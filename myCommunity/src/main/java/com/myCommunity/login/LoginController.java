@@ -16,7 +16,7 @@ public class LoginController {
 	@PostMapping("/login")
 	public String login(@ModelAttribute("login") LoginVo loginVo) {
 		LoginVo user = loginService.loginConfirm(loginVo.getNickName(), loginVo.getPassword());
-		
+		System.out.println("a");
 		if(user == null) {
 			return "board/index"; //가입불가
 		}
