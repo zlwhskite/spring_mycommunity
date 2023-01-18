@@ -73,9 +73,15 @@ public class BoardServiceImpl implements BoardService {
 		return boardMapper.findAllFree();
 	}
 	
+	
 	@Override
 	public List<BoardVo> boardHits(String division) {
 		return boardMapper.boardHits(division);
+	}
+	
+	@Override
+	public List<BoardVo> boardRecen(String division) {
+		return boardMapper.boardRecen(division);
 	}
 
 }

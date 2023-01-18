@@ -2,6 +2,12 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.myCommunity.login.LoginMapper">
-
+	<select id="loginConfirm" resultType="LoginVo">
+		select id, email, nickname, password, gender, modify_time, delete_time
+		from users
+		where id = #{id} 
+		and password = #{pwd}
+		and delete_time is null
+	</select>
 
 </mapper>

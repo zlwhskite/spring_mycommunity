@@ -19,7 +19,8 @@
             <th:block th:if="${not tit.toString().equals('인기 글')}">
             <div class="container text-end mb-2">
             	<form style="display:inline-block;" th:action="@{/boards/srt}" method="get">
-            		<input type="hidden" th:value="${enDivision}" name="enDivision"></input>
+            		<input type="hidden" th:value="${endivision}" name="enDivision"></input>
+            		<input type="hidden" th:value="${tit}" name="tit"></input>
                 	<select class="form-select" id="sort" name="srt" onchange="this.form.submit()">
                   		<option th:selected="${srt} == '최신순'">최신순</option>
                   		<option th:selected="${srt} == '인기순'">인기순</option>
@@ -50,7 +51,7 @@
                         </td>
                         <td>
                         	<a style="text-decoration: none; color: black;" data-bs-toggle="tooltip" title="작성 글 보러가기" 
-                        	th:href="@{/boards/{nickName}(nickName = ${board.userNickName})}">
+                        	th:href="@{/boards/name/{nickName}(nickName = ${board.userNickName})}">
                             	[[${board.userNickName}]]
                            	</a>
                        	</td>

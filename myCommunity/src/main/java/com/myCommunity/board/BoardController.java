@@ -51,66 +51,46 @@ public class BoardController {
 		return "board/index";
 	}
 	
-	
-	@GetMapping("/hot")
-	public String hotBoard(Model model) {
-		List<BoardVo> hotList = boardService.findAllHot();
-		model.addAttribute("boardList", hotList);
-		model.addAttribute("tit", "인기 글");
-		model.addAttribute("enDivision", "hot");
+	@GetMapping("/{division}")
+	public String divisionBoard(@PathVariable("division") String division, Model model) {
+		if(division.equals("hot")) {
+			List<BoardVo> boardList = boardService.findAllHot();
+			model.addAttribute("boardList", boardList);
+			model.addAttribute("tit", "인기 글");
+			model.addAttribute("enDivision", "hot");
+			
+			return "board/posts";
+		}
+		
+		String endivision = "";
+		
+		if(division.equals("travel")) {
+			endivision = "여행";
+		}
+		if(division.equals("hobby")) {
+			endivision = "취미";
+		}
+		if(division.equals("computer")) {
+			endivision = "컴퓨터";
+		}
+		if(division.equals("stock")) {
+			endivision = "주식";
+		}
+		if(division.equals("free")) {
+			endivision = "자유게시판";
+		}
+		
+		List<BoardVo> boardList = boardService.boardRecen(endivision);
+		
+		model.addAttribute("boardList", boardList);
+		model.addAttribute("tit", endivision);
+		model.addAttribute("enDivision", division);
 		
 		return "board/posts";
 	}
-	@GetMapping("/travel")
-	public String travelBoard(@RequestParam(defaultValue="최신순") String srt, Model model) {
-		if(srt.equals("인기순")) {
-			List<BoardVo> stockList = boardService.boardHits("여행");
-			model.addAttribute("boardList", stockList);
-			model.addAttribute("tit", "여행");
-			model.addAttribute("enDivision", "travel");
-			model.addAttribute("srt", "인기순");
-			return "board/posts";
-		}
-		List<BoardVo> travelList = boardService.findAllTravel();
-		model.addAttribute("boardList", travelList);
-		model.addAttribute("tit", "여행");
-		model.addAttribute("enDivision", "travel");
-		return "board/posts";
-	}
-	@GetMapping("/hobby")
-	public String hobbyBoard(Model model) {
-		List<BoardVo> hobbyList = boardService.findAllHobby();
-		model.addAttribute("boardList", hobbyList);
-		model.addAttribute("tit", "취미");
-		model.addAttribute("enDivision", "hobby");
-		return "board/posts";
-	}
-	@GetMapping("/computer")
-	public String computerBoard(Model model) {
-		List<BoardVo> computerList = boardService.findAllComputer();
-		model.addAttribute("boardList", computerList);
-		model.addAttribute("tit", "컴퓨터");
-		model.addAttribute("enDivision", "computer");
-		return "board/posts";
-	}
-	@GetMapping("/stock")
-	public String stockBoard(Model model) {
-		List<BoardVo> stockList = boardService.findAllStock();
-		model.addAttribute("boardList", stockList);
-		model.addAttribute("tit", "주식");
-		model.addAttribute("enDivision", "stock");
-		return "board/posts";
-	}
-	@GetMapping("/free")
-	public String freeBoard(Model model) {
-		List<BoardVo> freeList = boardService.findAllFree();
-		model.addAttribute("boardList", freeList);
-		model.addAttribute("tit", "자유게시판");
-		model.addAttribute("enDivision", "free");
-		return "board/posts";
-	}
+
 	
-	@GetMapping("/{nickName}")
+	@GetMapping("/name/{nickName}")
 	public String userBoard(@PathVariable("nickName") String nickName, Model model) {
 		List<BoardVo> nickNameList = boardService.findByName(nickName);
 		
@@ -255,96 +235,28 @@ public class BoardController {
 		return "redirect:/boards";
 	}
 	
-	
 	@GetMapping("/srt")
-	public String boardSort(@RequestParam("enDivision") String division, @RequestParam("srt") String sort, Model model) {
-		if(sort.equals("최신순")) {
-			if(division.equals("travel")) {
-				List<BoardVo> travelList = boardService.findAllTravel();
-				model.addAttribute("boardList", travelList);
-				model.addAttribute("tit", "여행");
-				model.addAttribute("enDivision", "travel");
-				model.addAttribute("srt", "최신순");
-				
-				return "board/posts";
-			}
-			if(division.equals("hobby")) {
-				List<BoardVo> hobbyList = boardService.findAllHobby();
-				model.addAttribute("boardList", hobbyList);
-				model.addAttribute("tit", "취미");
-				model.addAttribute("enDivision", "hobby");
-				model.addAttribute("srt", "최신순");
-				return "board/posts";
-			}
-			if(division.equals("computer")) {
-				List<BoardVo> computerList = boardService.findAllComputer();
-				model.addAttribute("boardList", computerList);
-				model.addAttribute("tit", "컴퓨터");
-				model.addAttribute("enDivision", "computer");
-				model.addAttribute("srt", "최신순");
-				return "board/posts";
-			}
-			if(division.equals("stock")) {
-				List<BoardVo> stockList = boardService.findAllStock();
-				model.addAttribute("boardList", stockList);
-				model.addAttribute("tit", "주식");
-				model.addAttribute("enDivision", "stock");
-				model.addAttribute("srt", "최신순");
-				return "board/posts";
-			}
-			if(division.equals("free")) {
-				List<BoardVo> freeList = boardService.findAllFree();
-				model.addAttribute("boardList", freeList);
-				model.addAttribute("tit", "자유게시판");
-				model.addAttribute("enDivision", "free");
-				model.addAttribute("srt", "최신순");
-				return "board/posts";
-			}
-		}
-		
+	public String boardSort2(@RequestParam("enDivision") String division, @RequestParam("srt") String sort, 
+			@RequestParam("tit") String tit, @RequestParam(defaultValue = "최신순") String srt, Model model) {
 		if(sort.equals("인기순")) {
-			if(division.equals("travel")) {
-				List<BoardVo> travelList = boardService.boardHits("여행");
-				model.addAttribute("boardList", travelList);
-				model.addAttribute("tit", "여행");
-				model.addAttribute("enDivision", "travel");
-				model.addAttribute("srt", "인기순");
-				return "board/posts";
-			}
-			if(division.equals("hobby")) {
-				List<BoardVo> hobbyList = boardService.boardHits("취미");
-				model.addAttribute("boardList", hobbyList);
-				model.addAttribute("tit", "취미");
-				model.addAttribute("enDivision", "hobby");
-				model.addAttribute("srt", "인기순");
-				return "board/posts";
-			}
-			if(division.equals("computer")) {
-				List<BoardVo> computerList = boardService.boardHits("컴퓨터");
-				model.addAttribute("boardList", computerList);
-				model.addAttribute("tit", "컴퓨터");
-				model.addAttribute("enDivision", "computer");
-				model.addAttribute("srt", "인기순");
-				return "board/posts";
-			}
-			if(division.equals("stock")) {
-				List<BoardVo> stockList = boardService.boardHits("주식");
-				model.addAttribute("boardList", stockList);
-				model.addAttribute("tit", "주식");
-				model.addAttribute("enDivision", "stock");
-				model.addAttribute("srt", "인기순");
-				return "board/posts";
-			}
-			if(division.equals("free")) {
-				List<BoardVo> freeList = boardService.boardHits("자유게시판");
-				model.addAttribute("boardList", freeList);
-				model.addAttribute("tit", "자유게시판");
-				model.addAttribute("enDivision", "free");
-				model.addAttribute("srt", "인기순");
-				return "board/posts";
-			}
+			List<BoardVo> boardList = boardService.boardHits(tit);
+			model.addAttribute("boardList", boardList);
+			model.addAttribute("tit", tit);
+			model.addAttribute("enDivision", division);
+			model.addAttribute("srt", srt);
+			
+			return "board/posts";
+		} 
+		if(sort.equals("최신순")) {
+			List<BoardVo> boardList = boardService.boardRecen(tit);
+			model.addAttribute("boardList", boardList);
+			model.addAttribute("tit", tit);
+			model.addAttribute("enDivision", division);
+			model.addAttribute("srt", srt);
+			
+			return "board/posts";
 		}
-		
-		return "redirect:/boards";
+		return "board/posts";
 	}
+	
 }

@@ -23,5 +23,6 @@ void save(BoardVo boardVo);
 	List<BoardVo> findAllStock(); 
 	List<BoardVo> findAllFree();
 	List<BoardVo> boardHits(String division);
-
+	List<BoardVo> boardRecen(String division);
+	
 }

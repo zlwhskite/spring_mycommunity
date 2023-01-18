@@ -12,22 +12,22 @@
             <div class="collapse navbar-collapse justify-content-between" id="mynavbar">
                 <ul class="navbar-nav">
                 	<li class="nav-item">
-                        <a class="nav-link" th:href="@{/boards/hot}">인기글</a>
+                        <a class="nav-link" th:href="@{/boards/{division}(division = 'hot')}">인기글</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" th:href="@{/boards/travel}">여행</a>
+                        <a class="nav-link" th:href="@{/boards/{division}(division = 'travel')}">여행</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" th:href="@{/boards/hobby}">취미</a>
+                        <a class="nav-link" th:href="@{/boards/{division}(division = 'hobby')}">취미</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" th:href="@{/boards/computer}">컴퓨터</a>
+                        <a class="nav-link" th:href="@{/boards/{division}(division = 'computer')}">컴퓨터</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" th:href="@{/boards/stock}">주식</a>
+                        <a class="nav-link" th:href="@{/boards/{division}(division = 'stock')}">주식</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" th:href="@{/boards/free}">자유게시판</a>
+                        <a class="nav-link" th:href="@{/boards/{division}(division = 'free')}">자유게시판</a>
                     </li>
                 </ul>
                 <ul class="navbar-nav">  	

@@ -86,6 +86,16 @@
 		order by hits DESC
 	</select>
 	
+	<select id="boardRecen" resultType="BoardVo">
+		select id, title, contents, user_nickname, division, hits, modify_time, delete_time
+		from boards
+		where division = #{division} 
+		and delete_time is null
+		order by id DESC
+	</select>
+	
+
+	
 
 
 </mapper>
