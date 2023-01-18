@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.myCommunity.user.UserMapper">
+
+	<insert id="save" useGeneratedKeys="true" keyProperty="id">
+		insert into users (email, nickname, password, gender, create_time, modify_time)
+		values (#{email}, #{nickName}, #{password}, #{gender}, #{createTime}, #{modifyTime})
+	</insert>
+	
+	<update id="update">
+		update users
+		set email=#{userVo.email},
+		gender=#{user.gender},
+		modify_time=#{boardVo.modifyTime}
+		where id = #{id}
+	</update>
+	
+	<update id="delete">
+		update users
+		set delete_time=#{userVo.deleteTime}
+		where id = #{id}
+	</update>
+	
+	<select id="findById" resultType="UserVo">
+		select id, email, nickname, password, gender, create_time, modify_time, delete_time
+		from users
+		where id = #{id}
+	</select>
+	
+	<select id="findBynickName" resultType="UserVo">
+		select id, email, nickname, password, gender, modify_time, delete_time
+		from users
+		where nickname = #{nickName}
+		and delete_time is null
+	</select>
+
+
+</mapper>

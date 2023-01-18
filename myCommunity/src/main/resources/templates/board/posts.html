@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
+    <title>Document</title>
+</head>
+<body>
+    <th:block th:replace="fragments/header :: header"></th:block>
+
+    <div class="container mt-3">
+        <div><br>
+         	
+            <h3 style="color: black;">[[${tit}]]</h3>
+            
+            <th:block th:if="${not tit.toString().equals('인기 글')}">
+            <div class="container text-end mb-2">
+            	<form style="display:inline-block;" th:action="@{/boards/srt}" method="get">
+            		<input type="hidden" th:value="${enDivision}" name="enDivision"></input>
+                	<select class="form-select" id="sort" name="srt" onchange="this.form.submit()">
+                  		<option th:selected="${srt} == '최신순'">최신순</option>
+                  		<option th:selected="${srt} == '인기순'">인기순</option>
+                	</select>
+            	</form>
+        	</div>
+            </th:block>
+            <table class="table table-hover">
+                <thead class="table-light">
+                    <tr>
+                        <th>번호</th>
+                        <th>제목</th>
+                        <th>작성자</th>
+                        <th>날짜</th>
+                        <th>조회수</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr th:each="board : ${boardList}">
+                        <td th:text="${board.id}"></td>
+                        <td>
+                        	<a style="text-decoration: none;" th:href="@{/boards/{division}/{id}(division = ${enDivision}, id = ${board.id})}">
+                        		[[${board.title}]] &nbsp;
+                        	</a>
+                        	<th:block th:if="${board.hits} &gt;= 100">
+                                		<span class="badge rounded-pill bg-danger">Hot</span>
+                            </th:block>
+                        </td>
+                        <td>
+                        	<a style="text-decoration: none; color: black;" data-bs-toggle="tooltip" title="작성 글 보러가기" 
+                        	th:href="@{/boards/{nickName}(nickName = ${board.userNickName})}">
+                            	[[${board.userNickName}]]
+                           	</a>
+                       	</td>
+                        <td th:text="${board.modifyTime}"></td>
+						<td th:text="${board.hits}"></td>
+                    </tr>
+                </tbody>
+            </table>
+           
+
+     		<!--
+            <ul class="pagination pagination-sm justify-content-center">
+                <li class="page-item mx-1"><a class="page-link" th:href="@{/boards(page=1)}"><<<</a></li>
+                <li class="page-item mx-1"><a class="page-link" href="javascript:void(0);">1</a></li>
+                <li class="page-item mx-1"><a class="page-link" href="javascript:void(0);">2</a></li>
+                <li class="page-item mx-1"><a class="page-link" href="javascript:void(0);">3</a></li>
+                <li class="page-item mx-1"><a class="page-link" href="javascript:void(0);">>>></a></li>
+            </ul>
+    		-->
+            
+            <hr>
+        </div>
+    </div>
+
+    <th:block th:replace="fragments/footer :: footer"></th:block>
+    
+</body>
+</html>

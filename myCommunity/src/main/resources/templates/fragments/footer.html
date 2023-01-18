@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+    <footer th:fragment="footer">
+        <div class="me-3 text-black text-center">
+            <p class="text-black" style="text-align: right;">Copyright &copy; Your Website 2022</p>
+        </div>
+  		
+  		<!-- Tooltip -->
+  		<script type="text/javascript" th:inline="javascript">
+	  	/*<![CDATA[*/
+	  		var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
+			var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+  				return new bootstrap.Tooltip(tooltipTriggerEl)
+			})
+  		/*]]>*/
+  		
+    		function nameCheck(){
+       			var nickName=$("#nickName").val();
+       			$.ajax({
+    	   			url : "/users/checks",
+    	   			type : "get",
+    	   			data : { "nickName" : nickName},
+    	   			success : function(result){
+    		   			// 중복유무 출력(result=1 : 사용할수있는 아이디, 0 : 사용할수없는 아이디)
+    		  	 		if(result==1){
+    			  			$("#check").html("사용할 수 있는 아이디입니다.");
+    			  			$("#check").css("color","green");
+    			  			$("#signUpButton").attr("disabled", false);
+    			  			
+    		   			}else{
+    			  			$("#check").html("사용할 수 없는 아이디입니다.");
+    			  			$("#check").css("color","red"); 
+    			  			$("#signUpButton").attr("disabled", true);
+    					}
+    				} 	   
+       			});    	
+    		}  
+  		
+  		</script>
+
+    <!-- The signIn Modal -->
+    <div id="signIn" class="modal fade">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <!-- Modal body -->
+                <div class="modal-body">
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" style="float: right;"></button>
+                    <h4 class="modal-title" style="text-align: center;">Sign In</h4>
+                    <form action="/action_page.php">
+                        <div class="mb-3 mt-3">
+                          <label for="userId" class="form-label">Name :</label>
+                          <input type="text" class="form-control" id="userId" placeholder="Enter Name" name="userId">
+                        </div>
+                        <div class="mb-3">
+                          <label for="password" class="form-label">Password :</label>
+                          <input type="password" class="form-control" id="password" placeholder="Enter password" name="password">
+                        </div>
+                        <button type="submit" class="btn btn-primary" style="float: right;">Login</button>
+                      </form>
+                    <br>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- The signUp Modal -->
+    <div id="signUp" class="modal fade">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <!-- Modal body -->
+                <div class="modal-body">
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" style="float: right;"></button>
+                    <h4 class="modal-title" style="text-align: center;">Sing Up</h4>
+                    <form th:action="@{/users}" method="post">
+                        <div class="mb-3 mt-3">
+                          <label for="nickName" class="form-label">NickName :</label>
+                          <input type="text" class="form-control" id="nickName" placeholder="Enter nickName" name="nickName">
+                          <div class="mt-1 text-end"> 
+                          <span id="check"></span>             
+                          <input type="button" class="btn btn-outline-secondary btn-sm" onclick="nameCheck();" value="중복체크"></input>
+                          </div>	
+                        </div>
+                        <div class="mb-3">
+                          <label for="password" class="form-label">Password :</label>
+                          <input type="password" class="form-control" id="password" placeholder="Enter password" name="password">
+                        </div>
+                        <div class="mb-3 mt-3">
+                            <label for="email" class="form-label">email :</label>
+                            <input type="email" class="form-control" id="email" placeholder="Enter Email" name="email">
+                        </div>
+                        <div class="mb-3 mt-3">
+                            <label for="gender">Gender :</label>
+                            <select id="gender" class="form-select" name="gender">
+                                <option>성별을 선택해주세요.</option>
+                                <option value="비밀">비밀</option>
+                                <option>남</option>
+                                <option>여</option>
+                              </select>
+                        </div>
+                        <div class="mt-3 text-center">
+                        	<button id="signUpButton" type="submit" class="btn btn-primary">Sign Up</button>
+                        </div>                      
+                      </form>
+                    <br>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+
+    <!-- The SearchModal -->
+    <div class="modal fade" id="search">
+        <div class="modal-dialog">
+            <div class="modal-content">
+            	<div class="text-end">
+             		<button type="button" class="btn-close" data-bs-dismiss="modal" style="margin-top: 10px; margin-right: 10px;"></button>
+              	</div>
+              	<h4 class="modal-title" style="text-align: center;">Search</h4>
+                <!-- Modal body -->
+                <div class="modal-body">                	
+                    <form th:action="@{/boards/search}" class="d-flex" method="get">
+                        <div class="me-2">
+                            <select class="form-select" name="division">
+                                <option>All</option>
+                                <option>여행</option>
+                                <option>취미</option>
+                                <option>컴퓨터</option>
+                                <option>주식</option>
+                                <option>자유게시판</option>
+                            </select>
+                        </div>
+                        <input class="form-control me-2" type="text" name="search" placeholder="Search">
+                        <button class="btn btn-primary" type="submit">Search</button>  
+                    </form>
+                </div>
+            </div>
+            
+        </div>
+    </div>
+    
+    </footer>
+</html>
