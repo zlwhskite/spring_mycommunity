@@ -13,101 +13,36 @@
   				return new bootstrap.Tooltip(tooltipTriggerEl)
 			})
   		/*]]>*/
-  		
-    		function nameCheck(){
-       			var nickName=$("#nickName").val();
-       			$.ajax({
-    	   			url : "/users/checks",
-    	   			type : "get",
-    	   			data : { "nickName" : nickName},
-    	   			success : function(result){
-    		   			// 중복유무 출력(result=1 : 사용할수있는 아이디, 0 : 사용할수없는 아이디)
-    		  	 		if(result==1){
-    			  			$("#check").html("사용할 수 있는 아이디입니다.");
-    			  			$("#check").css("color","green");
-    			  			$("#signUpButton").attr("disabled", false);
-    			  			
-    		   			}else{
-    			  			$("#check").html("사용할 수 없는 아이디입니다.");
-    			  			$("#check").css("color","red"); 
-    			  			$("#signUpButton").attr("disabled", true);
-    					}
-    				} 	   
-       			});    	
-    		}  
-  		
   		</script>
-
-    <!-- The signIn Modal -->
-    <div id="signIn" class="modal fade">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <!-- Modal body -->
-                <div class="modal-body">
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" style="float: right;"></button>
-                    <h4 class="modal-title" style="text-align: center;">Sign In</h4>
-                    <form action="/action_page.php">
-                        <div class="mb-3 mt-3">
-                          <label for="userId" class="form-label">Name :</label>
-                          <input type="text" class="form-control" id="userId" placeholder="Enter Name" name="userId">
-                        </div>
-                        <div class="mb-3">
-                          <label for="password" class="form-label">Password :</label>
-                          <input type="password" class="form-control" id="password" placeholder="Enter password" name="password">
-                        </div>
-                        <button type="submit" class="btn btn-primary" style="float: right;">Login</button>
-                      </form>
-                    <br>
-                </div>
-            </div>
-        </div>
-    </div>
-
-
-    <!-- The signUp Modal -->
-    <div id="signUp" class="modal fade">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <!-- Modal body -->
-                <div class="modal-body">
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" style="float: right;"></button>
-                    <h4 class="modal-title" style="text-align: center;">Sing Up</h4>
-                    <form th:action="@{/users}" method="post">
-                        <div class="mb-3 mt-3">
-                          <label for="nickName" class="form-label">NickName :</label>
-                          <input type="text" class="form-control" id="nickName" placeholder="Enter nickName" name="nickName">
-                          <div class="mt-1 text-end"> 
-                          <span id="check"></span>             
-                          <input type="button" class="btn btn-outline-secondary btn-sm" onclick="nameCheck();" value="중복체크"></input>
-                          </div>	
-                        </div>
-                        <div class="mb-3">
-                          <label for="password" class="form-label">Password :</label>
-                          <input type="password" class="form-control" id="password" placeholder="Enter password" name="password">
-                        </div>
-                        <div class="mb-3 mt-3">
-                            <label for="email" class="form-label">email :</label>
-                            <input type="email" class="form-control" id="email" placeholder="Enter Email" name="email">
-                        </div>
-                        <div class="mb-3 mt-3">
-                            <label for="gender">Gender :</label>
-                            <select id="gender" class="form-select" name="gender">
-                                <option>성별을 선택해주세요.</option>
-                                <option value="비밀">비밀</option>
-                                <option>남</option>
-                                <option>여</option>
-                              </select>
-                        </div>
-                        <div class="mt-3 text-center">
-                        	<button id="signUpButton" type="submit" class="btn btn-primary">Sign Up</button>
-                        </div>                      
-                      </form>
-                    <br>
-                </div>
-            </div>
-        </div>
-    </div>
-    
+  		
+  		
+  		<div class="modal fade" id="myModal">
+  			<div class="modal-dialog">
+    			<div class="modal-content panel-danger">
+      				<!-- Modal Header -->
+      				<div class="modal-header">
+        				알림 창
+        					<button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+      				</div>
+			      	<!-- Modal body -->
+			      	<div class="modal-body">
+			      		<th:block th:if="${msgm != null}">
+			        		[[ ${msgm} ]]
+			      		</th:block>
+			      		<th:block th:if="${lmsgm != null}">
+			        		[[ ${lmsgm} ]]
+			      		</th:block>
+			      		<th:block th:if="${errm != null}">
+			        		[[ ${errm} ]]
+			      		</th:block>
+			      	</div>
+			      	<!-- Modal footer -->
+			      	<div class="modal-footer">
+			        	<button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
+			      	</div>
+    			</div>
+  			</div>
+		</div>
 
     <!-- The SearchModal -->
     <div class="modal fade" id="search">

@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class BoardServiceImpl implements BoardService {
@@ -17,12 +18,14 @@ public class BoardServiceImpl implements BoardService {
 	}
 
 	@Override
+	@Transactional
 	public void update(int id, BoardVo boardVo) {
 		boardMapper.update(id, boardVo);
 		
 	}
 
 	@Override
+	@Transactional
 	public void delete(int id, BoardVo boardVo) {
 		boardMapper.delete(id, boardVo);
 	}

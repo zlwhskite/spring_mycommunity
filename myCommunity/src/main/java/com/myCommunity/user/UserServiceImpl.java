@@ -4,6 +4,7 @@ package com.myCommunity.user;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class UserServiceImpl implements UserService{
@@ -16,11 +17,13 @@ public class UserServiceImpl implements UserService{
 	}
 
 	@Override
+	@Transactional
 	public void update(int id, UserVo userVo) {
 		userMapper.update(id, userVo);
 	}
 
 	@Override
+	@Transactional
 	public void delete(int id, UserVo userdVo) {
 		userMapper.delete(id, userdVo);
 	}

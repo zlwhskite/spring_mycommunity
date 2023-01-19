@@ -4,6 +4,9 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -17,9 +20,11 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.myCommunity.comment.CommentServiceImpl;
 import com.myCommunity.comment.CommentVo;
+import com.myCommunity.login.LoginVo;
 import com.myCommunity.user.UserVo;
 
 
@@ -33,7 +38,7 @@ public class BoardController {
 
 	
 	@RequestMapping
-	public String index(Model model) {
+	public String index(HttpServletRequest request, Model model) {
 		List<BoardVo> boardList = boardService.findAll();
 		List<BoardVo> travelList = boardService.findAllTravel();
 		List<BoardVo> hobbyList = boardService.findAllHobby();
@@ -41,12 +46,42 @@ public class BoardController {
 		List<BoardVo> stockList = boardService.findAllStock();
 		List<BoardVo> freeList = boardService.findAllFree();
 		
+		HttpSession session = request.getSession(false);
+		
+		if (session == null) {
+
+			model.addAttribute("boardList", boardList);
+			model.addAttribute("travelList", travelList);
+			model.addAttribute("hobbyList", hobbyList);
+			model.addAttribute("computerList", computerList);
+			model.addAttribute("stockList", stockList);
+			model.addAttribute("freeList", freeList);
+			
+			return "board/index";
+		}
+		
+		LoginVo loginMember = (LoginVo)session.getAttribute("user");
+
+		if (loginMember == null) {
+			
+			model.addAttribute("boardList", boardList);
+			model.addAttribute("travelList", travelList);
+			model.addAttribute("hobbyList", hobbyList);
+			model.addAttribute("computerList", computerList);
+			model.addAttribute("stockList", stockList);
+			model.addAttribute("freeList", freeList);
+			
+			return "board/index";
+		}
+
 		model.addAttribute("boardList", boardList);
 		model.addAttribute("travelList", travelList);
 		model.addAttribute("hobbyList", hobbyList);
 		model.addAttribute("computerList", computerList);
 		model.addAttribute("stockList", stockList);
 		model.addAttribute("freeList", freeList);
+		
+		model.addAttribute("user", loginMember);
 	
 		return "board/index";
 	}
@@ -88,25 +123,20 @@ public class BoardController {
 		
 		return "board/posts";
 	}
-
-	
-	@GetMapping("/name/{nickName}")
-	public String userBoard(@PathVariable("nickName") String nickName, Model model) {
-		List<BoardVo> nickNameList = boardService.findByName(nickName);
-		
-		model.addAttribute("resultList", nickNameList);
-		model.addAttribute("tit", nickName);
-		
-		return "search/searchResult";
-	}
 	
 	@GetMapping("/create")
 	public String createPost() {
 		return "board/createPost";
 	}
-	
+
+
 	@PostMapping
-	public String savePost(@ModelAttribute("board") BoardVo boardVo) {
+	public String savePost(@ModelAttribute("board") BoardVo boardVo, RedirectAttributes rttr) {
+		if(boardVo.getTitle().isEmpty() || boardVo.getContents().isEmpty()) {
+			rttr.addFlashAttribute("errm", "제목 또는 내용을 입력해주세요.");
+			return "redirect:/boards/create";
+		}
+		
 		boardVo.setCreateTime(LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
 		boardVo.setModifyTime(LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
 		
@@ -127,6 +157,8 @@ public class BoardController {
 		if(boardVo.getDivision().equals("자유게시판")) {
 			boardVo.setDivision("free");
 		}
+		
+		rttr.addFlashAttribute("msgm", "글이 작성되었습니다.");
 		
 		return "redirect:/boards/"+boardVo.getDivision();
 	}
@@ -167,7 +199,7 @@ public class BoardController {
 	}
 	
 	@GetMapping("/{division}/{id}/edit")
-	public String editPost(@PathVariable("id") String id, Model model) {
+	public String editPost(@PathVariable("division") String division, @PathVariable("id") String id, Model model) {
 		int boardId = Integer.parseInt(id);
 		BoardVo boardVo = boardService.findById(boardId);
 		
@@ -186,21 +218,15 @@ public class BoardController {
 		if(boardVo.getDivision().equals("자유게시판")) {
 			model.addAttribute("tit", boardVo.getDivision());
 		}
-		
+		model.addAttribute("division", division);
 		model.addAttribute("board", boardVo);
 		
 		return "board/editPost";
 	}
 	
 	@PatchMapping("/{id}")
-	public String updatePost(@ModelAttribute("board") BoardVo boardVo, @PathVariable("id") String id) {
-		int boardId = Integer.parseInt(id);
-		boardVo.setModifyTime(LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
-				
-		boardService.update(boardId, boardVo);
-		
+	public String updatePost(@ModelAttribute("board") BoardVo boardVo, @PathVariable("id") String id, RedirectAttributes rttr, Model model) {
 		String select = "";
-		
 		if(boardVo.getDivision().equals("여행")) {
 			boardVo.setDivision("travel");
 			select = "travel";
@@ -222,16 +248,30 @@ public class BoardController {
 			select = "free";
 		}
 		
+		
+		if(boardVo.getTitle().isEmpty() || boardVo.getContents().isEmpty()) {
+			rttr.addFlashAttribute("division", select);
+			rttr.addFlashAttribute("errm", "빈칸으로는 수정할 수 없습니다.");
+			return "redirect:/boards/" + select + "/" + boardVo.getId() + "/edit";
+		}
+		
+		int boardId = Integer.parseInt(id);
+		boardVo.setModifyTime(LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
+				
+		boardService.update(boardId, boardVo);	
+		
+		rttr.addFlashAttribute("msgm", "수정이 완료되었습니다.");
+		
 		return "redirect:/boards/"+ select + "/" + boardVo.getId();
 	}
 	
 	@DeleteMapping("/{id}")
-	public String deletePost(@ModelAttribute("board") BoardVo boardVo, @PathVariable("id") String id) {
+	public String deletePost(@ModelAttribute("board") BoardVo boardVo, @PathVariable("id") String id, RedirectAttributes rttr) {
 		int boardId = Integer.parseInt(id);
 		boardVo.setDeleteTime(LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
 		
 		boardService.delete(boardId, boardVo);
-		
+		rttr.addFlashAttribute("msgm", "삭제가 성공했습니다.");
 		return "redirect:/boards";
 	}
 	

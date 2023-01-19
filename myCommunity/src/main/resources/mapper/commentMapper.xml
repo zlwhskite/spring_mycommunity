@@ -8,8 +8,7 @@
 		select
 			id, board_id, user_nickname, contents, modify_time, delete_time
 		from comments
-			where board_id = #{id}
-			and delete_time is null
+		where board_id = #{id}
 		order by id ASC
 	</select>
 	

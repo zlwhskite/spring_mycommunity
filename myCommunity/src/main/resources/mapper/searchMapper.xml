@@ -16,5 +16,14 @@
 		</if>
 		order by hits DESC
 	</select>
+	
+	<select id="searchNickName" resultType="SearchVo">
+		select id, email, nickname, password, gender, modify_time, delete_time
+		from users
+		where nickname = #{nickName}
+		and delete_time is null
+		order by hits DESC
+	</select>
+
 
 </mapper>

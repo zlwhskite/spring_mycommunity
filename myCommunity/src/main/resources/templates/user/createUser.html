@@ -34,11 +34,12 @@
     </script>
 </head>
 <body>
-    <th:block th:replace="fragments/header :: header"></th:block>
+   <th:block th:replace="fragments/header :: header"></th:block>
     
 
     <div class="container p-5 w-50">
 		<h2 style="text-align: center;">Sing Up</h2>
+		
     	<form th:action="@{/users}" method="post">
         	<div class="mb-3 mt-3">
           		<label for="nickName" class="form-label">NickName :</label>
@@ -47,32 +48,54 @@
             		<span id="check"></span>             
             		<input type="button" class="btn btn-outline-secondary btn-sm" onclick="nameCheck();" value="중복체크"></input>
           		</div>	
+          		
+          		<th:block th:if="${err != null}">
+            		<div style="color: red;"> <SMALL> [[${err['nerr']}]]  </SMALL></div>
+            	</th:block>
+            	
         	</div>
         	<div class="mb-3">
           		<label for="password" class="form-label">Password :</label>
           		<input type="password" class="form-control" id="password" placeholder="Enter password" name="password">
+          		
+          		<th:block th:if="${err != null}">
+            		<div style="color: red;"> <SMALL> [[${err['perr']} ]] </SMALL></div>
+            	</th:block>
+            	
         	</div>
         	<div class="mb-3 mt-3">
             	<label for="email" class="form-label">email :</label>
             	<input type="email" class="form-control" id="email" placeholder="Enter Email" name="email">
+            	
+            	<th:block th:if="${err != null}">
+            		<div style="color: red;"> <SMALL> [[${err['eerr']} ]] </SMALL></div>
+            	</th:block>
+            	
         	</div>
         	<div class="mb-3 mt-3">
             	<label for="gender">Gender :</label>
             	<select id="gender" class="form-select" name="gender">
-               		<option>성별을 선택해주세요.</option>
-               	 	<option value="비밀">비밀</option>
+               		<option value="x">성별을 선택해주세요.</option>
+               	 	<option>비밀</option>
                 	<option>남</option>
                 	<option>여</option>
               	</select>
+              	
+              	<th:block th:if="${err != null}">
+            		<div style="color: red;"> <SMALL>[[${err['gerr']}]] </SMALL></div>
+            	</th:block>
+            	
         	</div>
         	<div class="mt-3 mb-3 text-center">
-            	<button id="signUpButton" type="submit" class="btn btn-primary">Sign Up</button>
+            	<button id="signUpButton" type="submit" class="btn btn-primary" disabled>Sign Up</button>
         	</div>                      
       	</form>
+      	
     </div>
        
-    
+  
     <hr>
     <th:block th:replace="fragments/footer :: footer"></th:block>
+    
 </body>
 </html>

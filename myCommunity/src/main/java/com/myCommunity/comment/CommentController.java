@@ -28,15 +28,14 @@ public class CommentController {
 	
 	@PostMapping("/create")
 	public String commentCreate(@ModelAttribute("comment") CommentVo commentVo, @RequestParam("division") String division, 
-			@RequestParam("id") String boardId, @RequestParam("commentNickName") String userNickName) {
-		
+			@RequestParam("id") String boardId, @RequestParam("commentNickName") String userNickName, RedirectAttributes rttr) {
+
+	
 		int boarId = Integer.parseInt(boardId);
 		commentVo.setBoardId(boarId);
 		commentVo.setUserNickName(userNickName);
 		commentVo.setCreateTime(LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
 		commentVo.setModifyTime(LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
-		
-		commentService.commentCreate(commentVo);
 		
 		if(division.equals("여행")) {
 			division = "travel";
@@ -54,6 +53,15 @@ public class CommentController {
 			division = "free";
 		}
 		
+		if(commentVo.getContents().isEmpty()) {
+			rttr.addFlashAttribute("errm", "공백으로는 댓글을 등록할 수 없습니다.");
+			return "redirect:/boards/"+ division + "/" + boarId;
+		}
+		
+		commentService.commentCreate(commentVo);
+		
+		rttr.addFlashAttribute("msgm", "댓글이 등록되었습니다.");
+		
 		return "redirect:/boards/"+ division + "/" + boarId;
 	}
 	
@@ -64,7 +72,8 @@ public class CommentController {
 	}
 	
 	@RequestMapping(value="/{id}", params="action=modify")
-	public String commentUpdate(@ModelAttribute("comm") CommentVo commentVo, @PathVariable("id") String id, @RequestParam("division") String division) {
+	public String commentUpdate(@ModelAttribute("comm") CommentVo commentVo, @PathVariable("id") String id, @RequestParam("division") String division,
+			RedirectAttributes rttr) {
 		int commentId = Integer.parseInt(id);
 		
 		CommentVo com = commentService.findById(commentId);
@@ -90,20 +99,26 @@ public class CommentController {
 			division = "free";
 		}
 		
+		if(commentVo.getContents().isEmpty()) {
+			rttr.addFlashAttribute("errm", "공백으로는 댓글을 수정할 수 없습니다.");
+			return "redirect:/boards/" + division + "/" + com.getBoardId();
+		}
+		
 		
 		commentService.commentModify(commentId, com);
+		
+		rttr.addFlashAttribute("msgm", "댓글이 수정되었습니다.");
 		
 		return "redirect:/boards/" + division + "/" + com.getBoardId();
 	}
 	
 	@RequestMapping(value="/{id}", params="action=delete")
-	public String commentDelete(@ModelAttribute("comm") CommentVo commentVo, @PathVariable("id") String id, @RequestParam("division") String division) {
+	public String commentDelete(@ModelAttribute("comm") CommentVo commentVo, @PathVariable("id") String id, @RequestParam("division") String division,
+			RedirectAttributes rttr) {
 		int commentId = Integer.parseInt(id);
 
 		commentVo = commentService.findById(commentId);
 		commentVo.setDeleteTime(LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
-		
-		commentService.commentDelete(commentId, commentVo);
 		
 		if(division.equals("여행")) {
 			division = "travel";
@@ -120,6 +135,15 @@ public class CommentController {
 		if(division.equals("자유게시판")) {
 			division = "free";
 		}
+		
+		if(commentVo.getContents().isEmpty()) {
+			rttr.addFlashAttribute("errm", "공백으로는 댓글을 수정할 수 없습니다.");
+			return "redirect:/boards/" + division + "/" + commentVo.getBoardId();
+		}
+		
+		commentService.commentDelete(commentId, commentVo);
+		
+		rttr.addFlashAttribute("msgm", "댓글이 삭제되었습니다.");
 		
 		return "redirect:/boards/" + division + "/" + commentVo.getBoardId();
 	}

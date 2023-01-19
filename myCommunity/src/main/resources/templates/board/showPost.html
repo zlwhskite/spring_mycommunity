@@ -35,8 +35,11 @@
                     <a th:href="@{/boards/{division}/{id}/edit(division = ${endivision}, id = ${board.id})}" class="btn btn-primary">
                     	수정하기
                     </a>
+                    <a th:href="@{/boards}" class="btn btn-outline-primary">
+                    	Home
+                    </a>
                     <a th:href="@{/boards/{division}(division = ${endivision})}" class="btn btn-danger">
-                    	돌아가기
+                    	게시판가기
                     </a>
                 </div>
             </div>
@@ -55,19 +58,26 @@
 									<b>[[ ${comm.userNickName} ]]</b> / [[ ${comm.modifyTime} ]]
 								</p>
 								<div>
-									<p>[[ ${comm.contents} ]]</p>
+									<th:block th:if="${comm.deleteTime == null}">
+										<p>[[ ${comm.contents} ]]</p>
+									</th:block>
+									<th:block th:if="${comm.deleteTime != null}">
+										<s>삭제 된 댓글입니다.</s>
+									</th:block>
 								</div>
 								<div class="collapse mb-2" th:id="c + ${comm.id}">
 									<div class="input-group mb-3">
 										<textarea rows="5" cols="50" name="contents" placeholder="수정 할 댓글을 입력해주세요."></textarea>
-										<button type="submit" class="btn btn-outline-success btn-sm" name="action" value="modify" onclick="alert('수정이 완료되었습니다.')">수정완료</button>
+										<button type="submit" class="btn btn-outline-success btn-sm" name="action" value="modify">수정완료</button>
 									</div>
 								</div>
-								<p>						
-									<button class="btn btn-outline-primary" type="button" data-bs-toggle="collapse" th:attr="data-bs-target=|#c${comm.id}">수정</button> 
-									/ 
-									<button class="btn btn-outline-warning" type="submit" name="action" value="delete" onclick="alert('댓글이 삭제되었습니다.')">삭제</button>
-								</p>
+								<th:block th:if="${comm.deleteTime == null}">
+									<p>						
+										<button class="btn btn-outline-primary" type="button" data-bs-toggle="collapse" th:attr="data-bs-target=|#c${comm.id}">수정</button> 
+										/ 
+										<button class="btn btn-outline-warning" type="submit" name="action" value="delete">삭제</button>
+									</p>
+								</th:block>
 							</form>
 						</div>
 					</li>
@@ -85,7 +95,7 @@
 	                <textarea class="form-control" rows="3" id="contents" name="contents" placeholder="바른말 고운말"></textarea>
 	            </div>
 	            <div class="text-end">
-	            	<button type="submit" class="btn btn-primary" onclick="alert('댓글이 작성되었습니다.')">댓글쓰기</button>
+	            	<button type="submit" class="btn btn-primary">댓글쓰기</button>
 	           	</div>    
 	    	</form>
         </div>

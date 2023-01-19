@@ -41,7 +41,12 @@
                                 		[[${board.title}]]
                                 	</a>
                                	</td>
-                                <td th:text="${board.userNickName}"></td>
+                                <td>
+                                	<a style="text-decoration: none; color: black;" data-bs-toggle="tooltip" title="작성 글 보러가기" 
+                                		th:href="@{/boards/name/{nickName}(nickName = ${board.userNickName})}">
+                                		[[${board.userNickName}]]
+                                	</a>
+                                </td>
                                 <td th:text="${board.modifyTime}"></td>
                                 <td th:text="${board.hits}"></td>
                             </tr>                           
