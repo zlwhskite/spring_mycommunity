@@ -22,6 +22,18 @@
 		where id = #{id}
 	</update>
 	
+	<update id="userDelete">
+		update boards
+		set delete_time=#{boardVo.deleteTime}
+		where user_nickname = #{nickName}
+	</update>
+	
+	<update id="hitsUp">
+		update boards
+		set hits = hits + 1
+		where id = #{id}
+	</update>
+	
 	<select id="findById" resultType="BoardVo">
 		select id, title, contents, user_nickname, division, hits, modify_time, delete_time
 		from boards

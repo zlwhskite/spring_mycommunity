@@ -30,7 +30,7 @@
                             <tr th:each="board, index : ${boardList}" th:if="${index.index} < 5">
                                 <td th:text="${board.division}"></td>
                                 <td>
-                                	<a style="text-decoration: none;" th:href="@{/boards/hot/{id}(id = ${board.id})}">
+                                	<a style="text-decoration: none;" th:href="@{/boards/{division}/{id}(division = 'hot', id = ${board.id})}">
                                 		[[${board.title}]] &nbsp;
                                 	</a> 
                                 	<th:block th:if="${board.hits} &gt;= 100">
@@ -69,7 +69,7 @@
 	                                    <tr th:each="board, index : ${travelList}" th:if="${index.index} < 5">
 	                                        <td th:text="${board.id}"></td>
 	                                        <td>
-                                				<a style="text-decoration: none;" th:href="@{/boards/travel/{id}(id = ${board.id})}">[[${board.title}]]</a>
+                                				<a style="text-decoration: none;" th:href="@{/boards/{division}/{id}(division = 'travel', id = ${board.id})}">[[${board.title}]]</a>
                                 				<th:block th:if="${board.hits} &gt;= 100">
                                 					<span class="badge rounded-pill bg-danger">Hot</span>
                            	 					</th:block>
@@ -101,7 +101,7 @@
 	                                    <tr th:each="board, index : ${hobbyList}" th:if="${index.index} < 5">
 	                                        <td th:text="${board.id}"></td>
 	                                        <td>
-                                				<a style="text-decoration: none;" th:href="@{/boards/hobby/{id}(id = ${board.id})}">[[${board.title}]]</a>
+                                				<a style="text-decoration: none;" th:href="@{/boards/{division}/{id}(hobby = 'hobby', id = ${board.id})}">[[${board.title}]]</a>
                                 				<th:block th:if="${board.hits} &gt;= 100">
                                 					<span class="badge rounded-pill bg-danger">Hot</span>
                             					</th:block>
@@ -133,7 +133,7 @@
 	                                    <tr th:each="board, index : ${computerList}" th:if="${index.index} < 5">
 	                                        <td th:text="${board.id}"></td>
 	                                        <td>
-                                				<a style="text-decoration: none;" th:href="@{/boards/computer/{id}(id = ${board.id})}">[[${board.title}]]</a>
+                                				<a style="text-decoration: none;" th:href="@{/boards/{division}/{id}(division = 'computer', id = ${board.id})}">[[${board.title}]]</a>
                                 				<th:block th:if="${board.hits} &gt;= 100">
                                 					<span class="badge rounded-pill bg-danger">Hot</span>
                             					</th:block>
@@ -165,7 +165,7 @@
 	                                    <tr th:each="board, index : ${stockList}" th:if="${index.index} < 5">
 	                                        <td th:text="${board.id}"></td>
 	                                        <td>
-                                				<a style="text-decoration: none;" th:href="@{/boards/stock/{id}(id = ${board.id})}">[[${board.title}]]</a>
+                                				<a style="text-decoration: none;" th:href="@{/boards/{division}/{id}(division = 'stock', id = ${board.id})}">[[${board.title}]]</a>
                                 				<th:block th:if="${board.hits} &gt;= 100">
                                 					<span class="badge rounded-pill bg-danger">Hot</span>
                             					</th:block>
@@ -197,7 +197,7 @@
 	                                    <tr th:each="board, index : ${freeList}" th:if="${index.index} < 5">
 	                                        <td th:text="${board.id}"></td>
 	                                        <td>
-                                				<a style="text-decoration: none;" th:href="@{/boards/free/{id}(id = ${board.id})}">[[${board.title}]]</a>
+                                				<a style="text-decoration: none;" th:href="@{/boards/{division}/{id}(division = 'free', id = ${board.id})}">[[${board.title}]]</a>
                                 				<th:block th:if="${board.hits} &gt;= 100">
                                 					<span class="badge rounded-pill bg-danger">Hot</span>
                             					</th:block>

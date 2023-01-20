@@ -11,9 +11,18 @@
 	<update id="update">
 		update users
 		set email=#{userVo.email},
-		gender=#{user.gender},
-		modify_time=#{boardVo.modifyTime}
+		gender=#{userVo.gender},
+		modify_time=#{userVo.modifyTime}
 		where id = #{id}
+	</update>
+	
+	<update id="pwdModify">
+		update users
+		set password=#{userVo.password},
+		modify_time=#{userVo.modifyTime}
+		where id = #{id}
+		and
+		password = #{pwd}
 	</update>
 	
 	<update id="delete">
@@ -23,17 +32,23 @@
 	</update>
 	
 	<select id="findById" resultType="UserVo">
-		select id, email, nickname, password, gender, create_time, modify_time, delete_time
+		select id, email, nickname, password, gender, auth, create_time, modify_time, delete_time
 		from users
 		where id = #{id}
 	</select>
 	
 	<select id="findBynickName" resultType="UserVo">
-		select id, email, nickname, password, gender, modify_time, delete_time
+		select id, email, nickname, password, gender, auth, modify_time, delete_time
 		from users
 		where nickname = #{nickName}
 		and delete_time is null
 	</select>
 
+
+	<select id="findAll" resultType="UserVo">
+		select id, email, nickname, password, gender, auth, modify_time, delete_time
+		from users
+		where delete_time is null
+	</select>
 
 </mapper>

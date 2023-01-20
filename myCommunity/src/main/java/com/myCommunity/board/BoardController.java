@@ -60,9 +60,9 @@ public class BoardController {
 			return "board/index";
 		}
 		
-		LoginVo loginMember = (LoginVo)session.getAttribute("user");
+		LoginVo loginUser = (LoginVo)session.getAttribute("user");
 
-		if (loginMember == null) {
+		if (loginUser == null) {
 			
 			model.addAttribute("boardList", boardList);
 			model.addAttribute("travelList", travelList);
@@ -81,7 +81,7 @@ public class BoardController {
 		model.addAttribute("stockList", stockList);
 		model.addAttribute("freeList", freeList);
 		
-		model.addAttribute("user", loginMember);
+		model.addAttribute("user", loginUser);
 	
 		return "board/index";
 	}
@@ -121,22 +121,56 @@ public class BoardController {
 		model.addAttribute("tit", endivision);
 		model.addAttribute("enDivision", division);
 		
+		
 		return "board/posts";
 	}
 	
 	@GetMapping("/create")
-	public String createPost() {
+	public String createPost(HttpServletRequest request, RedirectAttributes rttr) {
+		HttpSession session = request.getSession(false);
+		
+		if(session == null) {
+			rttr.addFlashAttribute("errm", "로그인 후 글 작성이 가능합니다.");
+			return "redirect:/boards";
+		}
+		if(session != null) {
+			LoginVo loginVo = (LoginVo)session.getAttribute("user");
+			if(loginVo == null) {
+				rttr.addFlashAttribute("errm", "로그인 후 글 작성이 가능합니다.");
+				return "redirect:/boards";
+			}
+		}
+		
 		return "board/createPost";
 	}
 
 
 	@PostMapping
-	public String savePost(@ModelAttribute("board") BoardVo boardVo, RedirectAttributes rttr) {
+	public String savePost(@ModelAttribute("board") BoardVo boardVo, HttpServletRequest request, RedirectAttributes rttr) {
+		
+		HttpSession session = request.getSession(false);
+		
+		LoginVo loginUser = new LoginVo();
+		
+		if(session == null) {
+			rttr.addFlashAttribute("errm", "로그인 후 글 작성이 가능합니다.");
+			return "redirect:/login";
+		}
+		if(session != null) {
+			loginUser = (LoginVo)session.getAttribute("user");
+			
+			if(loginUser == null) {
+				rttr.addFlashAttribute("errm", "로그인 후 글 작성이 가능합니다.");
+				return "redirect:/login";
+			}
+		}
+		
 		if(boardVo.getTitle().isEmpty() || boardVo.getContents().isEmpty()) {
 			rttr.addFlashAttribute("errm", "제목 또는 내용을 입력해주세요.");
 			return "redirect:/boards/create";
 		}
 		
+		boardVo.setUserNickName(loginUser.getNickName());
 		boardVo.setCreateTime(LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
 		boardVo.setModifyTime(LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
 		
@@ -164,10 +198,28 @@ public class BoardController {
 	}
 	
 	@GetMapping("/{division}/{id}")
-	public String showPost(@PathVariable("id") String id, Model model) {
+	public String showPost(@PathVariable("id") String id, HttpServletRequest request, Model model) {
 		int boardId = Integer.parseInt(id);
 		
+		HttpSession session = request.getSession(false);
+		
 		BoardVo boardVo = boardService.findById(boardId);
+		
+		if(session == null) {
+			boardService.hitsUp(boardId); 
+		}
+		if(session != null) {
+			LoginVo loginUser = (LoginVo)session.getAttribute("user");
+			if(loginUser == null) {
+				boardService.hitsUp(boardId);
+			}
+			if(loginUser != null) {
+				if(!loginUser.getNickName().equals(boardVo.getUserNickName())) {
+					boardService.hitsUp(boardId);
+				}
+			}
+		}
+		
 		List<CommentVo> commentList = commentService.commentList(boardId);
 		
 		if(boardVo.getDivision().equals("여행")) {
@@ -196,32 +248,67 @@ public class BoardController {
 		model.addAttribute("commentList", commentList);
 		
 		return "board/showPost";
+		
+		
 	}
 	
 	@GetMapping("/{division}/{id}/edit")
-	public String editPost(@PathVariable("division") String division, @PathVariable("id") String id, Model model) {
+	public String editPost(@PathVariable("division") String division, @PathVariable("id") String id, Model model,
+			HttpServletRequest request, RedirectAttributes rttr) {
 		int boardId = Integer.parseInt(id);
 		BoardVo boardVo = boardService.findById(boardId);
 		
+		String endivision = "";
+		
 		if(boardVo.getDivision().equals("여행")) {
 			model.addAttribute("tit", boardVo.getDivision());
+			endivision = "travel";
 		}
 		if(boardVo.getDivision().equals("취미")) {
 			model.addAttribute("tit", boardVo.getDivision());
+			endivision = "hobby";
 		}
 		if(boardVo.getDivision().equals("컴퓨터")) {
 			model.addAttribute("tit", boardVo.getDivision());
+			endivision = "computer";
 		}
 		if(boardVo.getDivision().equals("주식")) {
 			model.addAttribute("tit", boardVo.getDivision());
+			endivision = "stock";
 		}
 		if(boardVo.getDivision().equals("자유게시판")) {
 			model.addAttribute("tit", boardVo.getDivision());
+			endivision = "free";
 		}
+	
+		HttpSession session = request.getSession(false);
+		
+		if(session == null) {
+			rttr.addFlashAttribute("errm", "수정권한이 없습니다.");
+
+			return "redirect:/boards/"+ endivision + "/" + boardVo.getId();
+		} 
+		
+		LoginVo loginUser = (LoginVo)session.getAttribute("user");
+		
+		if(loginUser == null) {
+			rttr.addFlashAttribute("errm", "로그인정보를 없습니다.");
+
+			return "redirect:/boards/"+ endivision + "/" + boardVo.getId();
+		}
+		if(loginUser != null) {
+			if(!loginUser.getNickName().equals(boardVo.getUserNickName())) {
+				rttr.addFlashAttribute("errm", "본인이 쓴 글만 수정이 가능합니다.");
+
+				return "redirect:/boards/"+ endivision + "/" + boardVo.getId();
+			}
+		}
+		
 		model.addAttribute("division", division);
 		model.addAttribute("board", boardVo);
-		
+			
 		return "board/editPost";
+		
 	}
 	
 	@PatchMapping("/{id}")
@@ -276,8 +363,25 @@ public class BoardController {
 	}
 	
 	@GetMapping("/srt")
-	public String boardSort2(@RequestParam("enDivision") String division, @RequestParam("srt") String sort, 
-			@RequestParam("tit") String tit, @RequestParam(defaultValue = "최신순") String srt, Model model) {
+	public String boardSort2(@RequestParam("srt") String sort, @RequestParam("tit") String tit, 
+			@RequestParam(defaultValue = "최신순") String srt, Model model) {
+		String division = "";
+		if(tit.equals("여행")) {
+			division = "travel";
+		}
+		if(tit.equals("취미")) {
+			division = "hobby";
+		}
+		if(tit.equals("컴퓨터")) {
+			division = "computer";
+		}
+		if(tit.equals("주식")) {
+			division = "stock";
+		}
+		if(tit.equals("자유게시판")) {
+			division = "free";
+		}
+		
 		if(sort.equals("인기순")) {
 			List<BoardVo> boardList = boardService.boardHits(tit);
 			model.addAttribute("boardList", boardList);

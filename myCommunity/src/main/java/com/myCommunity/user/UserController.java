@@ -3,6 +3,7 @@ package com.myCommunity.user;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
@@ -13,6 +14,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -20,6 +22,10 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.thymeleaf.util.MapUtils;
 
+import com.myCommunity.board.BoardServiceImpl;
+import com.myCommunity.board.BoardVo;
+import com.myCommunity.comment.CommentServiceImpl;
+import com.myCommunity.comment.CommentVo;
 import com.myCommunity.login.LoginServiceImpl;
 import com.myCommunity.login.LoginVo;
 
@@ -30,6 +36,10 @@ public class UserController {
 	UserServiceImpl userService;
 	@Autowired
 	LoginServiceImpl loginService;
+	@Autowired
+	BoardServiceImpl boardService;
+	@Autowired
+	CommentServiceImpl commentService;
 	
 	@ResponseBody
 	@GetMapping("/checks")
@@ -83,6 +93,107 @@ public class UserController {
 			rttr.addFlashAttribute("lmsgm", "회원가입에 실패했습니다.");
 			return "redirect:/create";
 		}
+	}
+	
+	@GetMapping("/edit")
+	public String userEdit(RedirectAttributes rttr, HttpServletRequest request, Model model) {
+		HttpSession session = request.getSession(false);
+		
+		LoginVo loginVo = (LoginVo)session.getAttribute("user");
+		
+		if(loginVo == null) {
+			rttr.addFlashAttribute("lmsgm", "정보를 읽어오는 중 오류가 발생했습니다.");
+			return "redirect:/boards";
+		}else {
+			UserVo user = userService.findBynickName(loginVo.getNickName());
+			
+			if(user.getAuth() == 1) {
+				List<UserVo> userList = userService.findAll();
+				model.addAttribute("userList", userList);
+				model.addAttribute("userIn", user);
+				return "user/userInfo";
+			}
+			
+			model.addAttribute("userIn", user);
+			
+			return "user/userInfo";
+		}
+	}
+	
+	
+	@RequestMapping(value="/{id}", params="action=modify")
+	public String userModify(@ModelAttribute("user") UserVo userVo, @PathVariable("id") String id, RedirectAttributes rttr) {
+		int userId = Integer.parseInt(id);
+		
+		userVo.setModifyTime(LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
+		userService.update(userId, userVo);
+		
+		rttr.addFlashAttribute("lmsgm", userVo.getNickName() + " 님," + " 수정이 완료되었습니다.");
+		return "redirect:/boards";
+	}
+	
+	@RequestMapping(value="/{id}", params="action=pwdModify")
+	public String pwdModify() {
+		return "user/userPassEdit";
+	}
+	
+	@PostMapping("/modi")
+	public String pwdUpdate(@RequestParam("pwd") String newpwd, @RequestParam("password") String oldpwd,RedirectAttributes rttr, HttpServletRequest request, Model model) {
+		HttpSession session = request.getSession(false);
+		LoginVo loginVo = (LoginVo)session.getAttribute("user");
+		
+		if(loginVo == null) {
+			rttr.addFlashAttribute("lmsgm", "수정하는 중 오류가 발생했습니다.");
+			return "redirect:/boards";
+		}else {
+			UserVo user = userService.findById(loginVo.getId());
+			user.setPassword(newpwd);
+			user.setModifyTime(LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
+			
+			int result = userService.pwdModify(loginVo.getId(), user, oldpwd);   
+			
+			if(result == 0) {
+				rttr.addFlashAttribute("lmsgm", "기존 비밀번호가 일치하지않습니다");
+				return "redirect:/users/edit";
+			}
+			
+			session.invalidate();
+			rttr.addFlashAttribute("lmsgm", "비밀번호가 변경되었습니다." + " 다시 로그인을 해주세요.");
+			return "redirect:/boards";
+		}
+	}
+	
+	@RequestMapping(value="/{id}", params="action=delete")
+	public String userDelete(RedirectAttributes rttr, HttpServletRequest request, Model model) {
+		HttpSession session = request.getSession(false);
+		LoginVo loginVo = (LoginVo)session.getAttribute("user");
+		
+		if(loginVo == null) {
+			rttr.addFlashAttribute("lmsgm", "수정하는 중 오류가 발생했습니다.");
+			return "redirect:/boards";
+		}else {
+			UserVo user = userService.findById(loginVo.getId());
+			user.setDeleteTime(LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
+			
+			BoardVo bv = new BoardVo();
+			bv.setDeleteTime(LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
+			
+			CommentVo cv = new CommentVo();
+			cv.setUserNickName(loginVo.getNickName());
+			cv.setDeleteTime(LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
+			
+			
+			userService.delete(loginVo.getId(), user);
+			boardService.userDelete(user.getNickName(), bv);
+			commentService.commentUserDelete(cv);
+			
+			
+			session.invalidate();
+			rttr.addFlashAttribute("lmsgm", "회원탈퇴를 성공했습니다." + " 감사합니다.");
+			return "redirect:/boards";
+			
+		}
+
 	}
 	
 	

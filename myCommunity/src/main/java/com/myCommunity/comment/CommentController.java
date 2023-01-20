@@ -3,6 +3,8 @@ package com.myCommunity.comment;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import javax.swing.plaf.synth.SynthToggleButtonUI;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,6 +21,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.myCommunity.board.BoardVo;
+import com.myCommunity.login.LoginVo;
 
 @Controller
 @RequestMapping("/comments")
@@ -28,14 +31,8 @@ public class CommentController {
 	
 	@PostMapping("/create")
 	public String commentCreate(@ModelAttribute("comment") CommentVo commentVo, @RequestParam("division") String division, 
-			@RequestParam("id") String boardId, @RequestParam("commentNickName") String userNickName, RedirectAttributes rttr) {
-
-	
+			@RequestParam("id") String boardId, HttpServletRequest request, RedirectAttributes rttr) {
 		int boarId = Integer.parseInt(boardId);
-		commentVo.setBoardId(boarId);
-		commentVo.setUserNickName(userNickName);
-		commentVo.setCreateTime(LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
-		commentVo.setModifyTime(LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
 		
 		if(division.equals("여행")) {
 			division = "travel";
@@ -53,10 +50,30 @@ public class CommentController {
 			division = "free";
 		}
 		
+		HttpSession session = request.getSession(false);
+		
+		if (session == null) {
+			rttr.addFlashAttribute("errm", "로그인 후 댓글작성이 가능합니다.");
+
+			return "redirect:/boards/"+ division + "/" + boarId;
+		}
+		
+		LoginVo loginUser = (LoginVo)session.getAttribute("user");
+		
+		if(loginUser == null) {
+			rttr.addFlashAttribute("errm", "로그인 후 댓글작성이 가능합니다.");
+			return "redirect:/boards/"+ division + "/" + boarId;
+		}
 		if(commentVo.getContents().isEmpty()) {
 			rttr.addFlashAttribute("errm", "공백으로는 댓글을 등록할 수 없습니다.");
 			return "redirect:/boards/"+ division + "/" + boarId;
 		}
+		
+		commentVo.setBoardId(boarId);
+		commentVo.setUserNickName(loginUser.getNickName());
+		commentVo.setCreateTime(LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
+		commentVo.setModifyTime(LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
+		
 		
 		commentService.commentCreate(commentVo);
 		
@@ -65,12 +82,7 @@ public class CommentController {
 		return "redirect:/boards/"+ division + "/" + boarId;
 	}
 	
-	@GetMapping("/{id}/edit")
-	public String commentEdit(@PathVariable("id") String id, Model model) {
-		
-		return "";
-	}
-	
+
 	@RequestMapping(value="/{id}", params="action=modify")
 	public String commentUpdate(@ModelAttribute("comm") CommentVo commentVo, @PathVariable("id") String id, @RequestParam("division") String division,
 			RedirectAttributes rttr) {
@@ -135,12 +147,7 @@ public class CommentController {
 		if(division.equals("자유게시판")) {
 			division = "free";
 		}
-		
-		if(commentVo.getContents().isEmpty()) {
-			rttr.addFlashAttribute("errm", "공백으로는 댓글을 수정할 수 없습니다.");
-			return "redirect:/boards/" + division + "/" + commentVo.getBoardId();
-		}
-		
+				
 		commentService.commentDelete(commentId, commentVo);
 		
 		rttr.addFlashAttribute("msgm", "댓글이 삭제되었습니다.");

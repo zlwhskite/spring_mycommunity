@@ -15,4 +15,5 @@ public interface CommentMapper {
 	void commentCreate(CommentVo commentVo);
 	void commentModify(@Param("id") int id, @Param("commentVo") CommentVo commentVo);
 	void commentDelete(@Param("id") int id, @Param("commentVo") CommentVo commentVo);
+	void commentUserDelete(@Param("commentVo") CommentVo commentVo);
 }

@@ -1,8 +1,12 @@
 package com.myCommunity.user;
 
 
+import java.util.List;
+
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
+
+import com.myCommunity.board.BoardVo;
 
 
 @Mapper
@@ -14,8 +18,12 @@ public interface UserMapper {
 	
 	void delete(@Param("id") int id, @Param("userVo") UserVo userdVo);
 	
+	int pwdModify(@Param("id") int id, @Param("userVo") UserVo userdVo, @Param("pwd") String pwd);
+	
 	UserVo findById(int id);
 	
 	UserVo findBynickName(String nickName);
+	
+	List<UserVo> findAll(); 
 
 }

@@ -11,5 +11,6 @@ public interface CommentService {
 	void commentCreate(CommentVo commentVo);
 	void commentModify(int id, CommentVo CommentVo);
 	void commentDelete(int id, CommentVo CommentVo);
+	void commentUserDelete(CommentVo commentVo);
 
 }
