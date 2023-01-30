@@ -7,6 +7,7 @@ import org.apache.ibatis.annotations.Param;
 public interface CommentService {
 	
 	List<CommentVo> commentList(int id);
+	List<CommentVo> commentListdelete(int id);
 	CommentVo findById(int id);
 	void commentCreate(CommentVo commentVo);
 	void commentModify(int id, CommentVo CommentVo);

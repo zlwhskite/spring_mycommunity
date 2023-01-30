@@ -16,8 +16,12 @@ public class SearchServiceImpl implements SearchService {
 //	}
 
 	@Override
-	public List<SearchVo> searchs(String division, String search) {
-		return searchMapper.searchs(division, search);
+	public List<SearchVo> searchs(int startIndex, int pageSize, String division, String search) {
+		return searchMapper.searchs(startIndex, pageSize, division, search);
+	}
+	@Override
+	public List<SearchVo> searchCount(String division, String search) {
+		return searchMapper.searchCount(division, search);
 	}
 
 }

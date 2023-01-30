@@ -50,5 +50,26 @@
 		from users
 		where delete_time is null
 	</select>
+	
+	<select id="findUserNickName" resultType="UserVo">
+		select id, email, nickname, delete_time
+		from users
+		where email = #{email}
+		and delete_time is null
+	</select>
+	
+	<select id="findPwd" resultType="UserVo">
+		select id, email, nickname, password, gender, auth, modify_time, delete_time
+		from users
+		where email = #{email}
+		and nickname = #{nickName}
+		and delete_time is null
+	</select>
+	
+	<update id="resetPwd">
+		update users
+		set password=#{pwd}
+		where id = #{id}
+	</update>
 
 </mapper>

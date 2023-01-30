@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import com.myCommunity.board.BoardServiceImpl;
 import com.myCommunity.board.BoardVo;
 import com.myCommunity.login.LoginVo;
 
@@ -28,27 +29,15 @@ import com.myCommunity.login.LoginVo;
 public class CommentController {
 	@Autowired
 	CommentServiceImpl commentService;
+	@Autowired
+	BoardServiceImpl boardService;
 	
 	@PostMapping("/create")
 	public String commentCreate(@ModelAttribute("comment") CommentVo commentVo, @RequestParam("division") String division, 
 			@RequestParam("id") String boardId, HttpServletRequest request, RedirectAttributes rttr) {
 		int boarId = Integer.parseInt(boardId);
 		
-		if(division.equals("여행")) {
-			division = "travel";
-		}
-		if(division.equals("취미")) {
-			division = "hobby";
-		}
-		if(division.equals("컴퓨터")) {
-			division = "computer";
-		}
-		if(division.equals("주식")) {
-			division = "stock";
-		}
-		if(division.equals("자유게시판")) {
-			division = "free";
-		}
+		division = boardService.dvchKE(division);
 		
 		HttpSession session = request.getSession(false);
 		
@@ -95,21 +84,7 @@ public class CommentController {
 		com.setModifyTime(commentVo.getModifyTime());
 		com.setContents(commentVo.getContents());
 		
-		if(division.equals("여행")) {
-			division = "travel";
-		}
-		if(division.equals("취미")) {
-			division = "hobby";
-		}
-		if(division.equals("컴퓨터")) {
-			division = "computer";
-		}
-		if(division.equals("주식")) {
-			division = "stock";
-		}
-		if(division.equals("자유게시판")) {
-			division = "free";
-		}
+		division = boardService.dvchKE(division);
 		
 		if(commentVo.getContents().isEmpty()) {
 			rttr.addFlashAttribute("errm", "공백으로는 댓글을 수정할 수 없습니다.");
@@ -132,22 +107,8 @@ public class CommentController {
 		commentVo = commentService.findById(commentId);
 		commentVo.setDeleteTime(LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
 		
-		if(division.equals("여행")) {
-			division = "travel";
-		}
-		if(division.equals("취미")) {
-			division = "hobby";
-		}
-		if(division.equals("컴퓨터")) {
-			division = "computer";
-		}
-		if(division.equals("주식")) {
-			division = "stock";
-		}
-		if(division.equals("자유게시판")) {
-			division = "free";
-		}
-				
+		division = boardService.dvchKE(division);
+		
 		commentService.commentDelete(commentId, commentVo);
 		
 		rttr.addFlashAttribute("msgm", "댓글이 삭제되었습니다.");

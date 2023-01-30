@@ -55,7 +55,22 @@ public class UserServiceImpl implements UserService{
 	public List<UserVo> findAll() {
 		return userMapper.findAll();
 	}
-
+	
+	@Override
+	public UserVo findUserNickName(String email) {
+		UserVo user = userMapper.findUserNickName(email);
+		return user;
+	}
+	
+	@Override
+	public UserVo findPwd(String nickName, String email) {
+		UserVo user = userMapper.findPwd(nickName, email);
+		return user;
+	}
+	@Override
+	public void resetPwd(int id, String pwd) {
+		userMapper.resetPwd(id, pwd);
+	}
 	
 
 }

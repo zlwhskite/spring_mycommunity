@@ -100,5 +100,43 @@ public class BoardServiceImpl implements BoardService {
 	public List<BoardVo> boardRecen(String division) {
 		return boardMapper.boardRecen(division);
 	}
+	
+	//언어변환
+	public String dvchKE(String division) {
+		if(division.equals("여행")) {
+			division = "travel";
+		}
+		if(division.equals("취미")) {
+			division = "hobby";
+		}
+		if(division.equals("컴퓨터")) {
+			division = "computer";
+		}
+		if(division.equals("주식")) {
+			division = "stock";
+		}
+		if(division.equals("자유게시판")) {
+			division = "free";
+		}
+		return division;
+	}
+	public String dvchEK(String division) {
+		if(division.equals("travel")) {
+			division = "여행";
+		}
+		if(division.equals("hobby")) {
+			division = "취미";
+		}
+		if(division.equals("computer")) {
+			division = "컴퓨터";
+		}
+		if(division.equals("stock")) {
+			division = "주식";
+		}
+		if(division.equals("free")) {
+			division = "자유게시판";
+		}
+		return division;
+	}
 
 }

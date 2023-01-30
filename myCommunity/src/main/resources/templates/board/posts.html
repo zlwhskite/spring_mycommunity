@@ -8,16 +8,24 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
-    <title>Document</title>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/index.css}">
+    <title>myCommunity</title>
 </head>
 <body>
     <th:block th:replace="fragments/header :: header"></th:block>
 
-    <div class="container mt-3">
+    <div class="container mt-5">
         <div><br>
-         	
-            <h3 style="color: black;">[[${tit}]]</h3>
-            
+        	<th:block th:if="${not tit.toString().equals('인기 글')}">
+         	<div>
+            	<h3 style="color: black;">[[${tit}]]</h3>
+         	</div>
+        	</th:block>
+        	<th:block th:if="${tit.toString().equals('인기 글')}">
+         	<div class="mb-5">
+            	<h3 style="color: black;">🥦[[${tit}]]</h3>
+         	</div>
+        	</th:block>
             <th:block th:if="${not tit.toString().equals('인기 글')}">
             <div class="container text-end mb-2">
             	<form style="display:inline-block;" th:action="@{/boards/srt}" method="get">
@@ -35,19 +43,24 @@
                         <th>번호</th>
                         <th>제목</th>
                         <th>작성자</th>
-                        <th>날짜</th>
+                        <th>작성일</th>
                         <th>조회수</th>
                     </tr>
                 </thead>
                 <tbody>
                     <tr th:each="board : ${boardList}">
-                        <td th:text="${board.id}"></td>
+                    	<th:block th:if="${not tit.toString().equals('인기 글')}">
+                        	<td th:text="${board.id}"></td>
+                    	</th:block>
+                    	<th:block th:if="${tit.toString().equals('인기 글')}">
+                        	<td th:text="${board.division}"></td>
+                    	</th:block>	
                         <td>
-                        	<a style="text-decoration: none;" th:href="@{/boards/{division}/{id}(division = ${enDivision}, id = ${board.id})}">
+                        	<a style="text-decoration: none;" th:href="@{/boards/{division}/{id}(division = ${enDivision}, id = ${board.id}, page = ${pagination.criteria.page})}">
                         		[[${board.title}]] &nbsp;
                         	</a>
                         	<th:block th:if="${board.hits} &gt;= 100">
-                                		<span class="badge rounded-pill bg-danger">Hot</span>
+                                		<span class="badge rounded-pill bg-danger"><small>Hot</small></span>
                             </th:block>
                         </td>
                         <td>
@@ -56,14 +69,78 @@
                             	[[${board.userNickName}]]
                            	</a>
                        	</td>
-                        <td th:text="${board.modifyTime}"></td>
+                       	<th:block th:if="${board.modifyTime} == null">
+                        	<td th:text="${board.createTime}"></td>
+                       	</th:block>
+                       	<th:block th:if="${board.modifyTime} != null">
+                        	<td>[[ ${board.modifyTime} ]]&nbsp;<small>(수정일)</small></td>
+                       	</th:block>
 						<td th:text="${board.hits}"></td>
                     </tr>
                 </tbody>
             </table>
+            
+            
+            
+  
+
+  				<ul class="pagination justify-content-center">
+  				
+  					<th:block th:if="${pagination.prev}">
+	  					<th:block th:if="${srt} == null">
+		    				<li class="page-item">
+		     					<a class="page-link" th:href="@{/boards/{division}(division = ${enDivision}, page = ${pagination.startPage} - 1)}" aria-label="Previous">
+		        					<span aria-hidden="true"><<</span>
+		      					</a>
+		    				</li>
+	  					</th:block>
+	  					<th:block th:if="${srt} != null">
+		    				<li class="page-item">
+		     					<a class="page-link" th:href="@{/boards/srt(tit = ${tit}, srt = ${srt}, page = ${pagination.startPage} - 1)}" aria-label="Previous">
+		        					<span aria-hidden="true"><<</span>
+		      					</a>
+		    				</li>
+	  					</th:block>
+  					</th:block>
+  				
+    				<th:block  th:with="start = ${pagination.startPage}, end = ${pagination.endPage}">
+	    				<li class="page-item mx-1" 
+	    					th:each="pageNum : ${#numbers.sequence(start, end)}" th:classappend="${pagination.criteria.page == pageNum} ? 'active' : ''">
+	    					<th:block th:if="${srt} == null">
+		    					<a class="page-link"
+		    						th:href="@{/boards/{division}(division = ${enDivision}, page = ${pageNum})}" th:text=${pageNum}></a>
+	    					</th:block>
+	    					<th:block th:if="${srt} != null">
+		    					<a class="page-link"
+		    						th:href="@{/boards/srt(tit = ${tit}, srt = ${srt}, page = ${pageNum})}" th:text=${pageNum}></a>
+	    					</th:block>
+	    				</li>
+    				</th:block>
+    				
+    				<th:block th:if="${pagination.next}">
+	    				<th:block th:if="${srt} == null">
+		    				<li class="page-item">
+		      					<a class="page-link" th:href="@{/boards/{division}(division = ${enDivision}, page = ${pagination.endPage} + 1)}" aria-label="Next">
+		        					<span aria-hidden="true">>></span>
+		      					</a>
+		    				</li>
+	    				</th:block>
+	    				<th:block th:if="${srt} != null">
+	    					<li class="page-item">
+		      					<a class="page-link" th:href="@{/boards/srt(tit = ${tit}, srt = ${srt}, page = ${pagination.endPage} + 1)}" aria-label="Next">
+		        					<span aria-hidden="true">>></span>
+		      					</a>
+		    				</li>
+	    				</th:block>    				
+    				</th:block>
+    				
+  				</ul>
+
+            
+            
            
 
-     	
+     		<!--
             <ul class="pagination pagination-sm justify-content-center">
                 <li class="page-item mx-1"><a class="page-link" th:href="@{/boards(page=1)}"><<<</a></li>
                 <li class="page-item mx-1"><a class="page-link" href="javascript:void(0);">1</a></li>
@@ -71,7 +148,7 @@
                 <li class="page-item mx-1"><a class="page-link" href="javascript:void(0);">3</a></li>
                 <li class="page-item mx-1"><a class="page-link" href="javascript:void(0);">>>></a></li>
             </ul>
-    
+    		-->
             
             <hr>
         </div>

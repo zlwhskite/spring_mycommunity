@@ -20,5 +20,9 @@ public interface UserService {
 	UserVo findBynickName(String nickName);
 	
 	List<UserVo> findAll(); 
+	
+	UserVo findUserNickName(String email);	
+	UserVo findPwd(String nickName, String email);
+	void resetPwd(int id, String pwd);
 
 }

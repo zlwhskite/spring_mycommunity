@@ -25,5 +25,9 @@ public interface UserMapper {
 	UserVo findBynickName(String nickName);
 	
 	List<UserVo> findAll(); 
+	
+	UserVo findUserNickName(String email);
+	UserVo findPwd(@Param("nickName") String nickName, @Param("email") String email);
+	void resetPwd(@Param("id") int id, @Param("pwd") String pwd);
 
 }

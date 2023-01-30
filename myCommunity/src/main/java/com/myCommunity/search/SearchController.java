@@ -9,10 +9,14 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.myCommunity.board.BoardMapper;
 import com.myCommunity.board.BoardServiceImpl;
 import com.myCommunity.board.BoardVo;
+import com.myCommunity.criteria.Criteria;
+import com.myCommunity.criteria.CriteriaService;
+import com.myCommunity.criteria.Pagination;
 
 @Controller
 @RequestMapping("/boards")
@@ -21,20 +25,96 @@ public class SearchController {
 	SearchServiceImpl searchMapper;
 	@Autowired
 	BoardServiceImpl boardService;
+	@Autowired
+	CriteriaService criteriaService;
+
 	
 	@GetMapping("/search")
-	public String search(@RequestParam("division") String division, @RequestParam("search") String search, Model model) {
+	public String search(@RequestParam("division") String division, @RequestParam("search") String search, 
+			@RequestParam(value="page", required=false, defaultValue = "1") String page, RedirectAttributes rttr, Model model) {
+		int pagee = Integer.parseInt(page);
 		
 		if(division.equals("All")) {
-			List<SearchVo> searchList = searchMapper.searchs(division, search);
+			List<SearchVo> countList = searchMapper.searchCount(division, search);
+			if(countList.size() == 0) {
+				rttr.addFlashAttribute("errm", "검색결과가 없습니다.");
+				return "redirect:/boards";
+			}
+			int totalCount = countList.size();
+			
+			Pagination pn = new Pagination();
+			Criteria pg = new Criteria();
+			
+			if(pagee <= 0) {
+				pagee = 1;
+			}
+			
+			pg.setPage(pagee);
+			
+			pn.setCriteria(pg);
+			
+			pn.setTotalCount(totalCount);
+
+			if(pn.getEndPage() < pagee) {
+				pagee = pn.getTotalPageCount();
+				pg.setPage(pagee);
+				
+				pn.setCriteria(pg);
+				
+				pn.setTotalCount(totalCount);
+			}
+			
+			int start = pn.getCriteria().getPageStart();
+			int size = pn.getCriteria().getRecordSize();
+			
+			List<SearchVo> searchList = searchMapper.searchs(start, size, division, search);
+			model.addAttribute("pagination", pn);
 			model.addAttribute("resultList", searchList);
+			model.addAttribute("countList", countList);
+			model.addAttribute("search", search);
 			model.addAttribute("tit", division);
 			
 			return "search/searchResult";
 		}
 
-		List<SearchVo> searchList = searchMapper.searchs(division, search);
+		List<SearchVo> countList = searchMapper.searchCount(division, search);
+		if(countList.size() == 0) {
+			rttr.addFlashAttribute("errm", "검색결과가 없습니다.");
+			return "redirect:/boards";
+		}
+		int totalCount = countList.size();
+		
+		
+		Pagination pn = new Pagination();
+		Criteria pg = new Criteria();
+		
+		if(pagee <= 0) {
+			pagee = 1;
+		}
+		
+		pg.setPage(pagee);
+		
+		pn.setCriteria(pg);
+		
+		pn.setTotalCount(totalCount);
+
+		if(pn.getEndPage() < pagee) {
+			pagee = pn.getTotalPageCount();
+			pg.setPage(pagee);
+			
+			pn.setCriteria(pg);
+			
+			pn.setTotalCount(totalCount);
+		}
+		
+		int start = pn.getCriteria().getPageStart();
+		int size = pn.getCriteria().getRecordSize();
+		
+		List<SearchVo> searchList = searchMapper.searchs(start, size, division, search);
+		model.addAttribute("pagination", pn);
 		model.addAttribute("resultList", searchList);
+		model.addAttribute("countList", countList);
+		model.addAttribute("search", search);
 		model.addAttribute("tit", division);
 	
 		return "search/searchResult";
@@ -46,6 +126,7 @@ public class SearchController {
 		List<BoardVo> nickNameList = boardService.findByName(nickName);
 		
 		model.addAttribute("resultList", nickNameList);
+		model.addAttribute("countList", nickNameList);
 		model.addAttribute("tit", nickName);
 		
 		return "search/searchResult";

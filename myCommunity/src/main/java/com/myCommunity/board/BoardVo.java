@@ -82,7 +82,4 @@ public class BoardVo {
 		this.deleteTime = deleteTime;
 	}
 	
-	
-	
-	
 }

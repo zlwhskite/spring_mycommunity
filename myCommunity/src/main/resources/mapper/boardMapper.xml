@@ -4,8 +4,8 @@
 <mapper namespace="com.myCommunity.board.BoardMapper">
 
 	<insert id="save" useGeneratedKeys="true" keyProperty="id">
-		insert into boards (title, contents, user_nickname, division, create_time, modify_time)
-		values (#{title}, #{contents}, #{userNickName}, #{division}, #{createTime}, #{modifyTime})
+		insert into boards (title, contents, user_nickname, division, create_time)
+		values (#{title}, #{contents}, #{userNickName}, #{division}, #{createTime})
 	</insert>
 	
 	<update id="update">
@@ -35,63 +35,63 @@
 	</update>
 	
 	<select id="findById" resultType="BoardVo">
-		select id, title, contents, user_nickname, division, hits, modify_time, delete_time
+		select id, title, contents, user_nickname, division, hits, create_time, modify_time, delete_time
 		from boards
 		where id = #{id} and delete_time is null
 	</select>
 	
 	<select id="findByName" resultType="BoardVo">
-		select id, title, contents, user_nickname, division, hits, modify_time, delete_time
+		select id, title, contents, user_nickname, division, hits, create_time, modify_time, delete_time
 		from boards
 		where user_nickname = #{nickName} and delete_time is null
 	</select>
 	
 	<select id="findAll" resultType="BoardVo">
-		select id, title, contents, user_nickname, division, hits, modify_time, delete_time
+		select id, title, contents, user_nickname, division, hits, create_time, modify_time, delete_time
 		from boards
 		where delete_time is null
 		order by hits DESC
 	</select>
 	<select id="findAllHot" resultType="BoardVo">
-		select id, title, contents, user_nickname, division, hits, modify_time, delete_time
+		select id, title, contents, user_nickname, division, hits, create_time, modify_time, delete_time
 		from boards
 		where delete_time is null
 		and hits > 50
 		order by hits DESC
 	</select>
 	<select id="findAllTravel" resultType="BoardVo">
-		select id, title, contents, user_nickname, division, hits, modify_time, delete_time
+		select id, title, contents, user_nickname, division, hits, create_time, modify_time, delete_time
 		from boards
 		where division = '여행' and delete_time is null
 		order by id DESC
 	</select>
 	<select id="findAllHobby" resultType="BoardVo">
-		select id, title, contents, user_nickname, division, hits, modify_time, delete_time
+		select id, title, contents, user_nickname, division, hits, create_time, modify_time, delete_time
 		from boards
 		where division = '취미' and delete_time is null
 		order by id DESC
 	</select>
 	<select id="findAllComputer" resultType="BoardVo">
-		select id, title, contents, user_nickname, division, hits, modify_time, delete_time
+		select id, title, contents, user_nickname, division, hits, create_time, modify_time, delete_time
 		from boards
 		where division = '컴퓨터' and delete_time is null
 		order by id DESC
 	</select>
 	<select id="findAllStock" resultType="BoardVo">
-		select id, title, contents, user_nickname, division, hits, modify_time, delete_time
+		select id, title, contents, user_nickname, division, hits, create_time, modify_time, delete_time
 		from boards
 		where division = '주식' and delete_time is null
 		order by id DESC
 	</select>
 	<select id="findAllFree" resultType="BoardVo">
-		select id, title, contents, user_nickname, division, hits, modify_time, delete_time
+		select id, title, contents, user_nickname, division, hits, create_time, modify_time, delete_time
 		from boards
 		where division = '자유게시판' and delete_time is null
 		order by id DESC
 	</select>
 	
 	<select id="boardHits" resultType="BoardVo">
-		select id, title, contents, user_nickname, division, hits, modify_time, delete_time
+		select id, title, contents, user_nickname, division, hits, create_time, modify_time, delete_time
 		from boards
 		where division = #{division} 
 		and delete_time is null
@@ -99,7 +99,7 @@
 	</select>
 	
 	<select id="boardRecen" resultType="BoardVo">
-		select id, title, contents, user_nickname, division, hits, modify_time, delete_time
+		select id, title, contents, user_nickname, division, hits, create_time, modify_time, delete_time
 		from boards
 		where division = #{division} 
 		and delete_time is null

@@ -12,6 +12,18 @@
 		order by id ASC
 	</select>
 	
+	<!-- 댓글 조회(삭제된 댓글) -->
+	<select id="commentListdelete" resultType="CommentVo">
+		select
+			id, board_id, user_nickname, contents, modify_time
+		from comments
+		where board_id = #{id}
+		and
+		delete_time is null
+		order by id ASC
+	</select>
+	
+	
 	<!-- 특정 댓글 조회 -->
 	<select id="findById" resultType="CommentVo">
 		select id, board_id, user_nickname, contents, modify_time, delete_time 

@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.myCommunity.attendance.AttendanceMapper">
+
+	<insert id="attenSave" useGeneratedKeys="true" keyProperty="id">
+		insert into attendance (user_id, attendance_date)
+		values (#{userId}, #{attendanceDate})
+	</insert>
+	
+	<select id="findById" resultType="AttendanceVo">
+		select user_id, attendance_date, count
+		from attendance
+		where user_id = #{userId}
+		and
+		attendance_date = #{attendanceDate}
+	</select>
+	
+	<update id="update">
+		update attendance
+		set count = #{attVo.count}
+		where user_id = #{userId}
+		and
+		attendance_date = #{attVo.attendanceDate}
+	</update>
+	
+	<delete id="delete">
+    	delete from attendance 
+    	where user_id = #{userId}
+  	</delete>
+  	
+  	<select id="todayUser" resultType="int">
+  		select count(*)
+		from attendance
+		where attendance_date = #{attendanceDate}
+  	</select>
+
+</mapper>

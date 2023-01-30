@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.myCommunity.criteria.CriteriaMapper">
+	<select id="findAll" resultType="com.myCommunity.board.BoardVo">
+		select id, title, contents, user_nickname, division, hits, create_time, modify_time, delete_time
+		from boards
+		where delete_time is null 
+		and
+		division = #{division}
+		order by id DESC
+		limit #{startIndex}, #{pageSize}
+	</select>
+	
+	<select id="findAllHit" resultType="com.myCommunity.board.BoardVo">
+		select id, title, contents, user_nickname, division, hits, create_time, modify_time, delete_time
+		from boards
+		where delete_time is null 
+		and hits > 50
+		order by hits DESC
+		limit #{startIndex}, #{pageSize}
+	</select>
+	
+	
+	<select id="findHit" resultType="com.myCommunity.board.BoardVo">
+		select id, title, contents, user_nickname, division, hits, create_time, modify_time, delete_time
+		from boards
+		where delete_time is null 
+		and
+		division = #{division}
+		order by hits DESC
+		limit #{startIndex}, #{pageSize}
+	</select>
+	
+	<select id="count" resultType="int">
+		select count(*)
+		from boards
+		where division = #{division} 
+		and delete_time is null
+	</select>
+	
+	<select id="allCount" resultType="int">
+		select count(*)
+		from boards
+		where delete_time is null
+	</select>
+	
+
+</mapper>

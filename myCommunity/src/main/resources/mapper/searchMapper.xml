@@ -4,7 +4,7 @@
 <mapper namespace="com.myCommunity.search.SearchMapper">
 
 	<select id="searchs" resultType="SearchVo">
-		SELECT id, title, contents, user_nickname, division, hits, modify_time, delete_time
+		SELECT id, title, contents, user_nickname, division, hits, create_time, modify_time, delete_time
 		FROM boards
 		WHERE delete_time is null
 		<if test="division == 'All' and search != null and search != ''">
@@ -14,11 +14,26 @@
 			AND division = #{division}
 			AND title LIKE '%' || #{search} || '%'
 		</if>
-		order by hits DESC
+		order by id DESC
+		limit #{startIndex}, #{pageSize}
+	</select>
+	
+	<select id="searchCount" resultType="SearchVo">
+		SELECT id
+		FROM boards
+		WHERE delete_time is null
+		<if test="division == 'All' and search != null and search != ''">
+			AND title LIKE '%' || #{search} || '%'
+		</if>
+		<if test="division != 'All' and search != null and search != ''">
+			AND division = #{division}
+			AND title LIKE '%' || #{search} || '%'
+		</if>
+		order by id DESC
 	</select>
 	
 	<select id="searchNickName" resultType="SearchVo">
-		select id, email, nickname, password, gender, modify_time, delete_time
+		select id, email, nickname, password, gender, create_time, modify_time, delete_time
 		from users
 		where nickname = #{nickName}
 		and delete_time is null

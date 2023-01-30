@@ -6,5 +6,6 @@ import org.apache.ibatis.annotations.Param;
 
 public interface SearchService {
 //	List<SearchVo> allSearch(String search);
-	List<SearchVo> searchs(String division, String search);
+	List<SearchVo> searchs(int startIndex, int pageSize, String division, String search);
+	List<SearchVo> searchCount(String division, String search);
 }
