@@ -42,8 +42,7 @@
 		</script>
 
 
-
-    <nav class="navbar navbar-expand-sm bg-success bg-gradient navbar-dark fixed-top mb-5">
+	    <nav class="navbar navbar-expand-sm bg-success bg-gradient navbar-dark fixed-top mb-5">
         <div class="container-fluid">
             <a class="navbar-brand" th:href="@{/boards}">
                 myCommunity
@@ -75,11 +74,20 @@
                 <ul class="navbar-nav">
                 	<th:block th:if="${session.user != null}">
 	                	<li class="nav-item">
+	                	<th:block th:if="${session.user.auth == 0}">
 	                	<form id="userInfo" th:action="@{/users/edit}" method="get">
 	                        <a onclick="document.getElementById('userInfo').submit();" class="nav-link" style="cursor: pointer;">
 	                        	<b>[[${session.user.nickName}]]</b>&nbsp;님
 	                        </a>
 	                	</form>
+	                	</th:block>
+	                	<th:block th:if="${session.user.auth == 1}">
+	                	<form id="userInfo" th:action="@{/admin}" method="get">
+	                        <a onclick="document.getElementById('userInfo').submit();" class="nav-link" style="cursor: pointer;">
+	                        	<b>Admin</b>
+	                        </a>
+	                	</form>
+	                	</th:block>
 	                    </li>  	
 	                    <li class="nav-item">
 	                    	<form id="logoutForm" th:action="@{/logout}" method="post">
@@ -123,6 +131,7 @@
             </div>
         </div>
     </nav>
+
    <!--
  	<div id="mySidenav" class="sidenav">
   		<a id="aa" class="dark-example-02-btn" href="javacsript:void(0);" onclick="abc();">다크모드</a>

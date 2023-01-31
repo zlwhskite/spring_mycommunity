@@ -56,7 +56,7 @@
                         	<td th:text="${board.division}"></td>
                     	</th:block>	
                         <td>
-                        	<a style="text-decoration: none;" th:href="@{/boards/{division}/{id}(division = ${enDivision}, id = ${board.id}, page = ${pagination.criteria.page})}">
+                        	<a style="text-decoration: none;" th:href="@{/boards/{division}/{id}(division = ${enDivision}, id = ${board.id}, srt = ${srt}, page = ${pagination.criteria.page})}">
                         		[[${board.title}]] &nbsp;
                         	</a>
                         	<th:block th:if="${board.hits} &gt;= 100">

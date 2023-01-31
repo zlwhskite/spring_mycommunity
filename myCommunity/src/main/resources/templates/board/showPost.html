@@ -9,65 +9,6 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
     <link rel="stylesheet" type="text/css" th:href="@{/css/index.css}">
     <title>myCommunity</title>
-     <script type="text/javascript" th:inline="javascript">
-     /*<![CDATA[*/
-     /*
-     $(document).ready(function(){
-    	 loadList();    	 
-     });  
-     */
-
-     function loadList(){
-		 alert("alwats");
-		var division = /*[[ ${endivision} ]]*/
-    	// 서버와 통신 : 게시판 리스트 가져오기
-    	$.ajax({
-    		url : "/boards/ajax",
-    		type : "get",
-    		data : { "division" : division},
-    		dataType : "json",
-    		success : makeBoard,
-    		error : function() {
-				alert("데이터를 받는 중 err 생겼습니다.");  
-			}    		
-    	});
-     }      
-            
-     function makeBoard(data){ 
-    	var listHtml="<div class='container'>";
-	    listHtml+="<div class='mt-4 p-5 bg-default text-white rounded'>";
-	    listHtml+="<table class='table table-hover'>";
-	    listHtml+="<thead class='table-light'>";
-	    listHtml+="<tr>";
-	    listHtml+="<th>번호</th>";
-	    listHtml+="<th>제목</th>";
-	    listHtml+="<th>작성자</th>";
-	    listHtml+="<th>날짜</th>";
-	    listHtml+="<th>조회수</th>";
-	    listHtml+="</tr>";
-	    listHtml+="</thead>";
-	    listHtml+="<tbody>";
-	    $.each(data, function(index,obj){ // obj={"idx":5,"title":"게시판"~~ }
-	        listHtml+="<tr>";
-	        listHtml+="<td>"+obj.id+"</td>";
-	        listHtml+="<td><a>"+ obj.title +"</a></td>";
-	        listHtml+="<td><a>"+ obj.userNickName +"</a></td>";
-	        listHtml+="<td>"+obj.modifyTime+"</td>";
-	        listHtml+="<td>"+obj.hits+"</td>";
-	        listHtml+="</tr>";
-	    } );    	 
-	    listHtml+="</tbody>";
-	    listHtml+="</table>";
-	    $("#view").html(listHtml);
-     }
-     
-     
-     
-     
-     
-
-     /*]]>*/
-     </script>
 </head>
 <body>
     <th:block th:replace="fragments/header :: header"></th:block>
@@ -92,8 +33,8 @@
                 </div>
                 <div class="text-center mt-3">
                 <th:block th:if="${session.user != null}">
-					<th:block th:if="${#strings.equals(session.user.nickName, board.userNickName)}">                
-	                    <a th:href="@{/boards/{division}/{id}/edit(division = ${endivision}, id = ${board.id})}" class="btn btn-primary">
+					<th:block th:if="${#strings.equals(session.user.nickName, board.userNickName)} or ${session.user.auth == 1}">                
+	                    <a th:href="@{/boards/{division}/{id}/edit(division = ${enDivision}, id = ${board.id})}" class="btn btn-primary">
 	                    	수정하기
 	                    </a>
 					</th:block>
@@ -101,7 +42,7 @@
                     <a th:href="@{/boards}" class="btn btn-outline-success">
                     	Home
                     </a>
-                    <a th:href="@{/boards/{division}(division = ${endivision})}" class="btn btn-info" style="color: white;">
+                    <a th:href="@{/boards/{division}(division = ${enDivision})}" class="btn btn-info" style="color: white;">
                     	게시판가기
                     </a>
                 </div>
@@ -210,7 +151,7 @@
             			<ul class="pagination justify-content-center">			
   						<th:block th:if="${pagination.prev}">				
 		    				<li class="page-item">
-		     					<a class="page-link" th:href="@{/boards/{division}(division = ${endivision}, page = ${pagination.startPage} - 1)}" aria-label="Previous">
+		     					<a class="page-link" th:href="@{/boards/{division}(division = ${enDivision}, page = ${pagination.startPage} - 1)}" aria-label="Previous">
 		        					<span aria-hidden="true"><<</span>
 		      					</a>
 		    				</li>	
@@ -218,12 +159,12 @@
     					<th:block  th:with="start = ${pagination.startPage}, end = ${pagination.endPage}">
 	    					<li class="page-item mx-1" 
 	    						th:each="pageNum : ${#numbers.sequence(start, end)}" th:classappend="${pagination.criteria.page == pageNum} ? 'active' : ''">
-		    					<a class="page-link" th:href="@{/boards/{division}(division = ${endivision}, page = ${pageNum})}" th:text=${pageNum}></a>
+		    					<a class="page-link" th:href="@{/boards/{division}(division = ${enDivision}, page = ${pageNum})}" th:text=${pageNum}></a>
 	    					</li>
     					</th:block>	
     					<th:block th:if="${pagination.next}">		
 		    				<li class="page-item">
-		      					<a class="page-link" th:href="@{/boards/{division}(division = ${endivision}, page = ${pagination.endPage} + 1)}" aria-label="Next">
+		      					<a class="page-link" th:href="@{/boards/{division}(division = ${enDivision}, page = ${pagination.endPage} + 1)}" aria-label="Next">
 		        					<span aria-hidden="true">>></span>
 		      					</a>
 		    				</li>    						

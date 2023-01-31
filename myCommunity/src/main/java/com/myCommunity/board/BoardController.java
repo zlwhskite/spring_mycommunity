@@ -258,7 +258,7 @@ public class BoardController {
 		List<CommentVo> commentSize = commentService.commentListdelete(boardId);
 		
 		model.addAttribute("tit", boardVo.getDivision());
-		model.addAttribute("endivision", boardService.dvchKE(boardVo.getDivision()));
+		model.addAttribute("enDivision", boardService.dvchKE(boardVo.getDivision()));
 		
 		int totalCount = criteriaService.count(boardVo.getDivision());
 
@@ -327,6 +327,12 @@ public class BoardController {
 		}
 		if(loginUser != null) {
 			if(!loginUser.getNickName().equals(boardVo.getUserNickName())) {
+				if(loginUser.getAuth() == 1) {
+					model.addAttribute("division", division);
+					model.addAttribute("board", boardVo);
+						
+					return "board/editPost";
+				}
 				rttr.addFlashAttribute("errm", "본인이 쓴 글만 수정이 가능합니다.");
 
 				return "redirect:/boards/"+ endivision + "/" + boardVo.getId();

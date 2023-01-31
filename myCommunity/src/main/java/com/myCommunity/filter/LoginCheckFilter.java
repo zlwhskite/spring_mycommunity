@@ -18,7 +18,7 @@ import com.myCommunity.attendance.AttendanceService;
 
 public class LoginCheckFilter implements Filter{
 	
-	private static final String[] whitelist = {"/", "/boards", "/users", "/login", "/logout", "/users/create", "/users/checks", 
+	private static final String[] whitelist = {"/", "/boards", "/users", "/users/*", "/login", "/logout", 
 			"/boards/*", "/comments/create", "/h2-console", "/h2-console/*", "/css/*"};
 		
 	@Override

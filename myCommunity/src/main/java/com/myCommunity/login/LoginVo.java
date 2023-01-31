@@ -4,6 +4,7 @@ public class LoginVo {
 	private int id;
 	private String nickName;
 	private String password;
+	private int auth;
 	
 	public LoginVo() {}
 	public LoginVo(int id, String nickName, String password) {
@@ -31,6 +32,12 @@ public class LoginVo {
 	}
 	public void setPassword(String password) {
 		this.password = password;
+	}
+	public int getAuth() {
+		return auth;
+	}
+	public void setAuth(int auth) {
+		this.auth = auth;
 	}
 	
 	

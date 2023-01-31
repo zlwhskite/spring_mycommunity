@@ -54,6 +54,11 @@ public class LoginController {
 		//세션에 로그인 회원 정보 보관
 		session.setAttribute("user", user);
 		
+		if(user.getAuth() == 1) {
+			rttr.addFlashAttribute("lmsgm", "관리자 로그인입니다.");
+			return "redirect:/boards";
+		}
+		
 		
 		Calendar calendar = new GregorianCalendar();
 		SimpleDateFormat SDF = new SimpleDateFormat("yyyy-MM-dd");
