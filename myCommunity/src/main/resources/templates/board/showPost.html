@@ -139,7 +139,7 @@
                         			<td>
 			                        	<a style="text-decoration: none; color: black;" data-bs-toggle="tooltip" title="작성 글 보러가기" 
 			                        	th:href="@{/boards/name/{nickName}(nickName = ${bd.userNickName})}">
-			                            	[[${board.userNickName}]]
+			                            	[[${bd.userNickName}]]
 			                           	</a>
                        				</td>
 			                        <td th:text="${bd.modifyTime}"></td>

@@ -82,8 +82,6 @@ public class LoginController {
 				
 				if(at != null) {
 					int cnt = at.getCount() + 1;
-					System.out.println("원래 = "+att.getCount());
-					System.out.println("+한거 = " + cnt);
 					att.setCount(cnt);
 					attService.update(user.getId(), att);
 					rttr.addFlashAttribute("lmsgm", user.getNickName() + " 님, 안녕하세요! " + "( 연속 " + cnt + "일째 출석 중 )");

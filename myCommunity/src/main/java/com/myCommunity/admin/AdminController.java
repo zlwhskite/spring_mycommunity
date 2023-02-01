@@ -13,6 +13,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import com.myCommunity.board.BoardServiceImpl;
 import com.myCommunity.board.BoardVo;
 import com.myCommunity.login.LoginVo;
 
@@ -20,6 +21,8 @@ import com.myCommunity.login.LoginVo;
 public class AdminController {
 	@Autowired
 	AdminService adminService;
+	@Autowired
+	BoardServiceImpl boardService;
 	
 	
 	@GetMapping("/admin")
@@ -54,11 +57,23 @@ public class AdminController {
 		if(todayBoard.isEmpty()) {
 			model.addAttribute("todayBoard", 0);
 		}
+		List<BoardVo> travelList = boardService.findAllTravel();
+		List<BoardVo> hobbyList = boardService.findAllHobby();
+		List<BoardVo> computerList = boardService.findAllComputer();
+		List<BoardVo> stockList = boardService.findAllStock();
+		List<BoardVo> freeList = boardService.findAllFree();
+		
 		
 		model.addAttribute("todayUserList", todayUser);
 		model.addAttribute("todayBoardList", todayBoard);
 		model.addAttribute("userList", userList);
 		model.addAttribute("boardList", boardList);
+		
+		model.addAttribute("travelList", travelList);
+		model.addAttribute("hobbyList", hobbyList);
+		model.addAttribute("computerList", computerList);
+		model.addAttribute("stockList", stockList);
+		model.addAttribute("freeList", freeList);
 		
 		
 		

@@ -10,9 +10,11 @@
 		<if test="division == 'All' and search != null and search != ''">
 			AND title LIKE '%' || #{search} || '%'
 		</if>
-		<if test="division != 'All' and search != null and search != ''">
+		<if test="division != 'All'">
 			AND division = #{division}
-			AND title LIKE '%' || #{search} || '%'
+			<if test="search != null and search != ''">
+				AND title LIKE '%' || #{search} || '%'
+			</if>	
 		</if>
 		order by id DESC
 		limit #{startIndex}, #{pageSize}
@@ -25,9 +27,11 @@
 		<if test="division == 'All' and search != null and search != ''">
 			AND title LIKE '%' || #{search} || '%'
 		</if>
-		<if test="division != 'All' and search != null and search != ''">
+		<if test="division != 'All'">
 			AND division = #{division}
-			AND title LIKE '%' || #{search} || '%'
+			<if test="search != null and search != ''">
+				AND title LIKE '%' || #{search} || '%'
+			</if>	
 		</if>
 		order by id DESC
 	</select>

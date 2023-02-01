@@ -233,7 +233,6 @@ public class BoardController {
 	@GetMapping("/{division}/{id}")
 	public String showPost(@PathVariable("id") int boardId, @RequestParam(value="page", required=false, defaultValue = "1") int page, HttpServletRequest request, Model model) {
 		HttpSession session = request.getSession(false);
-		
 		BoardVo boardVo = boardService.findById(boardId);
 		
 		if(session == null) {
