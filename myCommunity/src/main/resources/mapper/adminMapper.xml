@@ -6,6 +6,7 @@
 		select id, email, nickname, password, gender, auth, create_time, modify_time, delete_time
 		from users
 		where delete_time is null
+		order by id DESC
 	</select>
 	<select id="boardList" resultType="AdminVo">
 		select id, title, contents, user_nickname, division, hits, create_time, modify_time, delete_time

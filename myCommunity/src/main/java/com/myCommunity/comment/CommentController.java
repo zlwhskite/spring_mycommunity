@@ -34,9 +34,7 @@ public class CommentController {
 	
 	@PostMapping("/create")
 	public String commentCreate(@ModelAttribute("comment") CommentVo commentVo, @RequestParam("division") String division, 
-			@RequestParam("id") String boardId, HttpServletRequest request, RedirectAttributes rttr) {
-		int boarId = Integer.parseInt(boardId);
-		
+			@RequestParam("id") int boardId, HttpServletRequest request, RedirectAttributes rttr) {		
 		division = boardService.dvchKE(division);
 		
 		HttpSession session = request.getSession(false);
@@ -44,21 +42,21 @@ public class CommentController {
 		if (session == null) {
 			rttr.addFlashAttribute("errm", "로그인 후 댓글작성이 가능합니다.");
 
-			return "redirect:/boards/"+ division + "/" + boarId;
+			return "redirect:/boards/"+ division + "/" + boardId;
 		}
 		
 		LoginVo loginUser = (LoginVo)session.getAttribute("user");
 		
 		if(loginUser == null) {
 			rttr.addFlashAttribute("errm", "로그인 후 댓글작성이 가능합니다.");
-			return "redirect:/boards/"+ division + "/" + boarId;
+			return "redirect:/boards/"+ division + "/" + boardId;
 		}
 		if(commentVo.getContents().isEmpty()) {
 			rttr.addFlashAttribute("errm", "공백으로는 댓글을 등록할 수 없습니다.");
-			return "redirect:/boards/"+ division + "/" + boarId;
+			return "redirect:/boards/"+ division + "/" + boardId;
 		}
 		
-		commentVo.setBoardId(boarId);
+		commentVo.setBoardId(boardId);
 		commentVo.setUserNickName(loginUser.getNickName());
 		commentVo.setCreateTime(LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
 		commentVo.setModifyTime(LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
@@ -68,15 +66,13 @@ public class CommentController {
 		
 		rttr.addFlashAttribute("msgm", "댓글이 등록되었습니다.");
 		
-		return "redirect:/boards/"+ division + "/" + boarId;
+		return "redirect:/boards/"+ division + "/" + boardId;
 	}
 	
 
 	@RequestMapping(value="/{id}", params="action=modify")
-	public String commentUpdate(@ModelAttribute("comm") CommentVo commentVo, @PathVariable("id") String id, @RequestParam("division") String division,
-			RedirectAttributes rttr) {
-		int commentId = Integer.parseInt(id);
-		
+	public String commentUpdate(@ModelAttribute("comm") CommentVo commentVo, @PathVariable("id") int commentId, @RequestParam("division") String division,
+			RedirectAttributes rttr) {	
 		CommentVo com = commentService.findById(commentId);
 		
 		commentVo.setModifyTime(LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
@@ -100,10 +96,8 @@ public class CommentController {
 	}
 	
 	@RequestMapping(value="/{id}", params="action=delete")
-	public String commentDelete(@ModelAttribute("comm") CommentVo commentVo, @PathVariable("id") String id, @RequestParam("division") String division,
+	public String commentDelete(@ModelAttribute("comm") CommentVo commentVo, @PathVariable("id") int commentId, @RequestParam("division") String division,
 			RedirectAttributes rttr) {
-		int commentId = Integer.parseInt(id);
-
 		commentVo = commentService.findById(commentId);
 		commentVo.setDeleteTime(LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
 		

@@ -135,9 +135,7 @@ public class UserController {
 	
 	
 	@RequestMapping(value="/{id}", params="action=modify")
-	public String userModify(@ModelAttribute("user") UserVo userVo, @PathVariable("id") String id, RedirectAttributes rttr) {
-		int userId = Integer.parseInt(id);
-		
+	public String userModify(@ModelAttribute("user") UserVo userVo, @PathVariable("id") int userId, RedirectAttributes rttr) {
 		userVo.setModifyTime(LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
 		userService.update(userId, userVo);
 		
@@ -252,10 +250,8 @@ public class UserController {
 		return "user/findResultPwd";
 	}
 	@PostMapping("/reset")
-	public String resetPwd(@RequestParam("pswd1") String pwd1, @RequestParam("pswd2") String pwd2, @RequestParam("id") String id, 
+	public String resetPwd(@RequestParam("pswd1") String pwd1, @RequestParam("pswd2") String pwd2, @RequestParam("id") int userId, 
 			RedirectAttributes rttr, Model model) {
-		int userId =  Integer.parseInt(id);
-		
 		if(!pwd1.equals(pwd2)) {
 			rttr.addFlashAttribute("lmsgm", "입력하신 비밀번호가 일치하지않습니다.");
 			return "redirect:/users/findPwd";

@@ -31,9 +31,7 @@ public class SearchController {
 	
 	@GetMapping("/search")
 	public String search(@RequestParam("division") String division, @RequestParam("search") String search, 
-			@RequestParam(value="page", required=false, defaultValue = "1") String page, RedirectAttributes rttr, Model model) {
-		int pagee = Integer.parseInt(page);
-		
+			@RequestParam(value="page", required=false, defaultValue = "1") int page, RedirectAttributes rttr, Model model) {	
 		if(division.equals("All")) {
 			List<SearchVo> countList = searchMapper.searchCount(division, search);
 			if(countList.size() == 0) {
@@ -45,19 +43,19 @@ public class SearchController {
 			Pagination pn = new Pagination();
 			Criteria pg = new Criteria();
 			
-			if(pagee <= 0) {
-				pagee = 1;
+			if(page <= 0) {
+				page = 1;
 			}
 			
-			pg.setPage(pagee);
+			pg.setPage(page);
 			
 			pn.setCriteria(pg);
 			
 			pn.setTotalCount(totalCount);
 
-			if(pn.getEndPage() < pagee) {
-				pagee = pn.getTotalPageCount();
-				pg.setPage(pagee);
+			if(pn.getEndPage() < page) {
+				page = pn.getTotalPageCount();
+				pg.setPage(page);
 				
 				pn.setCriteria(pg);
 				
@@ -88,19 +86,19 @@ public class SearchController {
 		Pagination pn = new Pagination();
 		Criteria pg = new Criteria();
 		
-		if(pagee <= 0) {
-			pagee = 1;
+		if(page <= 0) {
+			page = 1;
 		}
 		
-		pg.setPage(pagee);
+		pg.setPage(page);
 		
 		pn.setCriteria(pg);
 		
 		pn.setTotalCount(totalCount);
 
-		if(pn.getEndPage() < pagee) {
-			pagee = pn.getTotalPageCount();
-			pg.setPage(pagee);
+		if(pn.getEndPage() < page) {
+			page = pn.getTotalPageCount();
+			pg.setPage(page);
 			
 			pn.setCriteria(pg);
 			

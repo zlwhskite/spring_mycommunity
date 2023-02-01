@@ -94,8 +94,7 @@ public class BoardController {
 	}
 	
 	@GetMapping("/{division}")
-	public String divisionBoard(@PathVariable("division") String division, @RequestParam(value="page", required=false, defaultValue = "1") String page, Model model) {
-		int pagee = Integer.parseInt(page);
+	public String divisionBoard(@PathVariable("division") String division, @RequestParam(value="page", required=false, defaultValue = "1") int page, Model model) {
 		if(division.equals("hot")) {
 			List<BoardVo> hotCnt = boardService.findAllHot();
 			int totalCount = hotCnt.size();
@@ -103,19 +102,19 @@ public class BoardController {
 			Pagination pn = new Pagination();
 			Criteria pg = new Criteria();
 			
-			if(pagee <= 0) {
-				pagee = 1;
+			if(page <= 0) {
+				page = 1;
 			}
 			
-			pg.setPage(pagee);
+			pg.setPage(page);
 			
 			pn.setCriteria(pg);
 			
 			pn.setTotalCount(totalCount);
 
-			if(pn.getEndPage() < pagee) {
-				pagee = pn.getTotalPageCount();
-				pg.setPage(pagee);
+			if(pn.getEndPage() < page) {
+				page = pn.getTotalPageCount();
+				pg.setPage(page);
 				
 				pn.setCriteria(pg);
 				
@@ -141,19 +140,19 @@ public class BoardController {
 		Pagination pn = new Pagination();
 		Criteria pg = new Criteria();
 		
-		if(pagee <= 0) {
-			pagee = 1;
+		if(page <= 0) {
+			page = 1;
 		}
 		
-		pg.setPage(pagee);
+		pg.setPage(page);
 		
 		pn.setCriteria(pg);
 		
 		pn.setTotalCount(totalCount);
 
-		if(pn.getEndPage() < pagee) {
-			pagee = pn.getTotalPageCount();
-			pg.setPage(pagee);
+		if(pn.getEndPage() < page) {
+			page = pn.getTotalPageCount();
+			pg.setPage(page);
 			
 			pn.setCriteria(pg);
 			
@@ -232,9 +231,7 @@ public class BoardController {
 	}
 	
 	@GetMapping("/{division}/{id}")
-	public String showPost(@PathVariable("id") String id, @RequestParam(value="page", required=false, defaultValue = "1") String page, HttpServletRequest request, Model model) {
-		int boardId = Integer.parseInt(id);
-		int pagee = Integer.parseInt(page);
+	public String showPost(@PathVariable("id") int boardId, @RequestParam(value="page", required=false, defaultValue = "1") int page, HttpServletRequest request, Model model) {
 		HttpSession session = request.getSession(false);
 		
 		BoardVo boardVo = boardService.findById(boardId);
@@ -265,19 +262,19 @@ public class BoardController {
 		Pagination pn = new Pagination();
 		Criteria pg = new Criteria();
 		
-		if(pagee <= 0) {
-			pagee = 1;
+		if(page <= 0) {
+			page = 1;
 		}
 		
-		pg.setPage(pagee);
+		pg.setPage(page);
 		
 		pn.setCriteria(pg);
 		
 		pn.setTotalCount(totalCount);
 
-		if(pn.getEndPage() < pagee) {
-			pagee = pn.getTotalPageCount();
-			pg.setPage(pagee);
+		if(pn.getEndPage() < page) {
+			page = pn.getTotalPageCount();
+			pg.setPage(page);
 			
 			pn.setCriteria(pg);
 			
@@ -302,9 +299,8 @@ public class BoardController {
 	}
 	
 	@GetMapping("/{division}/{id}/edit")
-	public String editPost(@PathVariable("division") String division, @PathVariable("id") String id, Model model,
+	public String editPost(@PathVariable("division") String division, @PathVariable("id") int boardId, Model model,
 			HttpServletRequest request, RedirectAttributes rttr) {
-		int boardId = Integer.parseInt(id);
 		BoardVo boardVo = boardService.findById(boardId);
 		
 		model.addAttribute("tit", boardVo.getDivision());
@@ -347,7 +343,7 @@ public class BoardController {
 	}
 	
 	@PatchMapping("/{id}")
-	public String updatePost(@ModelAttribute("board") BoardVo boardVo, @PathVariable("id") String id, RedirectAttributes rttr, Model model) {		
+	public String updatePost(@ModelAttribute("board") BoardVo boardVo, @PathVariable("id") int boardId, RedirectAttributes rttr, Model model) {		
 		boardVo.setDivision(boardService.dvchKE(boardVo.getDivision()));
 		String select = boardService.dvchKE(boardVo.getDivision());
 		
@@ -357,7 +353,6 @@ public class BoardController {
 			return "redirect:/boards/" + select + "/" + boardVo.getId() + "/edit";
 		}
 		
-		int boardId = Integer.parseInt(id);
 		boardVo.setModifyTime(LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
 				
 		boardService.update(boardId, boardVo);	
@@ -368,8 +363,7 @@ public class BoardController {
 	}
 	
 	@DeleteMapping("/{id}")
-	public String deletePost(@ModelAttribute("board") BoardVo boardVo, @PathVariable("id") String id, RedirectAttributes rttr) {
-		int boardId = Integer.parseInt(id);
+	public String deletePost(@ModelAttribute("board") BoardVo boardVo, @PathVariable("id") int boardId, RedirectAttributes rttr) {
 		boardVo.setDeleteTime(LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
 		String division = boardService.dvchKE(boardVo.getDivision());
 		
@@ -380,9 +374,7 @@ public class BoardController {
 	
 	@GetMapping("/srt")
 	public String boardSort2(@RequestParam("srt") String sort, @RequestParam("tit") String tit, 
-			@RequestParam(defaultValue = "최신순") String srt, @RequestParam(value="page", required=false, defaultValue = "1") String page, Model model) {
-		int pagee = Integer.parseInt(page);
-		
+			@RequestParam(defaultValue = "최신순") String srt, @RequestParam(value="page", required=false, defaultValue = "1") int page, Model model) {
 		String division = boardService.dvchKE(tit);
 		
 		if(sort.equals("인기순")) {
@@ -391,19 +383,19 @@ public class BoardController {
 			Pagination pn = new Pagination();
 			Criteria pg = new Criteria();
 			
-			if(pagee <= 0) {
-				pagee = 1;
+			if(page <= 0) {
+				page = 1;
 			}
 			
-			pg.setPage(pagee);
+			pg.setPage(page);
 			
 			pn.setCriteria(pg);
 			
 			pn.setTotalCount(totalCount);
 
-			if(pn.getEndPage() < pagee) {
-				pagee = pn.getTotalPageCount();
-				pg.setPage(pagee);
+			if(pn.getEndPage() < page) {
+				page = pn.getTotalPageCount();
+				pg.setPage(page);
 				
 				pn.setCriteria(pg);
 				
@@ -429,19 +421,19 @@ public class BoardController {
 			Pagination pn = new Pagination();
 			Criteria pg = new Criteria();
 			
-			if(pagee <= 0) {
-				pagee = 1;
+			if(page <= 0) {
+				page = 1;
 			}
 			
-			pg.setPage(pagee);
+			pg.setPage(page);
 			
 			pn.setCriteria(pg);
 			
 			pn.setTotalCount(totalCount);
 
-			if(pn.getEndPage() < pagee) {
-				pagee = pn.getTotalPageCount();
-				pg.setPage(pagee);
+			if(pn.getEndPage() < page) {
+				page = pn.getTotalPageCount();
+				pg.setPage(page);
 				
 				pn.setCriteria(pg);
 				

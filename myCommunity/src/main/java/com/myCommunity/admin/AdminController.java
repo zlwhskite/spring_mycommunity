@@ -33,11 +33,11 @@ public class AdminController {
 		if(session != null) {
 			LoginVo loginVo = (LoginVo)session.getAttribute("user");
 			if(loginVo == null) {
-				rttr.addFlashAttribute("errm", "로그인 후 글 작성이 가능합니다.");
+				rttr.addFlashAttribute("errm", "로그인정보를 획득하지 못했습니다.");
 				return "redirect:/login";
 			}
 			if(loginVo.getAuth() == 0) {
-				rttr.addFlashAttribute("errm", "권한이 없습니다.");
+				rttr.addFlashAttribute("errm", "관리자권한이 없습니다.");
 				return "redirect:/login";
 			}
 		}
