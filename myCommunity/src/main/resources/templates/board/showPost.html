@@ -57,26 +57,25 @@
    			<br>
             </th:block>
             	<!-- 댓글 -->
-				<ul th:each="comm : ${commentList}">
-					<li>
+				<ul class="list-group list-group-flush" th:each="comm : ${commentList}">
+					<li class="list-group-item">
 						<div>
 							<form th:action="@{/comments/{id}(id = ${comm.id})}" method="post">
 								<input type="hidden" th:field="${board.division}"></input>
 								<input type="hidden" name="boardId" th:value="${board.id}"></input>
 								<th:block th:if="${comm.deleteTime == null}">														
-									<p>	
-										<b>[[ ${comm.userNickName} ]]</b> / 
+									<p>
+										<b>◽&nbsp;[[ ${comm.userNickName} ]]</b> / 
 										<th:block th:if="${comm.modifyTime == null}">
 										[[ ${comm.createTime} ]]	
 										</th:block>
 										<th:block th:if="${comm.modifyTime != null}">
 										[[ ${comm.modifyTime} ]](수정)
 										</th:block>
-										&nbsp;&nbsp;
 										<button class="btn btn-link btn-sm" type="button" data-bs-toggle="collapse" th:attr="data-bs-target=|#a${comm.id}">댓글쓰기</button>
 									</p>				
 									<div>
-										<p>[[ ${comm.contents} ]]</p>							
+										<p>&nbsp;&nbsp;&nbsp;&nbsp;[[ ${comm.contents} ]]</p>							
 									</div>
 								</th:block>
 								<th:block th:if="${comm.deleteTime != null}">														
@@ -114,15 +113,15 @@
 					<th:block th:each="rep : ${replyList}">
 						<th:block th:if="${rep.groupId == comm.id}">
 						<input type="hidden" name="replyId" th:value="${rep.id}"></input>
-						<ul>
-							<li>
+						<ul class="list-group list-group-flush">
+							<li class="list-group-item">
 								<div>
 									<form th:action="@{/comments/{id}(id = ${rep.id})}" method="post">
 									<input type="hidden" th:field="${board.division}"></input>
 									<input type="hidden" name="boardId" th:value="${board.id}"></input>
 									<th:block th:if="${rep.deleteTime == null}">		
 									<p>
-										<b>[[ ${rep.userNickName} ]]</b> / 
+										<b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;⤷&nbsp;&nbsp;[[ ${rep.userNickName} ]]</b> / 
 										<th:block th:if="${rep.modifyTime == null}">
 											[[ ${rep.createTime} ]]	
 										</th:block>
@@ -131,12 +130,12 @@
 										</th:block>
 									</p>				
 									<div>
-										<p>[[ ${rep.contents} ]]</p>							
+										<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[[ ${rep.contents} ]]</p>							
 									</div>
 									</th:block>
 									<th:block th:if="${rep.deleteTime != null}">														
 										<p>	
-											<s>삭제 된 댓글입니다.</s>
+											<s>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;⤷&nbsp;&nbsp;삭제 된 댓글입니다.</s>
 										</p>				
 									</th:block>
 									<div class="collapse mb-2" th:id="rc + ${rep.id}">
