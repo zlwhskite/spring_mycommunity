@@ -155,13 +155,13 @@ public class UserController {
 		LoginVo loginVo = (LoginVo)session.getAttribute("user");
 		
 		if(loginVo == null) {
-			rttr.addFlashAttribute("lmsgm", "수정하는 중 오류가 발생했습니다.");
+			rttr.addFlashAttribute("errm", "수정하는 중 오류가 발생했습니다.");
 			return "redirect:/boards";
 		}else {
 			if(!newpwd.equals(confirmpwd)) {
 				UserVo user = userService.findById(loginVo.getId());
 				model.addAttribute("userIn", user);
-				rttr.addFlashAttribute("lmsgm", "비밀번호가 일치하지않습니다");
+				rttr.addFlashAttribute("errm", "비밀번호가 일치하지않습니다");
 				return "redirect:/users/edit";
 			}
 			UserVo user = userService.findById(loginVo.getId());
@@ -171,7 +171,7 @@ public class UserController {
 			int result = userService.pwdModify(loginVo.getId(), user, oldpwd);   
 			
 			if(result == 0) {
-				rttr.addFlashAttribute("lmsgm", "기존 비밀번호가 일치하지않습니다");
+				rttr.addFlashAttribute("errm", "기존 비밀번호가 일치하지않습니다");
 				return "redirect:/users/edit";
 			}
 			
@@ -187,7 +187,7 @@ public class UserController {
 		LoginVo loginVo = (LoginVo)session.getAttribute("user");
 		
 		if(loginVo == null) {
-			rttr.addFlashAttribute("lmsgm", "수정하는 중 오류가 발생했습니다.");
+			rttr.addFlashAttribute("errm", "수정하는 중 오류가 발생했습니다.");
 			return "redirect:/boards";
 		}else {
 			UserVo user = userService.findById(loginVo.getId());
@@ -223,7 +223,7 @@ public class UserController {
 		UserVo user = userService.findUserNickName(email);
 		
 		if(user == null) {
-			rttr.addFlashAttribute("lmsgm", "회원정보가 존재하지않습니다.");
+			rttr.addFlashAttribute("errm", "회원정보가 존재하지않습니다.");
 			return "redirect:/users/findUser";
 		}
 		
@@ -242,7 +242,7 @@ public class UserController {
 		UserVo user = userService.findPwd(nickName, email);
 		
 		if(user == null) {
-			rttr.addFlashAttribute("lmsgm", "회원정보가 존재하지않습니다.");
+			rttr.addFlashAttribute("errm", "회원정보가 존재하지않습니다.");
 			return "redirect:/users/findPwd";
 		}
 		
@@ -253,7 +253,7 @@ public class UserController {
 	public String resetPwd(@RequestParam("pswd1") String pwd1, @RequestParam("pswd2") String pwd2, @RequestParam("id") int userId, 
 			RedirectAttributes rttr, Model model) {
 		if(!pwd1.equals(pwd2)) {
-			rttr.addFlashAttribute("lmsgm", "입력하신 비밀번호가 일치하지않습니다.");
+			rttr.addFlashAttribute("errm", "입력하신 비밀번호가 일치하지않습니다.");
 			return "redirect:/users/findPwd";
 		}
 		

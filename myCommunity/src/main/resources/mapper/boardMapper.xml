@@ -83,6 +83,12 @@
 		where division = '주식' and delete_time is null
 		order by id DESC
 	</select>
+	<select id="findAllWorkout" resultType="BoardVo">
+		select id, title, contents, user_nickname, division, hits, create_time, modify_time, delete_time
+		from boards
+		where division = '운동' and delete_time is null
+		order by id DESC
+	</select>
 	<select id="findAllFree" resultType="BoardVo">
 		select id, title, contents, user_nickname, division, hits, create_time, modify_time, delete_time
 		from boards

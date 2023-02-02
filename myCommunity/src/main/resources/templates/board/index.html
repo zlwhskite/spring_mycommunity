@@ -189,6 +189,38 @@
 	                                <a th:href="@{/boards/stock}" class="text-black">더 보기...</a>
 	                            </div>
 	                        </div>
+	                        	                        <div class="col-sm-4">
+	                            <h3>운동</h3>            
+	                            <table class="table table-hover">
+	                                <thead class="table-light">
+	                                    <tr>
+	                                        <th>번호</th>
+	                                        <th>제목</th>
+	                                        <th>작성자</th>
+	                                    </tr>
+	                                </thead>
+	                                <tbody>
+	                                    <tr th:each="board, index : ${workoutList}" th:if="${index.index} < 5">
+	                                        <td th:text="${board.id}"></td>
+	                                        <td>
+                                				<a style="text-decoration: none;" th:href="@{/boards/{division}/{id}(division = 'free', id = ${board.id})}">[[${board.title}]]</a>
+                                				<th:block th:if="${board.hits} &gt;= 100">
+                                					<span class="badge rounded-pill bg-danger"><small>Hot</small></span>
+                            					</th:block>
+                                			</td>
+	                                        <td>
+                                				<a style="text-decoration: none; color: black;" data-bs-toggle="tooltip" title="작성 글 보러가기" 
+                                				th:href="@{/boards/name/{nickName}(nickName = ${board.userNickName})}">
+                                					[[${board.userNickName}]]
+                                				</a>
+                                			</td>
+	                                    </tr>                                        
+	                                </tbody>
+	                            </table>
+	                            <div style="text-align: right;">
+	                                <a th:href="@{/boards/workout}" class="text-black">더 보기...</a>
+	                            </div>
+	                        </div>
 	                        <div class="col-sm-4">
 	                            <h3>자유게시판</h3>            
 	                            <table class="table table-hover">

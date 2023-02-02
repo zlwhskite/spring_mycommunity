@@ -51,6 +51,7 @@ public class BoardController {
 		List<BoardVo> hobbyList = boardService.findAllHobby();
 		List<BoardVo> computerList = boardService.findAllComputer();
 		List<BoardVo> stockList = boardService.findAllStock();
+		List<BoardVo> workoutList = boardService.findAllWorkout();
 		List<BoardVo> freeList = boardService.findAllFree();
 		
 		HttpSession session = request.getSession(false);
@@ -62,6 +63,7 @@ public class BoardController {
 			model.addAttribute("hobbyList", hobbyList);
 			model.addAttribute("computerList", computerList);
 			model.addAttribute("stockList", stockList);
+			model.addAttribute("workoutList", workoutList);
 			model.addAttribute("freeList", freeList);
 			
 			return "board/index";
@@ -76,6 +78,7 @@ public class BoardController {
 			model.addAttribute("hobbyList", hobbyList);
 			model.addAttribute("computerList", computerList);
 			model.addAttribute("stockList", stockList);
+			model.addAttribute("workoutList", workoutList);
 			model.addAttribute("freeList", freeList);
 			
 			return "board/index";
@@ -86,6 +89,7 @@ public class BoardController {
 		model.addAttribute("hobbyList", hobbyList);
 		model.addAttribute("computerList", computerList);
 		model.addAttribute("stockList", stockList);
+		model.addAttribute("workoutList", workoutList);
 		model.addAttribute("freeList", freeList);
 		
 		model.addAttribute("user", loginUser);

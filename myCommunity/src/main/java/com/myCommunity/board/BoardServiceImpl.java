@@ -84,6 +84,11 @@ public class BoardServiceImpl implements BoardService {
 	public List<BoardVo> findAllStock() {
 		return boardMapper.findAllStock();
 	}
+	
+	@Override
+	public List<BoardVo> findAllWorkout() {
+		return boardMapper.findAllWorkout();
+	}
 
 	@Override
 	public List<BoardVo> findAllFree() {
@@ -115,6 +120,9 @@ public class BoardServiceImpl implements BoardService {
 		if(division.equals("주식")) {
 			division = "stock";
 		}
+		if(division.equals("운동")) {
+			division = "workout";
+		}
 		if(division.equals("자유게시판")) {
 			division = "free";
 		}
@@ -132,6 +140,9 @@ public class BoardServiceImpl implements BoardService {
 		}
 		if(division.equals("stock")) {
 			division = "주식";
+		}
+		if(division.equals("workout")) {
+			division = "운동";
 		}
 		if(division.equals("free")) {
 			division = "자유게시판";

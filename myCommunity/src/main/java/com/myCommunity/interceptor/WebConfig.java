@@ -16,8 +16,8 @@ public class WebConfig implements WebMvcConfigurer {
 				//인터셉터를 적용할 URL패턴을 지정
 				.addPathPatterns("/**") 
 				//인터셉터에서 제외할 패턴을 지정
-				.excludePathPatterns("/", "/boards", "/users", "/users/**", "/login", "/logout", 
-						 "/boards/**", "/comments/create", "/h2-console", "/h2-console/**", "/css/*");
+				.excludePathPatterns("/", "/boards", "/users", "/users/create", "/users/checks", "/login", "/logout", 
+						 "/boards/**", "/comments/**", "/h2-console", "/h2-console/**", "/css/*");
 	}
 }
 

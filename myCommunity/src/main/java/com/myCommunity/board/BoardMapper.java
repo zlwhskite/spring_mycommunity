@@ -29,6 +29,7 @@ public interface BoardMapper {
 	List<BoardVo> findAllHobby(); 
 	List<BoardVo> findAllComputer(); 
 	List<BoardVo> findAllStock(); 
+	List<BoardVo> findAllWorkout();
 	List<BoardVo> findAllFree();
 	List<BoardVo> boardHits(String division);
 	List<BoardVo> boardRecen(String division);

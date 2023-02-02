@@ -6,6 +6,7 @@
 			const errm = /*[[ ${errm} ]]*/
 			$(document).ready(function(){
   				if(errm != null){
+					$("#modalColor").attr("class", "modal-header text-bg-warning");      
    					$("#myModal").modal("show");
   				}
 			});
@@ -13,6 +14,7 @@
 			const msgm = /*[[ ${msgm} ]]*/
 			$(document).ready(function(){
   				if(msgm != null){
+					$("#modalColor").attr("class", "modal-header text-bg-primary");   
    					$("#myModal").modal("show");
   				}
 			});
@@ -20,6 +22,7 @@
 			const lmsgm = /*[[ ${lmsgm} ]]*/
 			$(document).ready(function(){
   				if(lmsgm != null){
+					$("#modalColor").attr("class", "modal-header text-bg-primary");   
    					$("#myModal").modal("show");
   				}
 			});    
@@ -66,6 +69,9 @@
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" th:href="@{/boards/{division}(division = 'stock')}">주식</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" th:href="@{/boards/{division}(division = 'workout')}">운동</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" th:href="@{/boards/{division}(division = 'free')}">자유게시판</a>
