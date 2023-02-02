@@ -11,9 +11,11 @@ import com.myCommunity.board.BoardVo;
 public interface CommentMapper {
 	
 	List<CommentVo> commentList(int id);
+	List<CommentVo> replyList(int id);
 	List<CommentVo> commentListdelete(int id);
 	CommentVo findById(int id);
 	void commentCreate(CommentVo commentVo);
+	void replyCreate(CommentVo commentVo);
 	void commentModify(@Param("id") int id, @Param("commentVo") CommentVo commentVo);
 	void commentDelete(@Param("id") int id, @Param("commentVo") CommentVo commentVo);
 	void commentUserDelete(@Param("commentVo") CommentVo commentVo);

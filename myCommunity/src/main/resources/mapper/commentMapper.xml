@@ -6,9 +6,20 @@
 	<!-- 댓글 조회 -->
 	<select id="commentList" resultType="CommentVo">
 		select
-			id, board_id, user_nickname, contents, modify_time, delete_time
+			id, board_id, user_nickname, contents, group_id, dep, create_time, modify_time, delete_time
 		from comments
 		where board_id = #{id}
+		and dep = 0
+		order by id ASC
+	</select>
+	
+	<!-- 대댓글 조회 -->
+	<select id="replyList" resultType="CommentVo">
+		select
+			id, board_id, user_nickname, contents, group_id, dep, create_time, modify_time, delete_time
+		from comments
+		where board_id = #{id}
+		and dep = 1
 		order by id ASC
 	</select>
 	
@@ -26,15 +37,20 @@
 	
 	<!-- 특정 댓글 조회 -->
 	<select id="findById" resultType="CommentVo">
-		select id, board_id, user_nickname, contents, modify_time, delete_time 
+		select id, board_id, user_nickname, contents, group_id, dep, create_time, modify_time, delete_time 
 		from comments
 		where id = #{id} and delete_time is null
 	</select>
 	
 	<!-- 댓글 작성 -->
 	<insert id="commentCreate" useGeneratedKeys="true" keyProperty="id">
-		INSERT INTO comments(board_id, user_nickname, contents, create_time, modify_time)
-			VALUES (#{boardId}, #{userNickName}, #{contents}, #{createTime}, #{modifyTime})
+		INSERT INTO comments(board_id, user_nickname, contents, create_time)
+			VALUES (#{boardId}, #{userNickName}, #{contents}, #{createTime})
+	</insert>
+	<!-- 대댓글 작성 -->
+	<insert id="replyCreate" useGeneratedKeys="true" keyProperty="id">
+		INSERT INTO comments(board_id, user_nickname, contents, group_id, dep, create_time)
+			VALUES (#{boardId}, #{userNickName}, #{contents}, #{groupId}, #{dep}, #{createTime})
 	</insert>
 		
 	<!-- 댓글 수정 -->

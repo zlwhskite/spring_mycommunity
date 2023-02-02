@@ -5,22 +5,56 @@ public class CommentVo {
 	private int boardId;
 	private String userNickName;
 	private String contents;
+	private int groupId;
+	private int dep;
 	private String createTime;
 	private String modifyTime;
 	private String deleteTime;
 	
 	public CommentVo() {}
 	
-	public CommentVo(int id, int boardId, String userNickName, String createTime, String modifyTime,
-			String deleteTime) {
+
+
+	public CommentVo(int id, int boardId, String userNickName, String contents, int groupId, int dep, String createTime,
+			String modifyTime, String deleteTime) {
 		super();
 		this.id = id;
 		this.boardId = boardId;
 		this.userNickName = userNickName;
+		this.contents = contents;
+		this.groupId = groupId;
+		this.dep = dep;
 		this.createTime = createTime;
 		this.modifyTime = modifyTime;
 		this.deleteTime = deleteTime;
 	}
+
+
+	
+
+	public int getGroupId() {
+		return groupId;
+	}
+
+
+
+	public void setGroupId(int groupId) {
+		this.groupId = groupId;
+	}
+
+
+
+	public int getDep() {
+		return dep;
+	}
+
+
+
+	public void setDep(int dep) {
+		this.dep = dep;
+	}
+
+
 
 	public int getId() {
 		return id;

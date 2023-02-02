@@ -17,6 +17,11 @@ public class CommentServiceImpl implements CommentService {
 	}
 	
 	@Override
+	public 	List<CommentVo> replyList(int id) {
+		return commentMapper.replyList(id);
+	}
+	
+	@Override
 	public CommentVo findById(int id) {
 		CommentVo commentVo = commentMapper.findById(id);
 		return commentVo;
@@ -25,6 +30,11 @@ public class CommentServiceImpl implements CommentService {
 	@Override
 	public void commentCreate(CommentVo commentVo) {
 		commentMapper.commentCreate(commentVo);
+	}
+	
+	@Override
+	public void replyCreate(CommentVo commentVo) {
+		commentMapper.replyCreate(commentVo);
 	}
 
 	@Override

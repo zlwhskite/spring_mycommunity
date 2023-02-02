@@ -251,6 +251,7 @@ public class BoardController {
 		}
 		
 		List<CommentVo> commentList = commentService.commentList(boardId);
+		List<CommentVo> replyList = commentService.replyList(boardId);
 		List<CommentVo> commentSize = commentService.commentListdelete(boardId);
 		
 		model.addAttribute("tit", boardVo.getDivision());
@@ -290,6 +291,7 @@ public class BoardController {
 		model.addAttribute("pagination", pn);
 		model.addAttribute("board", boardVo);
 		model.addAttribute("commentList", commentList);
+		model.addAttribute("replyList", replyList);
 		model.addAttribute("commentSize", commentSize);
 		
 		return "board/showPost";

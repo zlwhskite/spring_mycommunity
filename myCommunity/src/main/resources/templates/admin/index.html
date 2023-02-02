@@ -51,43 +51,49 @@
         <div id="section2" class="container-fluid" style="padding:20px 20px;">
 
             <h1>오늘 작성된 게시글</h1>
-            <table class="table table-hover">
-                <thead class="table-light">
-                    <tr>
-                        <th>번호</th>
-                        <th>제목</th>
-                        <th>작성자</th>
-                        <th>날짜</th>
-                        <th>조회수</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr th:each="board : ${todayBoardList}">
-                        <td th:text="${board.id}"></td>
-                        <td>
-                        	<a style="text-decoration: none;" th:href="@{/boards/{division}/{id}(division = ${board.division}, id = ${board.id})}">
-                        		[[${board.title}]]
-                        	</a>
-                        	<th:block th:if="${board.hits} &gt;= 100">
-                                		<span class="badge rounded-pill bg-danger"><small>Hot</small></span>
-                            </th:block>
-                        </td>
-                        <td>
-                        	<a style="text-decoration: none; color: black;" data-bs-toggle="tooltip" title="작성 글 보러가기" 
-                        	th:href="@{/boards/name/{nickName}(nickName = ${board.userNickName})}">
-                            	[[${board.userNickName}]]
-                           	</a>
-                       	</td>
-                       	<th:block th:if="${board.modifyTime} == null">
-                        	<td th:text="${board.createTime}"></td>
-                       	</th:block>
-                       	<th:block th:if="${board.modifyTime} != null">
-                        	<td>[[ ${board.modifyTime} ]]&nbsp;<small>(수정일)</small></td>
-                       	</th:block>
-						<td th:text="${board.hits}"></td>
-                    </tr>
-                </tbody>
-            </table>
+            <th:block th:if="${todayBoard} == null">
+	            <table class="table table-hover">
+	                <thead class="table-light">
+	                    <tr>
+	                        <th>번호</th>
+	                        <th>제목</th>
+	                        <th>작성자</th>
+	                        <th>날짜</th>
+	                        <th>조회수</th>
+	                    </tr>
+	                </thead>
+	                <tbody>
+	                    <tr th:each="board : ${todayBoardList}">
+	                        <td th:text="${board.id}"></td>
+	                        <td>
+	                        	<a style="text-decoration: none;" th:href="@{/boards/{division}/{id}(division = ${board.division}, id = ${board.id})}">
+	                        		[[${board.title}]]
+	                        	</a>
+	                        	<th:block th:if="${board.hits} &gt;= 100">
+	                                		<span class="badge rounded-pill bg-danger"><small>Hot</small></span>
+	                            </th:block>
+	                        </td>
+	                        <td>
+	                        	<a style="text-decoration: none; color: black;" data-bs-toggle="tooltip" title="작성 글 보러가기" 
+	                        	th:href="@{/boards/name/{nickName}(nickName = ${board.userNickName})}">
+	                            	[[${board.userNickName}]]
+	                           	</a>
+	                       	</td>
+	                       	<th:block th:if="${board.modifyTime} == null">
+	                        	<td th:text="${board.createTime}"></td>
+	                       	</th:block>
+	                       	<th:block th:if="${board.modifyTime} != null">
+	                        	<td>[[ ${board.modifyTime} ]]&nbsp;<small>(수정일)</small></td>
+	                       	</th:block>
+							<td th:text="${board.hits}"></td>
+	                    </tr>
+	                </tbody>
+	            </table>
+            </th:block>
+            <th:block th:if="${todayBoard} != null">
+            	<br>
+            	<h3>&nbsp;&nbsp;&nbsp;&nbsp;->&nbsp;오늘 작성된 게시글은 0개입니다.</h3>
+            </th:block>
 
         </div>
         <hr>
@@ -134,11 +140,16 @@
 		const free = /*[[ ${freeList.size} ]]*/[];
 		
 	  	new Chart(ctx, {
+			//차트 종류
 	    	type: 'bar',
+	    	//차트 데이터
 	    	data: {
+				//x축 이름들
 	      		labels: ['여행', '취미', '컴퓨터', '주식', '자유게시판'],
 	      		datasets: [{
+					//datasets의 이름
 	        		label: '게시글현황',
+	        		//datasets값
 	        		data: [travel, hobby, computer, stock, free],
 	        		backgroundColor: [
 			            'rgba(255, 0, 0, 0.2)',
@@ -157,14 +168,23 @@
 	        		borderWidth: 1
 	      		}]
 	    	},
+	    	//차트설정
 	    	options: {
 				 plugins: {
                  	legend: {
                     	display: false
                     },
+                    subtitle: {
+                		display: true,
+                		font: {weight: 'bold', size: '16px'},
+                		text: '게시글 현황'
+            		}
                 },
+                //축의 관한 설정
 	      		scales: {
+					//y축에 대한 설정
 	        		y: {
+						//값을 0부터 시작하게 설정
 	          			beginAtZero: true
 	        		}
 	      		}
@@ -172,6 +192,7 @@
 	  	});
 	/*]]>*/
 	</script>
+	
 </body>
 </html>
 

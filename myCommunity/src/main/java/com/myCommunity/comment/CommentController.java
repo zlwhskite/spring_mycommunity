@@ -59,8 +59,6 @@ public class CommentController {
 		commentVo.setBoardId(boardId);
 		commentVo.setUserNickName(loginUser.getNickName());
 		commentVo.setCreateTime(LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
-		commentVo.setModifyTime(LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
-		
 		
 		commentService.commentCreate(commentVo);
 		
@@ -96,9 +94,9 @@ public class CommentController {
 	}
 	
 	@RequestMapping(value="/{id}", params="action=delete")
-	public String commentDelete(@ModelAttribute("comm") CommentVo commentVo, @PathVariable("id") int commentId, @RequestParam("division") String division,
+	public String commentDelete(@PathVariable("id") int commentId, @RequestParam("division") String division,
 			RedirectAttributes rttr) {
-		commentVo = commentService.findById(commentId);
+		CommentVo commentVo = commentService.findById(commentId);
 		commentVo.setDeleteTime(LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
 		
 		division = boardService.dvchKE(division);
@@ -108,5 +106,81 @@ public class CommentController {
 		rttr.addFlashAttribute("msgm", "댓글이 삭제되었습니다.");
 		
 		return "redirect:/boards/" + division + "/" + commentVo.getBoardId();
+	}
+	
+	@RequestMapping(value="/{id}", params="action=replyCreate")
+	public String replyCreate(@ModelAttribute("comm") CommentVo commentVo, @PathVariable("id") int commentId, @RequestParam("division") String division,
+			@RequestParam("boardId") int boardId, @RequestParam("replyContents") String replyContents, HttpServletRequest request, RedirectAttributes rttr) {
+		division = boardService.dvchKE(division);
+		
+		HttpSession session = request.getSession(false);
+		
+		if (session == null) {
+			rttr.addFlashAttribute("errm", "로그인 후 댓글작성이 가능합니다.");
+
+			return "redirect:/boards/"+ division + "/" + boardId;
+		}
+		
+		LoginVo loginUser = (LoginVo)session.getAttribute("user");
+		
+		if(loginUser == null) {
+			rttr.addFlashAttribute("errm", "로그인 후 댓글작성이 가능합니다.");
+			return "redirect:/boards/"+ division + "/" + boardId;
+		}
+		if(replyContents.isEmpty()) {
+			rttr.addFlashAttribute("errm", "공백으로는 댓글을 등록할 수 없습니다.");
+			return "redirect:/boards/"+ division + "/" + boardId;
+		}
+		System.out.println("commentId = " + commentId);
+		System.out.println("boardId = " + boardId);
+		System.out.println(replyContents);
+		
+		commentVo.setGroupId(commentId);
+		commentVo.setUserNickName(loginUser.getNickName());
+		commentVo.setContents(replyContents);
+		commentVo.setDep(1);
+		commentVo.setCreateTime(LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
+
+		commentService.replyCreate(commentVo);
+		
+		rttr.addFlashAttribute("msgm", "댓글이 등록되었습니다.");
+		
+		return "redirect:/boards/"+ division + "/" + boardId;
+	}
+	
+	@RequestMapping(value="/{id}", params="action=replyModify")
+	public String replyUpdate(@PathVariable("id") int replyId, @RequestParam("modifyContents") String modifyContents, @RequestParam("division") String division, 
+			RedirectAttributes rttr) {	
+		CommentVo com = commentService.findById(replyId);
+		
+		com.setModifyTime(LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
+		com.setContents(modifyContents);
+		
+		division = boardService.dvchKE(division);
+		
+		if(modifyContents.isEmpty()) {
+			rttr.addFlashAttribute("errm", "공백으로는 댓글을 수정할 수 없습니다.");
+			return "redirect:/boards/" + division + "/" + com.getBoardId();
+		}
+		
+		commentService.commentModify(replyId, com);
+		
+		rttr.addFlashAttribute("msgm", "댓글이 수정되었습니다.");
+		
+		return "redirect:/boards/" + division + "/" + com.getBoardId();
+	}
+	
+	@RequestMapping(value="/{id}", params="action=replyDelete")
+	public String replyDelete(@PathVariable("id") int replyId, @RequestParam("division") String division, RedirectAttributes rttr) {
+		CommentVo com = commentService.findById(replyId);
+		com.setDeleteTime(LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
+		
+		division = boardService.dvchKE(division);
+		
+		commentService.commentDelete(replyId, com);
+		
+		rttr.addFlashAttribute("msgm", "댓글이 삭제되었습니다.");
+		
+		return "redirect:/boards/" + division + "/" + com.getBoardId();
 	}
 }
