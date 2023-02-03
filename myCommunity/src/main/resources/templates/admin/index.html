@@ -137,6 +137,7 @@
 		const hobby = /*[[ ${hobbyList.size} ]]*/[];
 		const computer = /*[[ ${computerList.size} ]]*/[];
 		const stock = /*[[ ${stockList.size} ]]*/[];
+		const workout = /*[[ ${workoutList.size} ]]*/[];
 		const free = /*[[ ${freeList.size} ]]*/[];
 		
 	  	new Chart(ctx, {
@@ -145,17 +146,18 @@
 	    	//차트 데이터
 	    	data: {
 				//x축 이름들
-	      		labels: ['여행', '취미', '컴퓨터', '주식', '자유게시판'],
+	      		labels: ['여행', '취미', '컴퓨터', '주식', '운동', '자유게시판'],
 	      		datasets: [{
 					//datasets의 이름
 	        		label: '게시글현황',
 	        		//datasets값
-	        		data: [travel, hobby, computer, stock, free],
+	        		data: [travel, hobby, computer, stock, workout, free],
 	        		backgroundColor: [
 			            'rgba(255, 0, 0, 0.2)',
 			            'rgba(255, 165, 0, 0.2)',
 			            'rgba(60, 179, 113, 0.2)',
 			            'rgba(0, 0, 255, 0.2)',
+			            'rgba(0, 88, 255, 0.2)',
 			            'rgba(238, 130, 238, 0.2)',
         			],
         			borderColor: [
@@ -163,6 +165,7 @@
 			            'rgb(255, 165, 0)',
 			            'rgb(60, 179, 113)',
 			            'rgb(0, 0, 255)',
+			            'rgba(0, 88, 255, 0.2)',
 			            'rgb(238, 130, 238)',
         			],
 	        		borderWidth: 1

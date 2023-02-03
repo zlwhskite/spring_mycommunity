@@ -57,10 +57,13 @@
                     	</th:block>	
                         <td>
                         	<a style="text-decoration: none;" th:href="@{/boards/{division}/{id}(division = ${enDivision}, id = ${board.id}, srt = ${srt}, page = ${pagination.criteria.page})}">
-                        		[[${board.title}]] &nbsp;
+                        		[[${board.title}]]
                         	</a>
+                        	<th:block th:if="${board.commentsCnt != 0}">
+                                ( [[ ${board.commentsCnt} ]] )
+                            </th:block>
                         	<th:block th:if="${board.hits} &gt;= 100">
-                                		<span class="badge rounded-pill bg-danger"><small>Hot</small></span>
+                                		<span class="badge rounded-pill bg-danger"><small>&nbsp;Hot</small></span>
                             </th:block>
                         </td>
                         <td>

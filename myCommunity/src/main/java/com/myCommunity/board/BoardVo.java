@@ -8,25 +8,41 @@ public class BoardVo {
 	private String contents;
 	private String division;
 	private int hits;
+	private int commentsCnt;
 	private String createTime;
 	private String modifyTime;
 	private String deleteTime;
 	
 	public BoardVo() {}
 	
-	public BoardVo(int id, String userNickName, String contents, String division, int hits, String createTime,
-			String modifyTime, String deleteTime) {
+
+	
+	public BoardVo(int id, String title, String userNickName, String contents, String division, int hits,
+			int commentsCnt, String createTime, String modifyTime, String deleteTime) {
 		super();
 		this.id = id;
+		this.title = title;
 		this.userNickName = userNickName;
 		this.contents = contents;
 		this.division = division;
 		this.hits = hits;
+		this.commentsCnt = commentsCnt;
 		this.createTime = createTime;
 		this.modifyTime = modifyTime;
 		this.deleteTime = deleteTime;
 	}
-	
+
+
+
+	public int getCommentsCnt() {
+		return commentsCnt;
+	}
+
+	public void setCommentsCnt(int commentsCnt) {
+		this.commentsCnt = commentsCnt;
+	}
+
+
 	public int getId() {
 		return id;
 	}

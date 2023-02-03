@@ -30,6 +30,23 @@
     					} 	   
        				});    	
     			}  
+    			
+    			
+    	
+    	function passwordCheck() {
+	    	var pwd1=$("#password").val();
+	    	var pwd2=$("#password2").val();
+	    	
+	    	$("#eperr").css('display', 'none');  	
+	    	
+	    	if(pwd1 != pwd2) {
+	    		$("#pwdMessage1").html("비밀번호가 서로 일치하지 않습니다.");
+	   			$("#pwdMessage2").html("");
+	    	} else {
+	    		$("#pwdMessage2").html("비밀번호가 일치합니다!");
+	  			$("#pwdMessage1").html("");
+	    	}   	
+    	}
 
     </script>
 </head>
@@ -56,16 +73,22 @@
         	</div>
         	<div class="mb-3">
           		<label for="password" class="form-label">Password :</label>
-          		<input type="password" class="form-control" id="password" placeholder="Enter password" name="password">
+          		<input type="password" class="form-control" onkeyup="passwordCheck()" id="password" placeholder="Enter password" name="password">
+        	</div>
+        	<div class="mb-3">
+          		<label for="password2" class="form-label">Confirm Password :</label>
+          		<input type="password" class="form-control" onkeyup="passwordCheck()" id="password2" placeholder="Enter confirm password" name="password2">
           		
           		<th:block th:if="${err != null}">
-            		<div style="color: red;"> <SMALL> [[${err['perr']} ]] </SMALL></div>
+            		<div id="eperr" style="color: red;"> <SMALL> [[${err['eperr']} ]] </SMALL></div>
             	</th:block>
             	
         	</div>
+        	<span id="pwdMessage1" style="color: red" disabled></span>
+            <span id="pwdMessage2" style="color: green" disabled></span>
         	<div class="mb-3 mt-3">
             	<label for="email" class="form-label">email :</label>
-            	<input type="email" class="form-control" id="email" placeholder="Enter Email" name="email">
+            	<input type="email" class="form-control" id="email" placeholder="Enter email" name="email">
             	
             	<th:block th:if="${err != null}">
             		<div style="color: red;"> <SMALL> [[${err['eerr']} ]] </SMALL></div>

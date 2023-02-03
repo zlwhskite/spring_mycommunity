@@ -13,6 +13,7 @@ public interface CommentMapper {
 	List<CommentVo> commentList(int id);
 	List<CommentVo> replyList(int id);
 	List<CommentVo> commentListdelete(int id);
+	int commentsCount(int id);
 	CommentVo findById(int id);
 	void commentCreate(CommentVo commentVo);
 	void replyCreate(CommentVo commentVo);

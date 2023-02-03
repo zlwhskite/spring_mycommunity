@@ -57,10 +57,12 @@ public class AdminController {
 		if(todayBoard.isEmpty()) {
 			model.addAttribute("todayBoard", 0);
 		}
+		
 		List<BoardVo> travelList = boardService.findAllTravel();
 		List<BoardVo> hobbyList = boardService.findAllHobby();
 		List<BoardVo> computerList = boardService.findAllComputer();
 		List<BoardVo> stockList = boardService.findAllStock();
+		List<BoardVo> workoutList = boardService.findAllWorkout();
 		List<BoardVo> freeList = boardService.findAllFree();
 		
 		
@@ -73,9 +75,8 @@ public class AdminController {
 		model.addAttribute("hobbyList", hobbyList);
 		model.addAttribute("computerList", computerList);
 		model.addAttribute("stockList", stockList);
+		model.addAttribute("workoutList", workoutList);
 		model.addAttribute("freeList", freeList);
-		
-		
 		
 		return "admin/index";
 	}

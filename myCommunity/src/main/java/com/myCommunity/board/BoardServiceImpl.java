@@ -43,6 +43,12 @@ public class BoardServiceImpl implements BoardService {
 	public void hitsUp(@Param("id") int id) {
 		boardMapper.hitsUp(id);
 	}
+	
+	@Override
+	@Transactional
+	public void commentsCount(@Param("id") int id, @Param("cnt") int cnt) {
+		boardMapper.commentsCount(id, cnt);
+	}
 
 	@Override
 	public BoardVo findById(int id) {

@@ -62,6 +62,10 @@ public class CommentController {
 		
 		commentService.commentCreate(commentVo);
 		
+		int cnt = commentService.commentsCount(boardId);
+		
+		boardService.commentsCount(boardId, cnt);
+		
 		rttr.addFlashAttribute("msgm", "댓글이 등록되었습니다.");
 		
 		return "redirect:/boards/"+ division + "/" + boardId;
@@ -103,6 +107,10 @@ public class CommentController {
 		
 		commentService.commentDelete(commentId, commentVo);
 		
+		int cnt = commentService.commentsCount(commentVo.getBoardId());
+		
+		boardService.commentsCount(commentVo.getBoardId(), cnt);
+		
 		rttr.addFlashAttribute("msgm", "댓글이 삭제되었습니다.");
 		
 		return "redirect:/boards/" + division + "/" + commentVo.getBoardId();
@@ -131,9 +139,6 @@ public class CommentController {
 			rttr.addFlashAttribute("errm", "공백으로는 댓글을 등록할 수 없습니다.");
 			return "redirect:/boards/"+ division + "/" + boardId;
 		}
-		System.out.println("commentId = " + commentId);
-		System.out.println("boardId = " + boardId);
-		System.out.println(replyContents);
 		
 		commentVo.setGroupId(commentId);
 		commentVo.setUserNickName(loginUser.getNickName());
@@ -142,6 +147,10 @@ public class CommentController {
 		commentVo.setCreateTime(LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
 
 		commentService.replyCreate(commentVo);
+		
+		int cnt = commentService.commentsCount(boardId);
+		
+		boardService.commentsCount(boardId, cnt);
 		
 		rttr.addFlashAttribute("msgm", "댓글이 등록되었습니다.");
 		
@@ -178,6 +187,10 @@ public class CommentController {
 		division = boardService.dvchKE(division);
 		
 		commentService.commentDelete(replyId, com);
+		
+		int cnt = commentService.commentsCount(com.getBoardId());
+		
+		boardService.commentsCount(com.getBoardId(), cnt);
 		
 		rttr.addFlashAttribute("msgm", "댓글이 삭제되었습니다.");
 		

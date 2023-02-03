@@ -9,6 +9,19 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
     <link rel="stylesheet" type="text/css" th:href="@{/css/index.css}">
     <title>myCommunity</title>
+    <script type="text/javascript" th:inline="javascript">
+    /*<![CDATA[*/
+    const scroll = /*[[ ${msgm} ]]*/[];
+    
+    if(scroll != null) {
+    	$(document).ready(function () {
+			$('html, body').animate({
+				scrollTop: $('#scr').offset().top
+			}, 'slow');
+		});
+    }
+    /*]]>*/
+    </script>
 </head>
 <body>
     <th:block th:replace="fragments/header :: header"></th:block>
@@ -48,14 +61,16 @@
                 </div>
             </div>
             </div>
-            
-            <th:block th:if="${not #lists.isEmpty(commentList)}">
-            	<hr>
-            </th:block>
-            <th:block th:if="${not #lists.isEmpty(commentList)}">
-   			<h4><small>[[${commentSize.size}]]개의 댓글</small></h4>
-   			<br>
-            </th:block>
+            <div id="scr">
+	            <th:block th:if="${not #lists.isEmpty(commentList)}">
+	            	<hr>
+	            </th:block>
+	            
+	            <th:block th:if="${not #lists.isEmpty(commentList)}">
+	   			<h4><small>[[${commentSize.size}]]개의 댓글</small></h4>
+	   			<br>
+	            </th:block>
+            </div>
             	<!-- 댓글 -->
 				<ul class="list-group list-group-flush" th:each="comm : ${commentList}">
 					<li class="list-group-item">
@@ -75,7 +90,7 @@
 										<button class="btn btn-link btn-sm" type="button" data-bs-toggle="collapse" th:attr="data-bs-target=|#a${comm.id}">댓글쓰기</button>
 									</p>				
 									<div>
-										<p>&nbsp;&nbsp;&nbsp;&nbsp;[[ ${comm.contents} ]]</p>							
+										<p>&nbsp;&nbsp;&nbsp;[[ ${comm.contents} ]]</p>							
 									</div>
 								</th:block>
 								<th:block th:if="${comm.deleteTime != null}">														
@@ -121,7 +136,7 @@
 									<input type="hidden" name="boardId" th:value="${board.id}"></input>
 									<th:block th:if="${rep.deleteTime == null}">		
 									<p>
-										<b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;⤷&nbsp;&nbsp;[[ ${rep.userNickName} ]]</b> / 
+										<b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;⤷&nbsp;&nbsp;[[ ${rep.userNickName} ]]</b> / 
 										<th:block th:if="${rep.modifyTime == null}">
 											[[ ${rep.createTime} ]]	
 										</th:block>
@@ -197,7 +212,7 @@
                     			<tr th:each="bd : ${boardList}" th:classappend="${bd.id == board.id} ? 'table-secondary' : ''">
                         			<td th:text="${bd.id}"></td>
                         			<td>
-			                        	<a style="text-decoration: none;" th:href="@{/boards/{division}/{id}(division = ${endivision}, id = ${bd.id}, page = ${pagination.criteria.page})}">
+			                        	<a style="text-decoration: none;" th:href="@{/boards/{division}/{id}(division = ${enDivision}, id = ${bd.id}, page = ${pagination.criteria.page})}">
 			                        		[[${bd.title}]] &nbsp;
 			                        	</a>
 			                        	<th:block th:if="${bd.hits} &gt;= 100">

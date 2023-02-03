@@ -42,6 +42,15 @@
 		where id = #{id} and delete_time is null
 	</select>
 	
+	<!-- 게시글 댓글 갯수 -->
+	<select id="commentsCount" resultType="int">
+		select count(*)
+		from comments
+		where board_id = #{id}
+		and
+		delete_time is null
+	</select>
+	
 	<!-- 댓글 작성 -->
 	<insert id="commentCreate" useGeneratedKeys="true" keyProperty="id">
 		INSERT INTO comments(board_id, user_nickname, contents, create_time)

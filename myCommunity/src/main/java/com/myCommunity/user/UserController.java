@@ -63,10 +63,15 @@ public class UserController {
 	}
 	
 	@PostMapping
-	public String userCreate(@ModelAttribute("user") UserVo userVo, RedirectAttributes rttr, Model model, HttpServletRequest request) {	
+	public String userCreate(@ModelAttribute("user") UserVo userVo, @RequestParam("password2") String password2, RedirectAttributes rttr, Model model, HttpServletRequest request) {	
 		Map<String, String> err = new HashMap<>();
-		if(userVo.getPassword().isEmpty()) {
+		System.out.println(password2);
+		System.out.println(userVo.getPassword());
+		if(userVo.getPassword().isEmpty() || password2.isEmpty()) {
 			err.put("perr", "비밀번호를 입력해주세요.");
+		}
+		if(!password2.equals(userVo.getPassword())) {
+			err.put("eperr", "비밀번호가 일치하지않습니다.");
 		}
 		if(userVo.getEmail().isEmpty()) {
 			err.put("eerr", "이메일을 입력해주세요.");

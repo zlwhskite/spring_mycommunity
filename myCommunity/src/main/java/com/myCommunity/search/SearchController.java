@@ -32,9 +32,7 @@ public class SearchController {
 	@GetMapping("/search")
 	public String search(@RequestParam("division") String division, @RequestParam("search") String search, 
 			@RequestParam(value="page", required=false, defaultValue = "1") int page, RedirectAttributes rttr, Model model) {	
-		System.out.println("division = " + division);
 		if(division.equals("All")) {
-			System.out.println("division = " + division);
 			List<SearchVo> countList = searchMapper.searchCount(division, search);
 			if(countList.size() == 0) {
 				rttr.addFlashAttribute("errm", "검색결과가 없습니다.");

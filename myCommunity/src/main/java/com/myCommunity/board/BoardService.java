@@ -14,6 +14,8 @@ void save(BoardVo boardVo);
 	
 	void userDelete(@Param("nickName") String nickName,  @Param("boardVo") BoardVo boardVo);
 	
+	void commentsCount(@Param("id") int id, @Param("cnt") int cnt);
+	
 	void hitsUp(@Param("id") int id);
 	
 	BoardVo findById(int id);

@@ -290,7 +290,6 @@ public class BoardController {
 		
 		List<BoardVo> boardList = criteriaService.findAll(start, size, boardVo.getDivision());
 		
-		
 		model.addAttribute("boardList", boardList);
 		model.addAttribute("pagination", pn);
 		model.addAttribute("board", boardVo);
@@ -299,8 +298,6 @@ public class BoardController {
 		model.addAttribute("commentSize", commentSize);
 		
 		return "board/showPost";
-		
-		
 	}
 	
 	@GetMapping("/{division}/{id}/edit")
@@ -344,7 +341,6 @@ public class BoardController {
 		model.addAttribute("board", boardVo);
 			
 		return "board/editPost";
-		
 	}
 	
 	@PatchMapping("/{id}")
