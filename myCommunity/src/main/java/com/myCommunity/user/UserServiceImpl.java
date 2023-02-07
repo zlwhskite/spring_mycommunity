@@ -7,7 +7,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
 
 @Service
 public class UserServiceImpl implements UserService{
@@ -72,10 +71,10 @@ public class UserServiceImpl implements UserService{
 		userMapper.resetPwd(id, pwd);
 	}
 
+	//비밀번호 암호화
 	@Override
 	public String sha256(String pwd) {
 		try{
-
 			MessageDigest digest = MessageDigest.getInstance("SHA-256");
 			byte[] hash = digest.digest(pwd.getBytes("UTF-8"));
 			StringBuffer hexString = new StringBuffer();
@@ -86,11 +85,10 @@ public class UserServiceImpl implements UserService{
 				hexString.append(hex);
 			}
 
-			
 			return hexString.toString();
 			
-		} catch(Exception ex){
-			throw new RuntimeException(ex);
+		} catch(Exception e){
+			throw new RuntimeException(e);
 		}
 	}
 	

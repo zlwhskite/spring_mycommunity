@@ -25,7 +25,7 @@ public interface UserService {
 	UserVo findPwd(String nickName, String email);
 	void resetPwd(int id, String pwd);
 	
-	
+	//비밀번호 암호화
 	String sha256(String pwd);
 
 }
