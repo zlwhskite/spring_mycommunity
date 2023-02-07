@@ -84,7 +84,10 @@ public class UserController {
 			model.addAttribute("err", err);
 			return "user/createUser";
 		}
-
+		
+		String sha = userService.sha256(userVo.getPassword());
+		System.out.println(sha);
+		userVo.setPassword(sha);
 		userVo.setCreateTime(LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
 		userVo.setModifyTime(LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
 		
@@ -170,7 +173,8 @@ public class UserController {
 				return "redirect:/users/edit";
 			}
 			UserVo user = userService.findById(loginVo.getId());
-			user.setPassword(newpwd);
+			String sha = userService.sha256(newpwd);
+			user.setPassword(sha);
 			user.setModifyTime(LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
 			
 			int result = userService.pwdModify(loginVo.getId(), user, oldpwd);   
@@ -262,7 +266,9 @@ public class UserController {
 			return "redirect:/users/findPwd";
 		}
 		
-		userService.resetPwd(userId, pwd1);
+		String sha = userService.sha256(pwd1);
+		
+		userService.resetPwd(userId, sha);
 		rttr.addFlashAttribute("msgm", "비밀번호가 재설정되었습니다.");
 		return "redirect:/boards";
 	}

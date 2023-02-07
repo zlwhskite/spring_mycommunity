@@ -6,6 +6,8 @@ import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 
 @Service
 public class UserServiceImpl implements UserService{
@@ -27,13 +29,10 @@ public class UserServiceImpl implements UserService{
 	@Transactional
 	public int pwdModify(@Param("id") int id, @Param("userVo") UserVo userdVo, @Param("pwd") String pwd) {
 		int result = userMapper.pwdModify(id, userdVo, pwd);
-		
-		
+			
 		return result;
-		
 	}
 	
-
 	@Override
 	@Transactional
 	public void delete(int id, UserVo userdVo) {
@@ -68,8 +67,31 @@ public class UserServiceImpl implements UserService{
 		return user;
 	}
 	@Override
+	@Transactional
 	public void resetPwd(int id, String pwd) {
 		userMapper.resetPwd(id, pwd);
+	}
+
+	@Override
+	public String sha256(String pwd) {
+		try{
+
+			MessageDigest digest = MessageDigest.getInstance("SHA-256");
+			byte[] hash = digest.digest(pwd.getBytes("UTF-8"));
+			StringBuffer hexString = new StringBuffer();
+
+			for (int i = 0; i < hash.length; i++) {
+				String hex = Integer.toHexString(0xff & hash[i]);
+				if(hex.length() == 1) hexString.append('0');
+				hexString.append(hex);
+			}
+
+			
+			return hexString.toString();
+			
+		} catch(Exception ex){
+			throw new RuntimeException(ex);
+		}
 	}
 	
 

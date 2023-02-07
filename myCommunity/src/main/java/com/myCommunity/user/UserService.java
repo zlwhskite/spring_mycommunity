@@ -24,5 +24,8 @@ public interface UserService {
 	UserVo findUserNickName(String email);	
 	UserVo findPwd(String nickName, String email);
 	void resetPwd(int id, String pwd);
+	
+	
+	String sha256(String pwd);
 
 }

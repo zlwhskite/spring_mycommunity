@@ -24,6 +24,7 @@ import com.myCommunity.attendance.AttendanceService;
 import com.myCommunity.attendance.AttendanceVo;
 import com.myCommunity.board.BoardServiceImpl;
 import com.myCommunity.board.BoardVo;
+import com.myCommunity.user.UserServiceImpl;
 
 @Controller
 public class LoginController {
@@ -33,6 +34,8 @@ public class LoginController {
 	BoardServiceImpl boardService;
 	@Autowired
 	AttendanceService attService;
+	@Autowired
+	UserServiceImpl userService;
 	
 	@GetMapping("/login")
 	public String loginForm() {
@@ -41,8 +44,9 @@ public class LoginController {
 	
 	@PostMapping("/login")
 	public String login(@ModelAttribute("login") LoginVo loginVo, HttpServletRequest request, RedirectAttributes rttr, Model model) {
+		String sha = userService.sha256(loginVo.getPassword());
 		
-		LoginVo user = loginService.loginConfirm(loginVo.getNickName(), loginVo.getPassword());
+		LoginVo user = loginService.loginConfirm(loginVo.getNickName(), sha);
 		
 		if(user == null) {
 			model.addAttribute("msg", "아이디 또는 비밀번호가 일치하지않습니다.");

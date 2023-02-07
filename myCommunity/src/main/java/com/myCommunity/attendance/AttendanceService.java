@@ -12,7 +12,6 @@ public class AttendanceService {
 	@Autowired
 	AttendanceMapper attMapper;
 	
-	
 	public int attenSave(AttendanceVo att) {
 		int result = attMapper.attenSave(att);
 		return result;

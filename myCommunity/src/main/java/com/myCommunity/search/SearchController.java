@@ -34,10 +34,12 @@ public class SearchController {
 			@RequestParam(value="page", required=false, defaultValue = "1") int page, RedirectAttributes rttr, Model model) {	
 		if(division.equals("All")) {
 			List<SearchVo> countList = searchMapper.searchCount(division, search);
+			
 			if(countList.size() == 0) {
 				rttr.addFlashAttribute("errm", "검색결과가 없습니다.");
 				return "redirect:/boards";
 			}
+			
 			int totalCount = countList.size();
 			
 			Pagination pn = new Pagination();
@@ -74,7 +76,7 @@ public class SearchController {
 			
 			return "search/searchResult";
 		}
-		System.out.println("division = " + division);
+		
 		List<SearchVo> countList = searchMapper.searchCount(division, search);
 		
 		if(countList.size() == 0) {
@@ -83,7 +85,6 @@ public class SearchController {
 		}
 		
 		int totalCount = countList.size();
-		
 		
 		Pagination pn = new Pagination();
 		Criteria pg = new Criteria();
