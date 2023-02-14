@@ -65,7 +65,6 @@ public class AdminController {
 		List<BoardVo> workoutList = boardService.findAllWorkout();
 		List<BoardVo> freeList = boardService.findAllFree();
 		
-		
 		model.addAttribute("todayUserList", todayUser);
 		model.addAttribute("todayBoardList", todayBoard);
 		model.addAttribute("userList", userList);

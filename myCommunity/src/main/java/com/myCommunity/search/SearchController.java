@@ -119,7 +119,6 @@ public class SearchController {
 		model.addAttribute("tit", division);
 	
 		return "search/searchResult";
-
 	}
 	
 	@GetMapping("/name/{nickName}")

@@ -199,7 +199,6 @@ public class BoardController {
 
 	@PostMapping
 	public String savePost(@ModelAttribute("board") BoardVo boardVo, HttpServletRequest request, RedirectAttributes rttr) {
-		
 		HttpSession session = request.getSession(false);
 		
 		LoginVo loginUser = new LoginVo();
@@ -222,6 +221,7 @@ public class BoardController {
 			return "redirect:/boards/create";
 		}
 		
+		System.out.println(boardVo.getContents().getClass().getName());
 		boardVo.setUserNickName(loginUser.getNickName());
 		boardVo.setCreateTime(LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
 		
@@ -235,7 +235,8 @@ public class BoardController {
 	}
 	
 	@GetMapping("/{division}/{id}")
-	public String showPost(@PathVariable("id") int boardId, @RequestParam(value="page", required=false, defaultValue = "1") int page, HttpServletRequest request, Model model) {
+	public String showPost(@PathVariable("id") int boardId, @RequestParam(value="page", required=false, defaultValue = "1") int page, 
+			HttpServletRequest request, Model model) {
 		HttpSession session = request.getSession(false);
 		BoardVo boardVo = boardService.findById(boardId);
 		
