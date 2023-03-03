@@ -97,6 +97,12 @@ public class BoardController {
 		return "board/index";
 	}
 	
+	/*
+	 * @RequestParam은 다양하게 타입을 설정해서 받을 수 있다
+	 * 하지만 지정한 키값이 존재하지않으면 400에러발생 -> DefaultValue로 예방
+	 * 
+	 * 결론 -> 이렇게 쓰는 것은 좋지않다
+	 */
 	@GetMapping("/{division}")
 	public String divisionBoard(@PathVariable("division") String division, @RequestParam(value="page", required=false, defaultValue = "1") int page, Model model) {
 		if(division.equals("hot")) {
@@ -302,8 +308,7 @@ public class BoardController {
 	}
 	
 	@GetMapping("/{division}/{id}/edit")
-	public String editPost(@PathVariable("division") String division, @PathVariable("id") int boardId, Model model,
-			HttpServletRequest request, RedirectAttributes rttr) {
+	public String editPost(@PathVariable("id") int boardId, Model model, HttpServletRequest request, RedirectAttributes rttr) {
 		BoardVo boardVo = boardService.findById(boardId);
 		
 		model.addAttribute("tit", boardVo.getDivision());
@@ -327,7 +332,7 @@ public class BoardController {
 		if(loginUser != null) {
 			if(!loginUser.getNickName().equals(boardVo.getUserNickName())) {
 				if(loginUser.getAuth() == 1) {
-					model.addAttribute("division", division);
+					model.addAttribute("division", endivision);
 					model.addAttribute("board", boardVo);
 						
 					return "board/editPost";
@@ -338,7 +343,7 @@ public class BoardController {
 			}
 		}
 		
-		model.addAttribute("division", division);
+		model.addAttribute("division", endivision);
 		model.addAttribute("board", boardVo);
 			
 		return "board/editPost";
