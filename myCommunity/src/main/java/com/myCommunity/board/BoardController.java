@@ -1,13 +1,20 @@
 package com.myCommunity.board;
 
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
+import java.util.UUID;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletRequestWrapper;
 import javax.servlet.http.HttpSession;
 
+import org.apache.commons.io.FileUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -20,8 +27,10 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import com.google.gson.JsonObject;
 import com.myCommunity.comment.CommentServiceImpl;
 import com.myCommunity.comment.CommentVo;
 import com.myCommunity.criteria.Criteria;
@@ -42,6 +51,9 @@ public class BoardController {
 	CommentServiceImpl commentService;
 	@Autowired
 	CriteriaService criteriaService;
+	
+	@Value("${file.dir}")
+	private String fileDir;
 
 	
 	@RequestMapping
@@ -227,7 +239,6 @@ public class BoardController {
 			return "redirect:/boards/create";
 		}
 		
-		System.out.println(boardVo.getContents().getClass().getName());
 		boardVo.setUserNickName(loginUser.getNickName());
 		boardVo.setCreateTime(LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
 		
@@ -461,6 +472,39 @@ public class BoardController {
 			return "board/posts";
 		}
 		return "board/posts";
+	}
+	
+	@PostMapping(value="/uploadSummernoteImageFile", produces = "application/json; charset=utf8")
+	@ResponseBody
+	public String uploadSummernoteImageFile(@RequestParam("file") MultipartFile multipartFile)  {
+		JsonObject jsonObject = new JsonObject();
+		//외부 경로
+		String fileRoot = fileDir;
+		//오리지날 파일명
+		String originalFileName = multipartFile.getOriginalFilename();
+		//파일 확장자
+		String extension = originalFileName.substring(originalFileName.lastIndexOf("."));
+		//저장될 파일 명
+		String savedFileName = UUID.randomUUID() + extension;
+		
+		File targetFile = new File(fileRoot + savedFileName);	
+		
+		try {
+			InputStream fileStream = multipartFile.getInputStream();
+			//파일 저장
+			FileUtils.copyInputStreamToFile(fileStream, targetFile);
+			jsonObject.addProperty("url", "/file/"+savedFileName); 
+			jsonObject.addProperty("responseCode", "success");
+				
+		} catch (IOException e) {
+			//파일 삭제
+			FileUtils.deleteQuietly(targetFile);
+			jsonObject.addProperty("responseCode", "error");
+			e.printStackTrace();
+		}
+		
+		String result = jsonObject.toString();
+		return result;
 	}
 		
 }

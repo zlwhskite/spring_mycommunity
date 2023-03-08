@@ -63,8 +63,33 @@
           ['para', ['ul', 'ol', 'paragraph']],
           ['table', ['table']],
           ['view', ['fullscreen', 'codeview', 'help']]
-        ]
+        ],
+        callbacks : { 
+            	onImageUpload : function(files) {
+            		// 파일 업로드(다중업로드를 위해 반복문 사용)
+            		for (var i = files.length - 1; i >= 0; i--) {
+            		uploadSummernoteImageFile(files[i], this);
+            		}
+            	}
+            }
       });
+      
+      
+      function uploadSummernoteImageFile(file, editor) {
+			data = new FormData();
+			data.append("file", file);
+			$.ajax({
+				data : data,
+				type : "POST",
+				url : "/boards/uploadSummernoteImageFile",
+				contentType : false,
+				enctype : 'multipart/form-data',
+				processData : false,
+				success : function(data) {
+					$(editor).summernote('insertImage', data.url);
+				}
+			});
+		}
     </script>
     
 </body>
