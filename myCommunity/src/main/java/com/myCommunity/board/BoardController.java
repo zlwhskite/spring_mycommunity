@@ -12,7 +12,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletRequestWrapper;
 import javax.servlet.http.HttpSession;
 
-import org.apache.commons.io.FileUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
@@ -474,7 +473,7 @@ public class BoardController {
 		return "board/posts";
 	}
 	
-	@PostMapping(value="/uploadSummernoteImageFile", produces = "application/json; charset=utf8")
+	@PostMapping(value="/uploadImageFile", produces = "application/json; charset=utf8")
 	@ResponseBody
 	public String uploadSummernoteImageFile(@RequestParam("file") MultipartFile multipartFile)  {
 		JsonObject jsonObject = new JsonObject();
@@ -490,15 +489,23 @@ public class BoardController {
 		File targetFile = new File(fileRoot + savedFileName);	
 		
 		try {
-			InputStream fileStream = multipartFile.getInputStream();
+			/*
+			 * multipartFile의 transferTo는 애초에 multipart폼으로 전송된 파일에 대해서만 처리가 가능,
+			 * FileUtil은 꼭 폼으로 전달된 파일이 아니라도 범용으로 쓸수 있습니다. 
+			 */
+			
 			//파일 저장
-			FileUtils.copyInputStreamToFile(fileStream, targetFile);
-			jsonObject.addProperty("url", "/file/"+savedFileName); 
+//			InputStream fileStream = multipartFile.getInputStream();
+//			FileUtils.copyInputStreamToFile(fileStream, targetFile);
+			multipartFile.transferTo(targetFile);
+			
+			jsonObject.addProperty("url", "/file/" + savedFileName); 
 			jsonObject.addProperty("responseCode", "success");
 				
 		} catch (IOException e) {
 			//파일 삭제
-			FileUtils.deleteQuietly(targetFile);
+//			FileUtils.deleteQuietly(targetFile);
+			targetFile.delete();
 			jsonObject.addProperty("responseCode", "error");
 			e.printStackTrace();
 		}

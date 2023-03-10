@@ -21,7 +21,7 @@
             </div>
             <div class="d-flex justify-content-center">
             <div class="container">
-            <form th:action="@{/boards/{id}(id = ${board.id})}" method="post" th:object="${board}">
+            <form th:action="@{/boards/{id}(id = ${board.id})}" method="post" class="w-100" th:object="${board}">
             	<input type="hidden" th:field="*{id}"></input>
             	<input type="hidden" th:field="*{division}"></input>
             	<input type="hidden" name="_method" value="delete"></input>
@@ -46,7 +46,7 @@
                     <!--
                     <textarea class="form-control" rows="7" th:field="*{contents}"></textarea>
                     -->
-                    <textarea id="summernote" name="contents">[[ ${board.contents} ]]</textarea>
+                    <textarea id="summernote" name="contents" style="width: 100%;">[[ ${board.contents} ]]</textarea>
                 </div>
                 <div class="text-center mt-5">                
                     <input type="submit" class="btn btn-primary" value="수정"></input>
@@ -75,8 +75,33 @@
           ['para', ['ul', 'ol', 'paragraph']],
           ['table', ['table']],
           ['view', ['fullscreen', 'codeview', 'help']]
-        ]
+        ],
+        callbacks : { 
+            	onImageUpload : function(files) {
+            		// 파일 업로드(다중업로드를 위해 반복문 사용)
+            		for (var i = files.length - 1; i >= 0; i--) {
+            		uploadSummernoteImageFile(files[i], this);
+            		}
+            	}
+            }
       });
+      
+      
+      function uploadSummernoteImageFile(file, editor) {
+			data = new FormData();
+			data.append("file", file);
+			$.ajax({
+				data : data,
+				type : "POST",
+				url : "/boards/uploadImageFile",
+				contentType : false,
+				enctype : 'multipart/form-data',
+				processData : false,
+				success : function(data) {
+					$(editor).summernote('insertImage', data.url);
+				}
+			});
+		}
     </script>
     
 </body>

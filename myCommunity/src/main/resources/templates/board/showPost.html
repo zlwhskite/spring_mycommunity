@@ -13,7 +13,7 @@
     <title>myCommunity</title>
     <script type="text/javascript" th:inline="javascript">
     /*<![CDATA[*/
-    const scroll = /*[[ ${msgm} ]]*/[];
+    const scroll = /*[[ ${msgm} ]]*/[]; //msgm값이 없으면 '[]'이거값이사용됨
     
     if(scroll != null) {
     	$(document).ready(function () {
@@ -47,7 +47,7 @@
                     <!--
                     <textarea class="form-control" rows="7" th:field="${board.contents}" readonly></textarea>      
                     -->
-                    <textarea id="summernote">[[ ${board.contents} ]]</textarea>           
+                    <textarea id="summernote" style="width: 100%;">[[ ${board.contents} ]]</textarea>           
                 </div>
                 <div class="text-center mt-3">
                 <th:block th:if="${session.user != null}">
@@ -80,7 +80,7 @@
 				<ul class="list-group list-group-flush" th:each="comm : ${commentList}">
 					<li class="list-group-item">
 						<div>
-							<form th:action="@{/comments/{id}(id = ${comm.id})}" method="post">
+							<form th:action="@{/comments/{id}(id = ${comm.id})}" class="w-100" method="post">
 								<input type="hidden" th:field="${board.division}"></input>
 								<input type="hidden" name="boardId" th:value="${board.id}"></input>
 								<th:block th:if="${comm.deleteTime == null}">														

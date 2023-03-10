@@ -21,7 +21,7 @@
                 <h3>글쓰기</h3>
             </div>
             <div class="d-flex justify-content-center">
-            <form th:action="@{/boards}" class="w-75" method="post">
+            <form th:action="@{/boards}" class="w-100" method="post">
                 <div class="mb-3 mt-3">
                     <label for="title" class="form-label">제목 : </label>
                     <input type="text" class="form-control" id="title" name="title">
@@ -35,14 +35,14 @@
                   <option value="운동">운동</option>
                   <option value="자유게시판">자유게시판</option>
                 </select>
-                <label class="mb-3 mt-3" for="contents">내용 :</label>           
+                <label class="mb-3 mt-3" for="contents">내용 :</label>
                 <!--   
                 <textarea class="form-control" rows="5" id="contents" name="contents"></textarea>     
                 -->
-                <textarea id="summernote" name="contents"></textarea>
+                <textarea id="summernote" name="contents" style="width: 100%;"></textarea>
                 <div class="text-center mt-5"> 
                     <input type="submit" class="btn btn-primary" value="저장"></input>
-                    <button type="submit" class="btn btn-danger">취소</button>
+                    <a th:href="@{/boards}" class="btn btn-danger">취소</a>
                 </div>
             </form>
             </div>
@@ -81,7 +81,7 @@
 			$.ajax({
 				data : data,
 				type : "POST",
-				url : "/boards/uploadSummernoteImageFile",
+				url : "/boards/uploadImageFile",
 				contentType : false,
 				enctype : 'multipart/form-data',
 				processData : false,
