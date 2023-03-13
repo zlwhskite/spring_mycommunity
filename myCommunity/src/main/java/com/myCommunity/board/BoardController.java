@@ -478,7 +478,7 @@ public class BoardController {
 	public String uploadSummernoteImageFile(@RequestParam("file") MultipartFile multipartFile)  {
 		JsonObject jsonObject = new JsonObject();
 		//외부 경로
-		String fileRoot = fileDir;
+		//String fileRoot = fileDir;
 		//오리지날 파일명
 		String originalFileName = multipartFile.getOriginalFilename();
 		//파일 확장자
@@ -486,19 +486,17 @@ public class BoardController {
 		//저장될 파일 명
 		String savedFileName = UUID.randomUUID() + extension;
 		
-		File targetFile = new File(fileRoot + savedFileName);	
+		File targetFile = new File(fileDir + savedFileName);	
 		
 		try {
 			/*
 			 * multipartFile의 transferTo는 애초에 multipart폼으로 전송된 파일에 대해서만 처리가 가능,
 			 * FileUtil은 꼭 폼으로 전달된 파일이 아니라도 범용으로 쓸수 있습니다. 
-			 */
-			
+			 */	
 			//파일 저장
 //			InputStream fileStream = multipartFile.getInputStream();
 //			FileUtils.copyInputStreamToFile(fileStream, targetFile);
 			multipartFile.transferTo(targetFile);
-			
 			jsonObject.addProperty("url", "/file/" + savedFileName); 
 			jsonObject.addProperty("responseCode", "success");
 				

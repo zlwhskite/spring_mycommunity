@@ -86,7 +86,7 @@ public class UserController {
 		}
 		
 		String sha = userService.sha256(userVo.getPassword());
-		System.out.println(sha);
+		
 		userVo.setPassword(sha);
 		userVo.setCreateTime(LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
 		userVo.setModifyTime(LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
