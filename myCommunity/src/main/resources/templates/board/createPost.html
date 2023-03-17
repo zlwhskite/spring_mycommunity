@@ -52,11 +52,12 @@
     <hr>
     
     <th:block th:replace="fragments/footer :: footer"></th:block>
-    
+ 
     <script>
       $('#summernote').summernote({
         tabsize: 2,
         height: 400,
+        placeholder: '이미지첨부는 마우스로 끌어 오세요.',
         toolbar: [
           ['style', ['style']],
           ['font', ['bold', 'underline', 'clear']],

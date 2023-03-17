@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -146,7 +147,10 @@ public class BoardController {
 			int size = pn.getCriteria().getRecordSize();
 			
 			List<BoardVo> boardList = criteriaService.findAllHit(start, size);
+			List<BoardVo> thumbnailList = boardService.thumb(boardList);
+			
 			model.addAttribute("boardList", boardList);
+			model.addAttribute("thumb", thumbnailList);
 			model.addAttribute("pagination", pn);
 			model.addAttribute("tit", "인기 글");
 			model.addAttribute("enDivision", "hot");
@@ -184,8 +188,10 @@ public class BoardController {
 		int size = pn.getCriteria().getRecordSize();
 		
 		List<BoardVo> boardList = criteriaService.findAll(start, size, endivision);
+		List<BoardVo> thumbnailList = boardService.thumb(boardList);
 
 		model.addAttribute("boardList", boardList);
+		model.addAttribute("thumb", thumbnailList);
 		model.addAttribute("pagination", pn);
 		model.addAttribute("tit", endivision);
 		model.addAttribute("enDivision", division);
@@ -374,7 +380,7 @@ public class BoardController {
 				
 		boardService.update(boardId, boardVo);	
 		
-		rttr.addFlashAttribute("msgm", "수정이 완료되었습니다.");
+		rttr.addFlashAttribute("lmsgm", "수정이 완료되었습니다.");
 		
 		return "redirect:/boards/"+ select + "/" + boardVo.getId();
 	}

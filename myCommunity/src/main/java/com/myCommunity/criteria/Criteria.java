@@ -13,7 +13,7 @@ public class Criteria {
 
 	public Criteria() {
 		this.page = 1;
-		this.recordSize = 8;
+		this.recordSize = 6;
 		this.pageSize = 5;  //1 ~ 5  /  6 ~ 10  / 11 ~ 15 
 	}
 	

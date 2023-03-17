@@ -1,5 +1,6 @@
 package com.myCommunity.board;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
@@ -154,6 +155,28 @@ public class BoardServiceImpl implements BoardService {
 			division = "자유게시판";
 		}
 		return division;
+	}
+	
+	//썸네일
+	public List<BoardVo> thumb(List<BoardVo> list) {
+		List<BoardVo> a = new ArrayList<>();
+		
+		for(BoardVo v : list) {	
+			String thumbnail = null;
+			int c = v.getContents().indexOf("/file/");
+			int d = v.getContents().indexOf(".png") + 4;
+			
+			if(c != -1 && d != -1) {
+				thumbnail = v.getContents().substring(c, d);
+				v.setContents(thumbnail);
+				a.add(v);
+			}else {
+				v.setContents("/file/noimage.png");
+				a.add(v);
+			}
+		}
+
+		return a;
 	}
 
 }

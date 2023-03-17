@@ -17,127 +17,131 @@
     <div class="container mt-5">
         <div><br>
         	<th:block th:if="${not tit.toString().equals('인기 글')}">
-         	<div>
-            	<h3 style="color: black;">[[${tit}]]</h3>
-         	</div>
+	         	<div>
+	            	<h3 style="color: black;">[[${tit}]]</h3>
+	         	</div>
+	         	<hr>
         	</th:block>
         	<th:block th:if="${tit.toString().equals('인기 글')}">
-         	<div class="mb-5">
-            	<h3 style="color: black;">🥦[[${tit}]]</h3>
-         	</div>
+	         	<div class="mb-5">
+	            	<h3 style="color: black;">🔥[[${tit}]]</h3>
+	            	<hr>
+	         	</div>
         	</th:block>
+        	
             <th:block th:if="${not tit.toString().equals('인기 글')}">
-            <div class="container text-end mb-2">
-            	<form style="display:inline-block;" th:action="@{/boards/srt}" method="get">
-            		<input type="hidden" th:value="${tit}" name="tit"></input>
-                	<select class="form-select" id="sort" name="srt" onchange="this.form.submit()">
-                  		<option th:selected="${srt} == '최신순'">최신순</option>
-                  		<option th:selected="${srt} == '인기순'">인기순</option>
-                	</select>
-            	</form>
-        	</div>
+	            <div class="container text-end mb-2">
+	            	<form style="display:inline-block;" th:action="@{/boards/srt}" method="get">
+	            		<input type="hidden" th:value="${tit}" name="tit"></input>
+	                	<select class="form-select" id="sort" name="srt" onchange="this.form.submit()">
+	                  		<option th:selected="${srt} == '최신순'">최신순</option>
+	                  		<option th:selected="${srt} == '인기순'">인기순</option>
+	                	</select>
+	            	</form>
+	        	</div>
             </th:block>
-            <table class="table table-hover">
-                <thead class="table-light">
-                    <tr>
-                        <th>번호</th>
-                        <th>제목</th>
-                        <th>작성자</th>
-                        <th>작성일</th>
-                        <th>조회수</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr th:each="board : ${boardList}">
-                    	<th:block th:if="${not tit.toString().equals('인기 글')}">
-                        	<td th:text="${board.id}"></td>
-                    	</th:block>
-                    	<th:block th:if="${tit.toString().equals('인기 글')}">
-                        	<td th:text="${board.division}"></td>
-                    	</th:block>	
-                        <td>
-                        	<a style="text-decoration: none;" th:href="@{/boards/{division}/{id}(division = ${enDivision}, id = ${board.id}, srt = ${srt}, page = ${pagination.criteria.page})}">
-                        		[[${board.title}]]
-                        	</a>
-                        	<th:block th:if="${board.commentsCnt != 0}">
-                                ( [[ ${board.commentsCnt} ]] )
-                            </th:block>
-                        	<th:block th:if="${board.hits} &gt;= 100">
-                                		<span class="badge rounded-pill bg-danger"><small>&nbsp;Hot</small></span>
-                            </th:block>
-                        </td>
-                        <td>
-                        	<a style="text-decoration: none; color: black;" data-bs-toggle="tooltip" title="작성 글 보러가기" 
-                        	th:href="@{/boards/name/{nickName}(nickName = ${board.userNickName})}">
-                            	[[${board.userNickName}]]
-                           	</a>
-                       	</td>
-                       	<th:block th:if="${board.modifyTime} == null">
-                        	<td th:text="${board.createTime}"></td>
-                       	</th:block>
-                       	<th:block th:if="${board.modifyTime} != null">
-                        	<td>[[ ${board.modifyTime} ]]&nbsp;<small>(수정일)</small></td>
-                       	</th:block>
-						<td th:text="${board.hits}"></td>
-                    </tr>
-                </tbody>
-            </table>
             
+           
+           	<div class="container-fluid mt-3">
+                <div class="row row-cols-sm-3">
             
-            
-  
-
-  				<ul class="pagination justify-content-center">
+                
+                	<div class="col mb-3" th:each="board : ${boardList}">    
+    					<div class="card" style="width:350px">
+										
+  	         				<th:block th:each="image, index : ${thumb}" th:if="${board.id} == ${image.id}">	
+  	         					<a style="text-decoration: none;" th:href="@{/boards/{division}/{id}(division = ${enDivision}, id = ${board.id}, srt = ${srt}, page = ${pagination.criteria.page})}">						
+            						<img th:src="${image.contents}" class="img-thumbnail" style="width: 100%; height:250px;" th:alt="${board.id} + 'Thumbnail'">
+  	         					</a>
+            				</th:block>
+						
+        					<div class="card-body">
+            					<div class="text-center mb-3">
+            						<a style="text-decoration: none; color:black;" th:href="@{/boards/{division}/{id}(division = ${enDivision}, id = ${board.id}, srt = ${srt}, page = ${pagination.criteria.page})}">
+                						<h4 class="card-title" style="display:inline;">
+                        					[[${board.title}]]	      
+                						</h4>
+                						<th:block th:if="${board.commentsCnt != 0}">
+                        					( [[ ${board.commentsCnt} ]] )
+                    					</th:block>  
+                    				</a>
+                					<th:block th:if="${board.hits} &gt;= 100">
+                    					<span class="badge rounded-pill bg-danger"><small>&nbsp;Hot</small></span>
+                					</th:block>
+            					</div>
+            					작성자 : 
+            					<a style="text-decoration: none; color: black;" data-bs-toggle="tooltip" title="작성 글 보러가기" th:href="@{/boards/name/{nickName}(nickName = ${board.userNickName})}">
+                					<b>[[${board.userNickName}]]</b>
+            					</a>
+            					<th:block th:if="${board.modifyTime} == null">
+                					<p class="card-text">
+                    					작성일 : [[ ${board.createTime} ]]<br>
+                    					조회수 : [[ ${board.hits} ]]
+                					</p>
+            					</th:block>
+            					<th:block th:if="${board.modifyTime} != null">
+                					<p class="card-text">
+                    					작성일 : [[ ${board.modifyTime} ]]&nbsp;(수정일)<br>
+                    					조회수 : [[ ${board.hits} ]]
+                					</p>
+            					</th:block>
+        					</div>
+        					
+    					</div>
+					</div>
+       
+                </div>
+            </div>
+       
+			
+			
+  			<ul class="pagination justify-content-center">
   				
-  					<th:block th:if="${pagination.prev}">
-	  					<th:block th:if="${srt} == null">
-		    				<li class="page-item">
-		     					<a class="page-link" th:href="@{/boards/{division}(division = ${enDivision}, page = ${pagination.startPage} - 1)}" aria-label="Previous">
-		        					<span aria-hidden="true"><<</span>
-		      					</a>
-		    				</li>
-	  					</th:block>
-	  					<th:block th:if="${srt} != null">
-		    				<li class="page-item">
-		     					<a class="page-link" th:href="@{/boards/srt(tit = ${tit}, srt = ${srt}, page = ${pagination.startPage} - 1)}" aria-label="Previous">
-		        					<span aria-hidden="true"><<</span>
-		      					</a>
-		    				</li>
-	  					</th:block>
-  					</th:block>
-  				
-    				<th:block  th:with="start = ${pagination.startPage}, end = ${pagination.endPage}">
-	    				<li class="page-item mx-1" 
-	    					th:each="pageNum : ${#numbers.sequence(start, end)}" th:classappend="${pagination.criteria.page == pageNum} ? 'active' : ''">
-	    					<th:block th:if="${srt} == null">
-		    					<a class="page-link"
-		    						th:href="@{/boards/{division}(division = ${enDivision}, page = ${pageNum})}" th:text=${pageNum}></a>
-	    					</th:block>
-	    					<th:block th:if="${srt} != null">
-		    					<a class="page-link"
-		    						th:href="@{/boards/srt(tit = ${tit}, srt = ${srt}, page = ${pageNum})}" th:text=${pageNum}></a>
-	    					</th:block>
-	    				</li>
-    				</th:block>
-    				
-    				<th:block th:if="${pagination.next}">
-	    				<th:block th:if="${srt} == null">
-		    				<li class="page-item">
-		      					<a class="page-link" th:href="@{/boards/{division}(division = ${enDivision}, page = ${pagination.endPage} + 1)}" aria-label="Next">
-		        					<span aria-hidden="true">>></span>
-		      					</a>
-		    				</li>
-	    				</th:block>
-	    				<th:block th:if="${srt} != null">
-	    					<li class="page-item">
-		      					<a class="page-link" th:href="@{/boards/srt(tit = ${tit}, srt = ${srt}, page = ${pagination.endPage} + 1)}" aria-label="Next">
-		        					<span aria-hidden="true">>></span>
-		      					</a>
-		    				</li>
-	    				</th:block>    				
-    				</th:block>
-    				
-  				</ul>
+  				<th:block th:if="${pagination.prev}">
+	  				<th:block th:if="${srt} == null">
+		    			<li class="page-item">
+		     				<a class="page-link" th:href="@{/boards/{division}(division = ${enDivision}, page = ${pagination.startPage} - 1)}" aria-label="Previous">
+		        				<span aria-hidden="true"><<</span>
+		      				</a>
+		    			</li>
+	  				</th:block>
+		  			<th:block th:if="${srt} != null">
+			    		<li class="page-item">
+			     			<a class="page-link" th:href="@{/boards/srt(tit = ${tit}, srt = ${srt}, page = ${pagination.startPage} - 1)}" aria-label="Previous">
+			        			<span aria-hidden="true"><<</span>
+			      			</a>
+			    		</li>
+		  			</th:block>
+	  			</th:block>
+	  				
+		    	<th:block  th:with="start = ${pagination.startPage}, end = ${pagination.endPage}">
+			    	<li class="page-item mx-1" th:each="pageNum : ${#numbers.sequence(start, end)}" th:classappend="${pagination.criteria.page == pageNum} ? 'active' : ''">
+			    		<th:block th:if="${srt} == null">
+				    		<a class="page-link" th:href="@{/boards/{division}(division = ${enDivision}, page = ${pageNum})}" th:text=${pageNum}></a>
+			    		</th:block>
+			    		<th:block th:if="${srt} != null">
+				    		<a class="page-link" th:href="@{/boards/srt(tit = ${tit}, srt = ${srt}, page = ${pageNum})}" th:text=${pageNum}></a>
+			    		</th:block>
+			    	</li>
+		    	</th:block>
+	    				
+		    	<th:block th:if="${pagination.next}">
+			    	<th:block th:if="${srt} == null">
+				    	<li class="page-item">
+				      		<a class="page-link" th:href="@{/boards/{division}(division = ${enDivision}, page = ${pagination.endPage} + 1)}" aria-label="Next">
+				        		<span aria-hidden="true">>></span>
+				      		</a>
+				    	</li>
+			    	</th:block>
+			    	<th:block th:if="${srt} != null">
+			    		<li class="page-item">
+				      		<a class="page-link" th:href="@{/boards/srt(tit = ${tit}, srt = ${srt}, page = ${pagination.endPage} + 1)}" aria-label="Next">
+				        		<span aria-hidden="true">>></span>
+				      		</a>
+				    	</li>
+			    	</th:block>    				
+    			</th:block>	
+  			</ul>
 
             
             
