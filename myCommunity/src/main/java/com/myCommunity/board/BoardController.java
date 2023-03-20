@@ -31,6 +31,8 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.google.gson.JsonObject;
+import com.myCommunity.admin.AdminService;
+import com.myCommunity.admin.AdminVo;
 import com.myCommunity.comment.CommentServiceImpl;
 import com.myCommunity.comment.CommentVo;
 import com.myCommunity.criteria.Criteria;
@@ -51,6 +53,8 @@ public class BoardController {
 	CommentServiceImpl commentService;
 	@Autowired
 	CriteriaService criteriaService;
+	@Autowired
+	AdminService adminService;
 	
 	@Value("${file.dir}")
 	private String fileDir;
@@ -65,6 +69,7 @@ public class BoardController {
 		List<BoardVo> stockList = boardService.findAllStock();
 		List<BoardVo> workoutList = boardService.findAllWorkout();
 		List<BoardVo> freeList = boardService.findAllFree();
+		List<AdminVo> infoList = adminService.infoBoardList();
 		
 		HttpSession session = request.getSession(false);
 		
@@ -77,6 +82,7 @@ public class BoardController {
 			model.addAttribute("stockList", stockList);
 			model.addAttribute("workoutList", workoutList);
 			model.addAttribute("freeList", freeList);
+			model.addAttribute("infoList", infoList);
 			
 			return "board/index";
 		}
@@ -92,6 +98,7 @@ public class BoardController {
 			model.addAttribute("stockList", stockList);
 			model.addAttribute("workoutList", workoutList);
 			model.addAttribute("freeList", freeList);
+			model.addAttribute("infoList", infoList);
 			
 			return "board/index";
 		}
@@ -103,6 +110,7 @@ public class BoardController {
 		model.addAttribute("stockList", stockList);
 		model.addAttribute("workoutList", workoutList);
 		model.addAttribute("freeList", freeList);
+		model.addAttribute("infoList", infoList);
 		
 		model.addAttribute("user", loginUser);
 	
@@ -251,6 +259,12 @@ public class BoardController {
 		
 		boardVo.setDivision(boardService.dvchKE(boardVo.getDivision()));
 		
+		if(boardVo.getDivision().equals("공지사항")) {
+			rttr.addFlashAttribute("msgm", "공지사항이 작성되었습니다.");
+			
+			return "redirect:/boards";
+		}
+		
 		rttr.addFlashAttribute("msgm", "글이 작성되었습니다.");
 		
 		return "redirect:/boards/"+boardVo.getDivision();
@@ -380,6 +394,12 @@ public class BoardController {
 				
 		boardService.update(boardId, boardVo);	
 		
+		if(boardVo.getDivision().equals("공지사항")) {
+			rttr.addFlashAttribute("lmsgm", "수정이 완료되었습니다.");
+			
+			return "redirect:/boards/info/" + boardVo.getId();
+		}
+		
 		rttr.addFlashAttribute("lmsgm", "수정이 완료되었습니다.");
 		
 		return "redirect:/boards/"+ select + "/" + boardVo.getId();
@@ -391,6 +411,12 @@ public class BoardController {
 		String division = boardService.dvchKE(boardVo.getDivision());
 		
 		boardService.delete(boardId, boardVo);
+		
+		if(boardVo.getDivision().equals("공지사항")) {
+			rttr.addFlashAttribute("msgm", "삭제가 성공했습니다.");
+			return "redirect:/boards";
+		}
+		
 		rttr.addFlashAttribute("msgm", "삭제가 성공했습니다.");
 		return "redirect:/boards/" + division;
 	}
@@ -429,8 +455,10 @@ public class BoardController {
 			int size = pn.getCriteria().getRecordSize();
 			
 			List<BoardVo> boardList = criteriaService.findHit(start, size, tit);
+			List<BoardVo> thumbnailList = boardService.thumb(boardList);
 			
 			model.addAttribute("boardList", boardList);
+			model.addAttribute("thumb", thumbnailList);
 			model.addAttribute("pagination", pn);
 			model.addAttribute("tit", tit);
 			model.addAttribute("enDivision", division);
@@ -467,8 +495,10 @@ public class BoardController {
 			int size = pn.getCriteria().getRecordSize();
 			
 			List<BoardVo> boardList = criteriaService.findAll(start, size, tit);
+			List<BoardVo> thumbnailList = boardService.thumb(boardList);
 			
 			model.addAttribute("boardList", boardList);
+			model.addAttribute("thumb", thumbnailList);
 			model.addAttribute("pagination", pn);
 			model.addAttribute("tit", tit);
 			model.addAttribute("enDivision", division);

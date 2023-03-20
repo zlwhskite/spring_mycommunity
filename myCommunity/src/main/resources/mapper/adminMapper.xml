@@ -19,11 +19,18 @@
 		where LEFT(create_time, 10) = #{date}
 		and delete_time is null
 	</select>
-		<select id="todayBoardList" resultType="AdminVo">
+	<select id="todayBoardList" resultType="AdminVo">
 		select id, title, contents, user_nickname, division, hits, create_time, modify_time, delete_time
 		from boards
 		where LEFT(create_time, 10) = #{date}
 		and delete_time is null
+	</select>
+	<select id="infoBoardList" resultType="AdminVo">
+		select id, title, contents, user_nickname, division, hits, create_time, modify_time, delete_time
+		from boards
+		where division = '공지사항'
+		and delete_time is null
+		order by id DESC
 	</select>
 
 </mapper>

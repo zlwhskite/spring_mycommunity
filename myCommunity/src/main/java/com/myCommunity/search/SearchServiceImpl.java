@@ -23,5 +23,9 @@ public class SearchServiceImpl implements SearchService {
 	public List<SearchVo> searchCount(String division, String search) {
 		return searchMapper.searchCount(division, search);
 	}
+	@Override
+	public List<SearchVo> searchNickName(String nickName) {
+		return searchMapper.searchNickName(nickName);
+	}
 
 }

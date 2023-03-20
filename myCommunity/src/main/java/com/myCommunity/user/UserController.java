@@ -31,6 +31,8 @@ import com.myCommunity.comment.CommentServiceImpl;
 import com.myCommunity.comment.CommentVo;
 import com.myCommunity.login.LoginServiceImpl;
 import com.myCommunity.login.LoginVo;
+import com.myCommunity.search.SearchServiceImpl;
+import com.myCommunity.search.SearchVo;
 
 @Controller
 @RequestMapping("/users")
@@ -43,6 +45,8 @@ public class UserController {
 	BoardServiceImpl boardService;
 	@Autowired
 	CommentServiceImpl commentService;
+	@Autowired
+	SearchServiceImpl searchService;
 	@Autowired
 	AttendanceService attService;
 	
@@ -127,6 +131,7 @@ public class UserController {
 			return "redirect:/boards";
 		}else {
 			UserVo user = userService.findBynickName(loginVo.getNickName());
+			List<SearchVo> userBoradList = searchService.searchNickName(user.getNickName());
 			
 			if(user.getAuth() == 1) {
 				List<UserVo> userList = userService.findAll();
@@ -136,6 +141,7 @@ public class UserController {
 			}
 			
 			model.addAttribute("userIn", user);
+			model.addAttribute("boardList", userBoradList);
 			
 			return "user/userInfo";
 		}

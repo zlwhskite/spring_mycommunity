@@ -27,55 +27,61 @@
 </head>
 <body>
     <th:block th:replace="fragments/header :: header"></th:block>
+    
     <div class="container mt-5">
-        <div class="p-5 rounded">
-            <div class="text-center">
-                <h3 th:text="${board.division}"></h3>
+    	<div class="p-5 rounded">
+        	<div class="text-center">
+            	<h3 th:text="${board.division}"></h3>
             </div>
             <div class="d-flex justify-content-center">
-            <div class="container">
-                <div class="mb-3 mt-3">
-                    <label for="title" class="form-label">Title :</label>
-                    <textarea class="form-control" rows="1" th:field="${board.title}" readonly></textarea>
-                </div>
-                <div class="mb-3">
-                    <label for="userNickName" class="form-label">User :</label>
-                    <textarea class="form-control" rows="1" th:field="${board.userNickName}" readonly></textarea>
-                </div>
-                <div class="mb-3">
-                    <label for="contents" class="form-label">내용 :</label>
-                    <!--
-                    <textarea class="form-control" rows="7" th:field="${board.contents}" readonly></textarea>      
-                    -->
-                    <textarea id="summernote" style="width: 100%;">[[ ${board.contents} ]]</textarea>           
-                </div>
-                <div class="text-center mt-3">
-                <th:block th:if="${session.user != null}">
-					<th:block th:if="${#strings.equals(session.user.nickName, board.userNickName)} or ${session.user.auth == 1}">                
-	                    <a th:href="@{/boards/{division}/{id}/edit(division = ${enDivision}, id = ${board.id})}" class="btn btn-primary">
-	                    	수정하기
-	                    </a>
-					</th:block>
-                </th:block>
-                    <a th:href="@{/boards}" class="btn btn-outline-success">
-                    	Home
-                    </a>
-                    <a th:href="@{/boards/{division}(division = ${enDivision})}" class="btn btn-info" style="color: white;">
-                    	게시판가기
-                    </a>
-                </div>
+            	<div class="container">
+                	<div class="mb-3 mt-3">
+                    	<label for="title" class="form-label">Title :</label>
+                    	<textarea class="form-control" rows="1" th:field="${board.title}" readonly></textarea>
+                	</div>
+                	<div class="mb-3">
+                    	<label for="userNickName" class="form-label">User :</label>
+                    	<textarea class="form-control" rows="1" th:field="${board.userNickName}" readonly></textarea>
+                	</div>
+                	<div class="mb-3">
+                    	<label for="contents" class="form-label">내용 :</label>
+                    	<!--
+                    	<textarea class="form-control" rows="7" th:field="${board.contents}" readonly></textarea>      
+                    	-->
+                    	<textarea id="summernote" style="width: 100%;">[[ ${board.contents} ]]</textarea>           
+                	</div>
+                	<div class="text-center mt-3">
+                		<th:block th:if="${session.user != null}">
+							<th:block th:if="${#strings.equals(session.user.nickName, board.userNickName)} or ${session.user.auth == 1}">                
+	                    		<a th:href="@{/boards/{division}/{id}/edit(division = ${enDivision}, id = ${board.id})}" class="btn btn-primary">
+	                    			수정하기
+	                    		</a>
+							</th:block>
+                		</th:block>
+                		<a th:href="@{/boards}" class="btn btn-outline-success">
+                			Home
+                		</a>
+                		<th:block th:if="${not #strings.equals(board.division, '공지사항')}">
+	                		<a th:href="@{/boards/{division}(division = ${enDivision})}" class="btn btn-info" style="color: white;">
+	                			게시판가기
+	                		</a>
+                		</th:block>
+            		</div>
+            	</div>
             </div>
-            </div>
-            <div id="scr">
-	            <th:block th:if="${not #lists.isEmpty(commentList)}">
-	            	<hr>
-	            </th:block>
+            <th:block th:if="${not #strings.equals(board.division, '공지사항')}">
+            
+            	<div id="scr">
+	            	<th:block th:if="${not #lists.isEmpty(commentList)}">
+	            		<hr>
+	            	</th:block>
 	            
-	            <th:block th:if="${not #lists.isEmpty(commentList)}">
-	   			<h4><small>[[${commentSize.size}]]개의 댓글</small></h4>
-	   			<br>
-	            </th:block>
-            </div>
+	            	<th:block th:if="${not #lists.isEmpty(commentList)}">
+	   					<h4><small>[[${commentSize.size}]]개의 댓글</small></h4>
+	   					<br>
+	            	</th:block>
+            	</div>
+            	
             	<!-- 댓글 -->
 				<ul class="list-group list-group-flush" th:each="comm : ${commentList}">
 					<li class="list-group-item">
@@ -237,7 +243,7 @@
                         				<td th:text="${bd.createTime}"></td>
                        				</th:block>
                        				<th:block th:if="${bd.modifyTime} != null">
-                        				<td>[[ ${bd.modifyTime} ]]&nbsp;<small>(수정일)</small></td>
+                        				<td>[[ ${bd.modifyTime} ]]&nbsp;<small>(수정)</small></td>
                        				</th:block>
 									<td th:text="${bd.hits}"></td>
                     			</tr>
@@ -269,7 +275,11 @@
             	</div>
         	</div>
     	</div>	    	
-	    	
+            </th:block>
+      
+            
+            
+           
         </div>
         <hr>
     </div>

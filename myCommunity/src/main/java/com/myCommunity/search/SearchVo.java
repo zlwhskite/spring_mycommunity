@@ -7,6 +7,7 @@ public class SearchVo {
 	private String contents;
 	private String division;
 	private int hits;
+	private int commentsCnt;
 	private String createTime;
 	private String modifyTime;
 	private String deleteTime;
@@ -25,7 +26,21 @@ public class SearchVo {
 		this.modifyTime = modifyTime;
 		this.deleteTime = deleteTime;
 	}
-	
+	public SearchVo(int id, String title, String userNickName, String contents, String division, int hits,
+			int commentsCnt, String createTime, String modifyTime, String deleteTime) {
+		super();
+		this.id = id;
+		this.title = title;
+		this.userNickName = userNickName;
+		this.contents = contents;
+		this.division = division;
+		this.hits = hits;
+		this.commentsCnt = commentsCnt;
+		this.createTime = createTime;
+		this.modifyTime = modifyTime;
+		this.deleteTime = deleteTime;
+	}
+
 	public SearchVo(int id, String userNickName, String contents, String division, int hits,
 			String modifyTime, String deleteTime) {
 		super();
@@ -92,6 +107,19 @@ public class SearchVo {
 	public void setDeleteTime(String deleteTime) {
 		this.deleteTime = deleteTime;
 	}
+
+	public int getCommentsCnt() {
+		return commentsCnt;
+	}
+
+	public void setCommentsCnt(int commentsCnt) {
+		this.commentsCnt = commentsCnt;
+	}
+	
+	
+	
+	
+	
 }
 
 

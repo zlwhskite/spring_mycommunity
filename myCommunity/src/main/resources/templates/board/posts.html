@@ -13,7 +13,7 @@
 </head>
 <body>
     <th:block th:replace="fragments/header :: header"></th:block>
-
+    
     <div class="container mt-5">
         <div><br>
         	<th:block th:if="${not tit.toString().equals('인기 글')}">
@@ -41,13 +41,24 @@
 	        	</div>
             </th:block>
             
-           
-           	<div class="container-fluid mt-3">
-                <div class="row row-cols-sm-3">
-            
-                
-                	<div class="col mb-3" th:each="board : ${boardList}">    
-    					<div class="card" style="width:350px">
+            <!--
+				로딩
+            <div id="loading">
+         		<div class="d-flex justify-content-center">
+  					<div class="spinner-border text-success" style="width: 3rem; height: 3rem; position: relative; z-index:100;" role="status"></div>
+				</div>
+    		</div>
+            -->
+
+           	<div class="container mt-3">
+           		<!--
+                <div class="row row-cols-sm-4">
+            	-->
+            	
+           		<div class="row">
+           		
+                	<div class="col-sm-3 mb-3" th:each="board : ${boardList}">    
+    					<div class="card h-100" style="width:300px">
 										
   	         				<th:block th:each="image, index : ${thumb}" th:if="${board.id} == ${image.id}">	
   	         					<a style="text-decoration: none;" th:href="@{/boards/{division}/{id}(division = ${enDivision}, id = ${board.id}, srt = ${srt}, page = ${pagination.criteria.page})}">						
@@ -81,7 +92,7 @@
             					</th:block>
             					<th:block th:if="${board.modifyTime} != null">
                 					<p class="card-text">
-                    					작성일 : [[ ${board.modifyTime} ]]&nbsp;(수정일)<br>
+                    					작성일 : [[ ${board.modifyTime} ]]&nbsp;(수정)<br>
                     					조회수 : [[ ${board.hits} ]]
                 					</p>
             					</th:block>
@@ -142,10 +153,7 @@
 			    	</th:block>    				
     			</th:block>	
   			</ul>
-
-            
-            
-           
+        
 
      		<!--
             <ul class="pagination pagination-sm justify-content-center">
@@ -162,6 +170,13 @@
     </div>
 
     <th:block th:replace="fragments/footer :: footer"></th:block>
+    
+    <script>
+    	$(document).ready(function() {
+      		$('#loading').hide();
+		});
+    
+    </script>
     
 </body>
 </html>

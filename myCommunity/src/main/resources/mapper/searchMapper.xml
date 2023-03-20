@@ -37,11 +37,11 @@
 	</select>
 	
 	<select id="searchNickName" resultType="SearchVo">
-		select id, email, nickname, password, gender, create_time, modify_time, delete_time
-		from users
-		where nickname = #{nickName}
+		select id, title, contents, user_nickname, division, hits, comments_cnt, create_time, modify_time, delete_time
+		from boards
+		where user_nickname = #{nickName}
 		and delete_time is null
-		order by hits DESC
+		order by id DESC
 	</select>
 
 

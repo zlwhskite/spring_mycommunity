@@ -12,4 +12,5 @@ public interface AdminMapper {
 	List<AdminVo> boardList();
 	List<AdminVo> todayUserList(String date);
 	List<AdminVo> todayBoardList(String date);
+	List<AdminVo> infoBoardList();
 }

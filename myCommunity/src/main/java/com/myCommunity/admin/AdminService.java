@@ -22,5 +22,8 @@ public class AdminService {
 	public List<AdminVo> todayBoardList(String date) {
 		return adminMapper.todayBoardList(date);
 	}
+	public List<AdminVo> infoBoardList() {
+		return adminMapper.infoBoardList();
+	}
 	
 }
