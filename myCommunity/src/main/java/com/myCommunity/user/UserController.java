@@ -2,6 +2,7 @@ package com.myCommunity.user;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -27,6 +28,8 @@ import com.myCommunity.attendance.AttendanceService;
 import com.myCommunity.attendance.AttendanceVo;
 import com.myCommunity.board.BoardServiceImpl;
 import com.myCommunity.board.BoardVo;
+import com.myCommunity.bookmark.BookmarkService;
+import com.myCommunity.bookmark.BookmarkVo;
 import com.myCommunity.comment.CommentServiceImpl;
 import com.myCommunity.comment.CommentVo;
 import com.myCommunity.login.LoginServiceImpl;
@@ -49,6 +52,8 @@ public class UserController {
 	SearchServiceImpl searchService;
 	@Autowired
 	AttendanceService attService;
+	@Autowired
+	BookmarkService bookmarkService;
 	
 	@ResponseBody
 	@GetMapping("/checks")
@@ -59,6 +64,34 @@ public class UserController {
 			return 0; //가입불가
 		}
 		return 1; //가입가능
+	}
+	
+	@ResponseBody
+	@PostMapping("/bookMark")
+	public int bookMark(@RequestParam Integer userId, @RequestParam Integer boardId) {
+		if(userId == null || boardId == null) {
+			return 0;
+		}
+		
+		BookmarkVo bm = new BookmarkVo();
+		bm = bookmarkService.bookmarkcheck(userId, boardId);
+		
+		if(bm != null) {
+			bookmarkService.delete(userId, boardId);
+			return 0;
+		}
+		
+		BookmarkVo bm2 = new BookmarkVo();
+		bm2.setUserId(userId);
+		bm2.setBoardId(boardId);
+
+		int result = bookmarkService.bookmarkSave(bm2);
+		
+		if(result != 1) {
+			return 0;
+		}
+		
+		return result;
 	}
 	
 	@GetMapping("/create")
@@ -132,6 +165,7 @@ public class UserController {
 		}else {
 			UserVo user = userService.findBynickName(loginVo.getNickName());
 			List<SearchVo> userBoradList = searchService.searchNickName(user.getNickName());
+			List<BookmarkVo> bmList = bookmarkService.bookmarkList(user.getId());
 			
 			if(user.getAuth() == 1) {
 				List<UserVo> userList = userService.findAll();
@@ -140,13 +174,27 @@ public class UserController {
 				return "user/userInfo";
 			}
 			
+			if(!bmList.isEmpty()) {
+				List<BoardVo> bookmarkList = new ArrayList<>();
+				
+				for(BookmarkVo v : bmList) {
+					bookmarkList.add(boardService.findById(v.getBoardId()));
+				}
+				
+				for(BoardVo v : bookmarkList) {
+					System.out.println(v.getTitle());
+				}
+				
+				model.addAttribute("boardList", bookmarkList);
+			}else {
+				model.addAttribute("userBook", "즐겨찾기한 게시글이 없습니다.");
+			}
+			
 			model.addAttribute("userIn", user);
-			model.addAttribute("boardList", userBoradList);
 			
 			return "user/userInfo";
 		}
 	}
-	
 	
 	@RequestMapping(value="/{id}", params="action=modify")
 	public String userModify(@ModelAttribute("user") UserVo userVo, @PathVariable("id") int userId, RedirectAttributes rttr) {

@@ -61,13 +61,13 @@ public class CommentController {
 		commentVo.setCreateTime(LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
 		
 		commentService.commentCreate(commentVo);
+		CommentVo comm = commentService.scrPosition(loginUser.getNickName());
 		
 		int cnt = commentService.commentsCount(boardId);
-		
 		boardService.commentsCount(boardId, cnt);
 		
 		rttr.addFlashAttribute("msgm", "댓글이 등록되었습니다.");
-		
+		rttr.addFlashAttribute("commId", comm.getId());
 		return "redirect:/boards/"+ division + "/" + boardId;
 	}
 	
@@ -93,7 +93,7 @@ public class CommentController {
 		commentService.commentModify(commentId, com);
 		
 		rttr.addFlashAttribute("msgm", "댓글이 수정되었습니다.");
-		
+		rttr.addFlashAttribute("commId", commentId);
 		return "redirect:/boards/" + division + "/" + com.getBoardId();
 	}
 	
@@ -153,7 +153,7 @@ public class CommentController {
 		boardService.commentsCount(boardId, cnt);
 		
 		rttr.addFlashAttribute("msgm", "댓글이 등록되었습니다.");
-		
+		rttr.addFlashAttribute("commId", commentId);
 		return "redirect:/boards/"+ division + "/" + boardId;
 	}
 	
@@ -175,7 +175,7 @@ public class CommentController {
 		commentService.commentModify(replyId, com);
 		
 		rttr.addFlashAttribute("msgm", "댓글이 수정되었습니다.");
-		
+		rttr.addFlashAttribute("commId", com.getGroupId());
 		return "redirect:/boards/" + division + "/" + com.getBoardId();
 	}
 	

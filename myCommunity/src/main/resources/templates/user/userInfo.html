@@ -17,40 +17,51 @@
         <div class="container p-5 w-50">
             <h2 class="text-center" data-bs-toggle="collapse" data-bs-target="#demo" style="cursor: pointer;"><b>[[ ${userIn.nickName} ]]</b>&nbsp;님의 정보</h2>
             <div id="demo" class="collapse">
-            	<h4>최근 쓴 글</h4>
-				<table class="table table-hover">
-                	<thead class="table-light">
-                    	<tr>
-                        	<th>구분</th>
-                            <th>제목</th>
-                            <th>작성일</th>
-                            <th>조회수</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                    	<tr th:each="board, index : ${boardList}" th:if="${index.index} < 5">
-                        	<td th:text="${board.division}"></td>
-                            <td>
-                            	<a style="text-decoration: none;" th:href="@{/boards/{division}/{id}(division = 'hot', id = ${board.id})}">
-                               		[[${board.title}]]          		
-                               	</a>
-                               	<th:block th:if="${board.commentsCnt != 0}">
-                                	( [[ ${board.commentsCnt} ]] )&nbsp;
-                                </th:block> 
-                                <th:block th:if="${board.hits} &gt;= 100">
-                                	<span class="badge rounded-pill bg-danger"><small>Hot</small></span>
-                                </th:block>
-                            </td>
-                            <th:block th:if="${board.modifyTime} == null">
-                        		<td th:text="${board.createTime}"></td>
-                       		</th:block>
-                       		<th:block th:if="${board.modifyTime} != null">
-                        		<td>[[ ${board.modifyTime} ]]&nbsp;<small>(수정)</small></td>
-                       		</th:block>
-                           	<td th:text="${board.hits}"></td>
-                       	</tr>
-                    </tbody>
-            	</table>           
+            	<th:block th:if="${#lists.isEmpty(boardList)}">
+            		<div class="text-center">
+            			<hr>
+            			<h4>[[ ${userBook} ]]</h4>
+            		</div>
+            	</th:block>
+            	<th:block th:unless="${#lists.isEmpty(boardList)}">
+            		<div class="text-center">
+            			<hr>
+	            		<h4>즐겨찾기한 게시글</h4>
+					</div>
+					<table class="table table-hover">
+	                	<thead class="table-light">
+	                    	<tr>
+	                        	<th>구분</th>
+	                            <th>제목</th>
+	                            <th>작성일</th>
+	                            <th>조회수</th>
+	                        </tr>
+	                    </thead>
+	                    <tbody>
+	                    	<tr th:each="board : ${boardList}">
+	                        	<td th:text="${board.division}"></td>
+	                            <td>
+	                            	<a style="text-decoration: none;" th:href="@{/boards/{division}/{id}(division = 'hot', id = ${board.id})}">
+	                               		[[${board.title}]]          		
+	                               	</a>
+	                               	<th:block th:if="${board.commentsCnt != 0}">
+	                                	( [[ ${board.commentsCnt} ]] )&nbsp;
+	                                </th:block> 
+	                                <th:block th:if="${board.hits} &gt;= 100">
+	                                	<span class="badge rounded-pill bg-danger"><small>Hot</small></span>
+	                                </th:block>
+	                            </td>
+	                            <th:block th:if="${board.modifyTime} == null">
+	                        		<td th:text="${board.createTime}"></td>
+	                       		</th:block>
+	                       		<th:block th:if="${board.modifyTime} != null">
+	                        		<td>[[ ${board.modifyTime} ]]&nbsp;<small>(수정)</small></td>
+	                       		</th:block>
+	                           	<td th:text="${board.hits}"></td>
+	                       	</tr>
+	                    </tbody>
+	            	</table>      
+            	</th:block>     
             </div>
             
             <div class="text-end">

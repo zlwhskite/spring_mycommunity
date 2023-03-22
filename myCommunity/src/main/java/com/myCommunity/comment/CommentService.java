@@ -16,5 +16,6 @@ public interface CommentService {
 	void commentModify(int id, CommentVo CommentVo);
 	void commentDelete(int id, CommentVo CommentVo);
 	void commentUserDelete(CommentVo commentVo);
+	CommentVo scrPosition(String nickname);
 
 }

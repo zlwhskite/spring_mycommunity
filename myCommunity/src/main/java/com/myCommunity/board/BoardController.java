@@ -33,6 +33,8 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import com.google.gson.JsonObject;
 import com.myCommunity.admin.AdminService;
 import com.myCommunity.admin.AdminVo;
+import com.myCommunity.bookmark.BookmarkService;
+import com.myCommunity.bookmark.BookmarkVo;
 import com.myCommunity.comment.CommentServiceImpl;
 import com.myCommunity.comment.CommentVo;
 import com.myCommunity.criteria.Criteria;
@@ -42,7 +44,6 @@ import com.myCommunity.criteria.Criteria;
 import com.myCommunity.criteria.Pagination;
 import com.myCommunity.login.LoginVo;
 import com.myCommunity.user.UserVo;
-
 
 @Controller
 @RequestMapping("/boards")
@@ -55,6 +56,8 @@ public class BoardController {
 	CriteriaService criteriaService;
 	@Autowired
 	AdminService adminService;
+	@Autowired
+	BookmarkService bookmarkService;
 	
 	@Value("${file.dir}")
 	private String fileDir;
@@ -261,12 +264,10 @@ public class BoardController {
 		
 		if(boardVo.getDivision().equals("공지사항")) {
 			rttr.addFlashAttribute("msgm", "공지사항이 작성되었습니다.");
-			
 			return "redirect:/boards";
 		}
 		
 		rttr.addFlashAttribute("msgm", "글이 작성되었습니다.");
-		
 		return "redirect:/boards/"+boardVo.getDivision();
 	}
 	
@@ -275,6 +276,7 @@ public class BoardController {
 			HttpServletRequest request, Model model) {
 		HttpSession session = request.getSession(false);
 		BoardVo boardVo = boardService.findById(boardId);
+		BookmarkVo bm = new BookmarkVo();
 		
 		if(session == null) {
 			boardService.hitsUp(boardId); 
@@ -287,6 +289,10 @@ public class BoardController {
 			if(loginUser != null) {
 				if(!loginUser.getNickName().equals(boardVo.getUserNickName())) {
 					boardService.hitsUp(boardId);
+					bm = bookmarkService.bookmarkcheck(loginUser.getId(), boardId);
+					if(bm != null) {
+						model.addAttribute("bookmark", bm);
+					}
 				}
 			}
 		}
@@ -294,6 +300,7 @@ public class BoardController {
 		List<CommentVo> commentList = commentService.commentList(boardId);
 		List<CommentVo> replyList = commentService.replyList(boardId);
 		List<CommentVo> commentSize = commentService.commentListdelete(boardId);
+		
 		
 		model.addAttribute("tit", boardVo.getDivision());
 		model.addAttribute("enDivision", boardService.dvchKE(boardVo.getDivision()));
@@ -348,7 +355,6 @@ public class BoardController {
 		
 		if(session == null) {
 			rttr.addFlashAttribute("errm", "수정권한이 없습니다.");
-
 			return "redirect:/boards/"+ endivision + "/" + boardVo.getId();
 		} 
 		
@@ -356,7 +362,6 @@ public class BoardController {
 		
 		if(loginUser == null) {
 			rttr.addFlashAttribute("errm", "로그인정보를 없습니다.");
-
 			return "redirect:/boards/"+ endivision + "/" + boardVo.getId();
 		}
 		if(loginUser != null) {
@@ -368,7 +373,6 @@ public class BoardController {
 					return "board/editPost";
 				}
 				rttr.addFlashAttribute("errm", "본인이 쓴 글만 수정이 가능합니다.");
-
 				return "redirect:/boards/"+ endivision + "/" + boardVo.getId();
 			}
 		}
@@ -382,12 +386,12 @@ public class BoardController {
 	@PatchMapping("/{id}")
 	public String updatePost(@ModelAttribute("board") BoardVo boardVo, @PathVariable("id") int boardId, RedirectAttributes rttr, Model model) {		
 		boardVo.setDivision(boardService.dvchKE(boardVo.getDivision()));
-		String select = boardService.dvchKE(boardVo.getDivision());
+		String division = boardService.dvchKE(boardVo.getDivision());
 		
 		if(boardVo.getTitle().isEmpty() || boardVo.getContents().isEmpty()) {
-			rttr.addFlashAttribute("division", select);
+			rttr.addFlashAttribute("division", division);
 			rttr.addFlashAttribute("errm", "빈칸으로는 수정할 수 없습니다.");
-			return "redirect:/boards/" + select + "/" + boardVo.getId() + "/edit";
+			return "redirect:/boards/" + division + "/" + boardVo.getId() + "/edit";
 		}
 		
 		boardVo.setModifyTime(LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
@@ -396,13 +400,11 @@ public class BoardController {
 		
 		if(boardVo.getDivision().equals("공지사항")) {
 			rttr.addFlashAttribute("lmsgm", "수정이 완료되었습니다.");
-			
 			return "redirect:/boards/info/" + boardVo.getId();
 		}
 		
 		rttr.addFlashAttribute("lmsgm", "수정이 완료되었습니다.");
-		
-		return "redirect:/boards/"+ select + "/" + boardVo.getId();
+		return "redirect:/boards/"+ division + "/" + boardVo.getId();
 	}
 	
 	@DeleteMapping("/{id}")
@@ -506,6 +508,7 @@ public class BoardController {
 			
 			return "board/posts";
 		}
+		
 		return "board/posts";
 	}
 	
@@ -521,7 +524,6 @@ public class BoardController {
 		String extension = originalFileName.substring(originalFileName.lastIndexOf("."));
 		//저장될 파일 명
 		String savedFileName = UUID.randomUUID() + extension;
-		
 		File targetFile = new File(fileDir + savedFileName);	
 		
 		try {

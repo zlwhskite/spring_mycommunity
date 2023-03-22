@@ -85,6 +85,14 @@
 		where user_nickname = #{commentVo.userNickName}
 	</update>
 	
+	
+	<!-- 게시글 등록 후 scr위치-->
+	<select id="scrPosition" resultType="CommentVo">
+		select id, board_id, user_nickname, contents, group_id, dep, create_time, modify_time, delete_time 
+		from comments
+		where user_nickname = #{nickname}
+		order by id DESC limit 1;
+	</select>
 
 
 </mapper>

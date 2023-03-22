@@ -66,4 +66,8 @@ public class CommentServiceImpl implements CommentService {
 		return commentMapper.commentListdelete(id);
 	}
 	
+	@Override
+	public CommentVo scrPosition(String nickname) {
+		return commentMapper.scrPosition(nickname);
+	}
 }

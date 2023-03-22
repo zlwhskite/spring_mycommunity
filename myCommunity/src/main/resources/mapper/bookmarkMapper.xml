@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.myCommunity.bookmark.BookmarkMapper">
+
+	<insert id="bookmarkSave" useGeneratedKeys="true" keyProperty="id">
+		INSERT INTO bookmarks(user_id, board_id)
+			VALUES (#{userId}, #{boardId})
+	</insert>
+	
+	<select id="bookmarkList" resultType="BookmarkVo">
+		select id, user_id, board_id
+		from bookmarks
+		where user_id = #{userId} 
+		order by id DESC
+	</select>
+	
+	<select id="bookmarkcheck" resultType="BookmarkVo">
+		select user_id, board_id
+		from bookmarks
+		where user_id = #{userId}
+		and board_id = #{boardId} 
+	</select>
+	
+	<delete id="delete">
+    	delete from bookmarks
+    	where user_id = #{userId}
+    	and board_id = #{boardId} 
+  	</delete>
+
+</mapper>

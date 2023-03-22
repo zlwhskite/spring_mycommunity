@@ -12,296 +12,371 @@
     <link rel="stylesheet" type="text/css" th:href="@{/css/index.css}">
     <title>myCommunity</title>
     <script type="text/javascript" th:inline="javascript">
-    /*<![CDATA[*/
-    const scroll = /*[[ ${msgm} ]]*/[]; //msgm값이 없으면 '[]'이거값이사용됨
+    	/*<![CDATA[*/
+    		const scroll = /*[[ ${msgm} ]]*/[]; //msgm값이 없으면 '[]'이거값이사용됨
     
-    if(scroll != null) {
-    	$(document).ready(function () {
-			$('html, body').animate({
-				scrollTop: $('#scr').offset().top - $('#scr').height() / 2
-			}, 'slow');
-		});
-    }
-    /*]]>*/
+    		var comm = "#"+/*[[ ${commId} ]]*/"scr";
+    		if(scroll != null) {
+    			$(document).ready(function () {
+					$('html, body').animate({
+						scrollTop: $(comm).offset().top - $(comm).height() / 2
+					}, 'slow');
+				});
+    		}
+    	/*]]>*/
     </script>
 </head>
 <body>
     <th:block th:replace="fragments/header :: header"></th:block>
     
     <div class="container mt-5">
-    	<div class="p-5 rounded">
-        	<div class="text-center">
-            	<h3 th:text="${board.division}"></h3>
-            </div>
-            <div class="d-flex justify-content-center">
-            	<div class="container">
-                	<div class="mb-3 mt-3">
-                    	<label for="title" class="form-label">Title :</label>
-                    	<textarea class="form-control" rows="1" th:field="${board.title}" readonly></textarea>
-                	</div>
-                	<div class="mb-3">
-                    	<label for="userNickName" class="form-label">User :</label>
-                    	<textarea class="form-control" rows="1" th:field="${board.userNickName}" readonly></textarea>
-                	</div>
-                	<div class="mb-3">
-                    	<label for="contents" class="form-label">내용 :</label>
-                    	<!--
-                    	<textarea class="form-control" rows="7" th:field="${board.contents}" readonly></textarea>      
-                    	-->
-                    	<textarea id="summernote" style="width: 100%;">[[ ${board.contents} ]]</textarea>           
-                	</div>
-                	<div class="text-center mt-3">
-                		<th:block th:if="${session.user != null}">
-							<th:block th:if="${#strings.equals(session.user.nickName, board.userNickName)} or ${session.user.auth == 1}">                
-	                    		<a th:href="@{/boards/{division}/{id}/edit(division = ${enDivision}, id = ${board.id})}" class="btn btn-primary">
-	                    			수정하기
-	                    		</a>
-							</th:block>
-                		</th:block>
-                		<a th:href="@{/boards}" class="btn btn-outline-success">
-                			Home
-                		</a>
-                		<th:block th:if="${not #strings.equals(board.division, '공지사항')}">
-	                		<a th:href="@{/boards/{division}(division = ${enDivision})}" class="btn btn-info" style="color: white;">
-	                			게시판가기
-	                		</a>
-                		</th:block>
-            		</div>
-            	</div>
-            </div>
-            <th:block th:if="${not #strings.equals(board.division, '공지사항')}">
-            
-            	<div id="scr">
-	            	<th:block th:if="${not #lists.isEmpty(commentList)}">
-	            		<hr>
-	            	</th:block>
-	            
-	            	<th:block th:if="${not #lists.isEmpty(commentList)}">
-	   					<h4><small>[[${commentSize.size}]]개의 댓글</small></h4>
-	   					<br>
-	            	</th:block>
-            	</div>
-            	
-            	<!-- 댓글 -->
-				<ul class="list-group list-group-flush" th:each="comm : ${commentList}">
-					<li class="list-group-item">
-						<div>
-							<form th:action="@{/comments/{id}(id = ${comm.id})}" class="w-100" method="post">
-								<input type="hidden" th:field="${board.division}"></input>
-								<input type="hidden" name="boardId" th:value="${board.id}"></input>
-								<th:block th:if="${comm.deleteTime == null}">														
-									<p>
-										<b>◽&nbsp;[[ ${comm.userNickName} ]]</b> / 
-										<th:block th:if="${comm.modifyTime == null}">
-										[[ ${comm.createTime} ]]	
-										</th:block>
-										<th:block th:if="${comm.modifyTime != null}">
-										[[ ${comm.modifyTime} ]](수정)
-										</th:block>
-										<button class="btn btn-link btn-sm" type="button" data-bs-toggle="collapse" th:attr="data-bs-target=|#a${comm.id}">댓글쓰기</button>
-									</p>				
-									<div>
-										<p>&nbsp;&nbsp;&nbsp;[[ ${comm.contents} ]]</p>							
-									</div>
-								</th:block>
-								<th:block th:if="${comm.deleteTime != null}">														
-									<p>	
-										<s>삭제 된 댓글입니다.</s>
-									</p>				
-								</th:block>
-								<div class="collapse mb-2" th:id="a + ${comm.id}">
-									<div class="input-group mb-3">
-										<textarea rows="5" cols="50" name="replyContents" placeholder="댓글을 입력해주세요."></textarea>
-										<button type="submit" class="btn btn-outline-success btn-sm" name="action" value="replyCreate">댓글쓰기</button>
-									</div>
-								</div>
-								<div class="collapse mb-2" th:id="c + ${comm.id}">
-									<div class="input-group mb-3">
-										<textarea rows="5" cols="50" name="contents" placeholder="수정 할 댓글을 입력해주세요."></textarea>
-										<button type="submit" class="btn btn-outline-success btn-sm" name="action" value="modify">수정완료</button>
-									</div>
-								</div>
-								<th:block th:if="${session.user != null}">
-									<th:block th:if="${#strings.equals(session.user.nickName, comm.userNickName)} and ${comm.deleteTime == null}">
-						
-										<p>						
-											<button class="btn btn-outline-primary" type="button" data-bs-toggle="collapse" th:attr="data-bs-target=|#c${comm.id}">수정</button> 
-											/ 
-											<button class="btn btn-outline-warning" type="submit" name="action" value="delete">삭제</button>
-										</p>
-						
-									</th:block>
-								</th:block>
-							</form>
-						</div>
-					</li>
-					<!-- 대댓글 -->
-					<th:block th:each="rep : ${replyList}">
-						<th:block th:if="${rep.groupId == comm.id}">
-						<input type="hidden" name="replyId" th:value="${rep.id}"></input>
-						<ul class="list-group list-group-flush">
-							<li class="list-group-item">
-								<div>
-									<form th:action="@{/comments/{id}(id = ${rep.id})}" method="post">
-									<input type="hidden" th:field="${board.division}"></input>
-									<input type="hidden" name="boardId" th:value="${board.id}"></input>
-									<th:block th:if="${rep.deleteTime == null}">		
-									<p>
-										<b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;⤷&nbsp;&nbsp;[[ ${rep.userNickName} ]]</b> / 
-										<th:block th:if="${rep.modifyTime == null}">
-											[[ ${rep.createTime} ]]	
-										</th:block>
-										<th:block th:if="${rep.modifyTime != null}">
-											[[ ${rep.modifyTime} ]](수정)
-										</th:block>
-									</p>				
-									<div>
-										<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[[ ${rep.contents} ]]</p>							
-									</div>
-									</th:block>
-									<th:block th:if="${rep.deleteTime != null}">														
-										<p>	
-											<s>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;⤷&nbsp;&nbsp;삭제 된 댓글입니다.</s>
-										</p>				
-									</th:block>
-									<div class="collapse mb-2" th:id="rc + ${rep.id}">
-									<div class="input-group mb-3">
-										<textarea rows="5" cols="50" name="modifyContents" placeholder="수정 할 댓글을 입력해주세요."></textarea>
-										<button type="submit" class="btn btn-outline-success btn-sm" name="action" value="replyModify">수정완료</button>
-									</div>
-									</div>
-									<th:block th:if="${session.user != null}">
-									<th:block th:if="${#strings.equals(session.user.nickName, rep.userNickName)} and ${rep.deleteTime == null}">
-						
-										<p>						
-											<button class="btn btn-outline-primary" type="button" data-bs-toggle="collapse" th:attr="data-bs-target=|#rc${rep.id}">수정</button> 
-											/ 
-											<button class="btn btn-outline-warning" type="submit" name="action" value="replyDelete">삭제</button>
-										</p>
-						
-									</th:block>
-									</th:block>
-									</form>
-								</div>
-							</li>
-						</ul>
-						</th:block>
-					</th:block>
-					
-				</ul>
-			
-			<hr>
-			
-			<form th:action="@{/comments/create}" method="post">
-	            <input type="hidden" th:field="${board.id}"></input>
-	            <input type="hidden" th:field="${board.userNickName}"></input>
-	            <input type="hidden" th:field="${board.division}"></input>
-	            <div class="mb-3 mt-2">
-	            	<label for="contents">Comments:</label>
-	                <textarea class="form-control" rows="3" id="contents" name="contents" placeholder="바른말 고운말"></textarea>
-	            </div>
-	            <div class="text-end">
-	            	<button type="submit" class="btn btn-primary">댓글쓰기</button>
-	           	</div>    
-	    	</form>
-	    	<hr>
-	    	
-	    	<div class="container">
-   				<div class="p-1 bg-default text-white rounded">
-        			<div><br>
-            			<table class="table table-hover">
-                			<thead class="table-light">
-                    			<tr>
-                        			<th>번호</th>
-			                        <th>제목</th>
-			                        <th>작성자</th>
-			                        <th>날짜</th>
-			                        <th>조회수</th>
-                    			</tr>
-                			</thead>
-                			<tbody>
-                    			<tr th:each="bd : ${boardList}" th:classappend="${bd.id == board.id} ? 'table-secondary' : ''">
-                        			<td th:text="${bd.id}"></td>
-                        			 <td>
-                        				<a style="text-decoration: none;" th:href="@{/boards/{division}/{id}(division = ${enDivision}, id = ${bd.id}, srt = ${srt}, page = ${pagination.criteria.page})}">
-                        					[[${bd.title}]]
-                        				</a>
-                        				<th:block th:if="${bd.commentsCnt != 0}">
-                                			( [[ ${bd.commentsCnt} ]] )
-                            			</th:block>
-                        				<th:block th:if="${bd.hits} &gt;= 100">
-                                			<span class="badge rounded-pill bg-danger"><small>&nbsp;Hot</small></span>
-                            			</th:block>
-                        			</td>
-                        			<td>
-			                        	<a style="text-decoration: none; color: black;" data-bs-toggle="tooltip" title="작성 글 보러가기" 
-			                        	th:href="@{/boards/name/{nickName}(nickName = ${bd.userNickName})}">
-			                            	[[ ${bd.userNickName} ]]
-			                           	</a>
-                       				</td>
-			                        <th:block th:if="${bd.modifyTime} == null">
-                        				<td th:text="${bd.createTime}"></td>
-                       				</th:block>
-                       				<th:block th:if="${bd.modifyTime} != null">
-                        				<td>[[ ${bd.modifyTime} ]]&nbsp;<small>(수정)</small></td>
-                       				</th:block>
-									<td th:text="${bd.hits}"></td>
-                    			</tr>
-                			</tbody>
-            			</table>
-            
-            			<ul class="pagination justify-content-center">			
-  						<th:block th:if="${pagination.prev}">				
-		    				<li class="page-item">
-		     					<a class="page-link" th:href="@{/boards/{division}(division = ${enDivision}, page = ${pagination.startPage} - 1)}" aria-label="Previous">
-		        					<span aria-hidden="true"><<</span>
-		      					</a>
-		    				</li>	
-  						</th:block>
-    					<th:block  th:with="start = ${pagination.startPage}, end = ${pagination.endPage}">
-	    					<li class="page-item mx-1" 
-	    						th:each="pageNum : ${#numbers.sequence(start, end)}" th:classappend="${pagination.criteria.page == pageNum} ? 'active' : ''">
-		    					<a class="page-link" th:href="@{/boards/{division}(division = ${enDivision}, page = ${pageNum})}" th:text=${pageNum}></a>
-	    					</li>
-    					</th:block>	
-    					<th:block th:if="${pagination.next}">		
-		    				<li class="page-item">
-		      					<a class="page-link" th:href="@{/boards/{division}(division = ${enDivision}, page = ${pagination.endPage} + 1)}" aria-label="Next">
-		        					<span aria-hidden="true">>></span>
-		      					</a>
-		    				</li>    						
-    					</th:block>	
-  					</ul>
-            	</div>
-        	</div>
-    	</div>	    	
-            </th:block>
-      
-            
-            
-           
-        </div>
-        <hr>
-    </div>
+  		<div class="p-5 rounded">
+    		<div class="text-center">
+      			<h2 th:text="${board.title}"></h2>
+    		</div>
+    		<div class="text-end">
+					조회수 : [[ ${board.hits} ]]
+    		</div>
+   
+    		<th:block th:if="${session.user != null}">
+    			<th:block th:if="${bookmark != null}">
+		    		<div class="text-end">
+		    			<button class="btn btn-lg" style="border:none;" id="bm" type="button" data-bs-toggle="modal" data-bs-target="#myM"> 🌝 </button>
+		    		</div>
+    			</th:block>
+    			<th:block th:unless="${bookmark != null}">
+    				<div class="text-end">
+		    			<button class="btn btn-lg" style="border:none;" id="bm" type="button" data-bs-toggle="modal" data-bs-target="#myM"> 🌚 </button>
+		    		</div>
+    			</th:block>
+
+    	
+	    		<script  type="text/javascript" th:inline="javascript">
+    				/*<![CDATA[*/
+      				$('#bm').click(function(){
+						var userId = /*[[ ${session.user.id} ]]*/0;;
+						var boardId = /*[[ ${board.id} ]]*/0;;
+        		
+        				$.ajax({
+            				url: "/users/bookMark",
+            				type: "post",
+            				data: {'userId': userId, 'boardId': boardId},
+            				success: function(result){
+                				if(result == 1) {
+									$('#bm').html('🌝');
+									$("#modalColor").attr("class", "modal-header text-bg-primary");  
+									$('#mcon').html("즐겨찾기 목록에 추가되었습니다.");
+								}else {
+									$('#bm').html('🌚');	
+									$("#modalColor").attr("class", "modal-header text-bg-warning");  
+									$('#mcon').html("즐겨찾기 목록에서 삭제되었습니다.");
+								}
+           					},
+            				error: function(){
+                				alert("즐겨찾기에 등록에 실패했습니다. 다시 시도해주세요.");
+            				}
+        				});
+    				});
+      				/*]]>*/
+    			</script>
+	
+    		</th:block>
+    		
+    		<div class="d-flex justify-content-center">
+      			<div class="container">
+        			<div class="mb-3">
+          				<label for="userNickName" class="form-label">User :</label>
+          				<textarea class="form-control" rows="1" th:field="${board.userNickName}" readonly></textarea>
+        			</div>
+        			<div class="mb-3">
+          				<label for="userNickName" class="form-label">구분 :</label>
+          				<textarea class="form-control" rows="1" th:field="${board.division}" readonly></textarea>
+        			</div>
+        			<th:block th:if="${board.modifyTime} == null">
+                   		<div class="mb-3 mt-3">
+          					<label for="date" class="form-label">작성일 :</label>
+          					<textarea class="form-control" rows="1" th:field="${board.createTime}" readonly></textarea>
+        				</div>
+                    </th:block>
+                    <th:block th:if="${board.modifyTime} != null">
+                        	<div class="mb-3 mt-3">
+          						<label for="date" class="form-label">작성일 :</label>
+          						<textarea class="form-control" rows="1" th:field="${board.modifyTime}" readonly>(수정)</textarea>
+        					</div>
+                    </th:block> 
+        			<div class="mb-3">
+          				<label for="contents" class="form-label">내용 :</label>
+          				<!--
+          				<textarea class="form-control" rows="7" th:field="${board.contents}" readonly></textarea>      
+          				-->
+          				<textarea id="summernote" style="width: 100%;">[[ ${board.contents} ]]</textarea>           
+        			</div>
+        			<div class="text-center mt-3">
+          				<th:block th:if="${session.user != null}">
+            				<th:block th:if="${#strings.equals(session.user.nickName, board.userNickName)} or ${session.user.auth == 1}">                
+              					<a th:href="@{/boards/{division}/{id}/edit(division = ${enDivision}, id = ${board.id})}" class="btn btn-primary">
+                					수정하기
+              					</a>
+            				</th:block>
+          				</th:block>
+          				<a th:href="@{/boards}" class="btn btn-outline-success">
+            				Home
+          				</a>
+          				<th:block th:if="${not #strings.equals(board.division, '공지사항')}">
+            				<a th:href="@{/boards/{division}(division = ${enDivision})}" class="btn btn-info" style="color: white;">
+              					게시판가기
+            				</a>
+          				</th:block>
+        			</div>
+      			</div>
+    		</div>
+
+    		<th:block th:if="${not #strings.equals(board.division, '공지사항')}">
+      			<div id="scr">
+        			<th:block th:if="${not #lists.isEmpty(commentList)}">
+          				<hr>
+        			</th:block>
+          
+        			<th:block th:if="${not #lists.isEmpty(commentList)}">
+          				<h4><small>[[${commentSize.size}]]개의 댓글</small></h4>
+          				<br>
+        			</th:block>
+      			</div>
+          
+      			<!-- 댓글 -->
+      			<ul class="list-group list-group-flush" th:each="comm : ${commentList}" th:id="${comm.id}">
+        			<li class="list-group-item">
+          				<div>
+            				<form th:action="@{/comments/{id}(id = ${comm.id})}" class="w-100" method="post">
+              					<input type="hidden" th:field="${board.division}"></input>
+              					<input type="hidden" name="boardId" th:value="${board.id}"></input>
+              					<th:block th:if="${comm.deleteTime == null}">														
+                					<p>
+                  						<b>◽&nbsp;[[ ${comm.userNickName} ]]</b> / 
+                  						<th:block th:if="${comm.modifyTime == null}">
+                    						[[ ${comm.createTime} ]]	
+                  						</th:block>
+                  						<th:block th:if="${comm.modifyTime != null}">
+                  							[[ ${comm.modifyTime} ]](수정)
+                  						</th:block>
+                  						<button class="btn btn-link btn-sm" type="button" data-bs-toggle="collapse" th:attr="data-bs-target=|#a${comm.id}">댓글쓰기</button>
+                					</p>				
+                					<div>
+                  						<p>&nbsp;&nbsp;&nbsp;[[ ${comm.contents} ]]</p>							
+                					</div>
+              					</th:block>
+              					<th:block th:if="${comm.deleteTime != null}">														
+                					<p>
+                  						<s>삭제 된 댓글입니다.</s>
+                					</p>				
+              					</th:block>
+              					<div class="collapse mb-2" th:id="a + ${comm.id}">
+                					<div class="input-group mb-3">
+                  						<textarea rows="5" cols="50" name="replyContents" placeholder="댓글을 입력해주세요."></textarea>
+                  						<button type="submit" class="btn btn-outline-success btn-sm" name="action" value="replyCreate">댓글쓰기</button>
+                					</div>
+              					</div>
+              					<div class="collapse mb-2" th:id="c + ${comm.id}">
+                					<div class="input-group mb-3">
+                  						<textarea rows="5" cols="50" name="contents" placeholder="수정 할 댓글을 입력해주세요."></textarea>
+                  						<button type="submit" class="btn btn-outline-success btn-sm" name="action" value="modify">수정완료</button>
+                					</div>
+              					</div>
+              					<th:block th:if="${session.user != null}">
+                					<th:block th:if="${#strings.equals(session.user.nickName, comm.userNickName)} and ${comm.deleteTime == null}">
+                  						<p>						
+                    						<button class="btn btn-outline-primary" type="button" data-bs-toggle="collapse" th:attr="data-bs-target=|#c${comm.id}">수정</button> 
+                    						/ 
+                    						<button class="btn btn-outline-warning" type="submit" name="action" value="delete">삭제</button>
+                  						</p>
+                					</th:block>
+              					</th:block>
+            				</form>
+          				</div>
+        			</li>
+
+        			<!-- 대댓글 -->
+        			<th:block th:each="rep : ${replyList}">
+         	 			<th:block th:if="${rep.groupId == comm.id}">
+            				<input type="hidden" name="replyId" th:value="${rep.id}"></input>
+            				<ul class="list-group list-group-flush">
+              					<li class="list-group-item">
+                					<div>
+                  						<form th:action="@{/comments/{id}(id = ${rep.id})}" method="post">
+                    						<input type="hidden" th:field="${board.division}"></input>
+                    						<input type="hidden" name="boardId" th:value="${board.id}"></input>
+                    						<th:block th:if="${rep.deleteTime == null}">		
+                      							<p>
+                        							<b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;⤷&nbsp;&nbsp;[[ ${rep.userNickName} ]]</b> / 
+                        							<th:block th:if="${rep.modifyTime == null}">
+                          								[[ ${rep.createTime} ]]	
+                        							</th:block>
+                        							<th:block th:if="${rep.modifyTime != null}">
+                          								[[ ${rep.modifyTime} ]](수정)
+                        							</th:block>
+                      							</p>				
+                      							<div>
+                        							<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[[ ${rep.contents} ]]</p>							
+                      							</div>
+                    						</th:block>
+                    						<th:block th:if="${rep.deleteTime != null}">														
+                     	 						<p>	
+                        							<s>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;⤷&nbsp;&nbsp;삭제 된 댓글입니다.</s>
+                      							</p>				
+                    						</th:block>
+                    						<div class="collapse mb-2" th:id="rc + ${rep.id}">
+                      							<div class="input-group mb-3">
+                        							<textarea rows="5" cols="50" name="modifyContents" placeholder="수정 할 댓글을 입력해주세요."></textarea>
+                        							<button type="submit" class="btn btn-outline-success btn-sm" name="action" value="replyModify">수정완료</button>
+                      							</div>
+                    						</div>
+                    						<th:block th:if="${session.user != null}">
+                      							<th:block th:if="${#strings.equals(session.user.nickName, rep.userNickName)} and ${rep.deleteTime == null}">
+                        							<p>						
+                          								<button class="btn btn-outline-primary" type="button" data-bs-toggle="collapse" th:attr="data-bs-target=|#rc${rep.id}">수정</button> 
+                            							/ 
+                          								<button class="btn btn-outline-warning" type="submit" name="action" value="replyDelete">삭제</button>
+                        							</p>
+                      							</th:block>
+                    						</th:block>
+                  						</form>
+                					</div>
+              					</li>
+            				</ul>
+          				</th:block>
+        			</th:block> 
+      			</ul>
+  
+      			<hr>
+  
+      			<form th:action="@{/comments/create}" method="post">
+        			<input type="hidden" th:field="${board.id}"></input>
+        			<input type="hidden" th:field="${board.userNickName}"></input>
+        			<input type="hidden" th:field="${board.division}"></input>
+        			<div class="mb-3 mt-2">
+          				<label for="contents">Comments:</label>
+            			<textarea class="form-control" rows="3" id="contents" name="contents" placeholder="바른말 고운말"></textarea>
+        			</div>
+        			<div class="text-end">
+          				<button type="submit" class="btn btn-primary">댓글쓰기</button>
+        			</div>    
+      			</form>
+
+      			<hr>
     
- 
+      			<div class="container">
+        			<div class="p-1 bg-default text-white rounded">
+          				<div><br>
+            				<table class="table table-hover">
+              					<thead class="table-light">
+                					<tr>
+                  						<th>번호</th>
+                  						<th>제목</th>
+                  						<th>작성자</th>
+                  						<th>날짜</th>
+                  						<th>조회수</th>
+                					</tr>
+              					</thead>
+              					<tbody>
+                					<tr th:each="bd : ${boardList}" th:classappend="${bd.id == board.id} ? 'table-secondary' : ''">
+                  						<td th:text="${bd.id}"></td>
+                  						<td>
+                    						<a style="text-decoration: none;" th:href="@{/boards/{division}/{id}(division = ${enDivision}, id = ${bd.id}, srt = ${srt}, page = ${pagination.criteria.page})}">
+                      							[[${bd.title}]]
+                    						</a>
+                   	 						<th:block th:if="${bd.commentsCnt != 0}">
+                      							( [[ ${bd.commentsCnt} ]] )
+                    						</th:block>
+                    						<th:block th:if="${bd.hits} &gt;= 100">
+                      							<span class="badge rounded-pill bg-danger"><small>&nbsp;Hot</small></span>
+                    						</th:block>
+                  						</td>
+                  						<td>
+                    						<a style="text-decoration: none; color: black;" data-bs-toggle="tooltip" title="작성 글 보러가기" th:href="@{/boards/name/{nickName}(nickName = ${bd.userNickName})}">
+                      							[[ ${bd.userNickName} ]]
+                    						</a>
+                  						</td>
+                  						<th:block th:if="${bd.modifyTime} == null">
+                    						<td th:text="${bd.createTime}"></td>
+                  						</th:block>
+                 						<th:block th:if="${bd.modifyTime} != null">
+                    						<td>[[ ${bd.modifyTime} ]]&nbsp;<small>(수정)</small></td>
+                  						</th:block>
+                  						<td th:text="${bd.hits}"></td>
+                					</tr>
+              					</tbody>
+            				</table>
+        
+            				<ul class="pagination justify-content-center">			
+              					<th:block th:if="${pagination.prev}">				
+                					<li class="page-item">
+                  						<a class="page-link" th:href="@{/boards/{division}(division = ${enDivision}, page = ${pagination.startPage} - 1)}" aria-label="Previous">
+                    						<span aria-hidden="true"><<</span>
+                  						</a>
+                					</li>	
+              					</th:block>
+              					<th:block  th:with="start = ${pagination.startPage}, end = ${pagination.endPage}">
+                					<li class="page-item mx-1" th:each="pageNum : ${#numbers.sequence(start, end)}" th:classappend="${pagination.criteria.page == pageNum} ? 'active' : ''">
+                  						<a class="page-link" th:href="@{/boards/{division}(division = ${enDivision}, page = ${pageNum})}" th:text=${pageNum}></a>
+                					</li>
+              					</th:block>	
+              					<th:block th:if="${pagination.next}">		
+                					<li class="page-item">
+                  						<a class="page-link" th:href="@{/boards/{division}(division = ${enDivision}, page = ${pagination.endPage} + 1)}" aria-label="Next">
+                    						<span aria-hidden="true">>></span>
+                  						</a>
+                					</li>    						
+              					</th:block>	
+            				</ul>
+          				</div>
+        			</div>
+      			</div>	 
+    		</th:block>
+
+  		</div>
+  		<hr>
+	</div>
+
+		<div class="modal fade" id="myM">
+  			<div class="modal-dialog">
+    			<div class="modal-content panel-danger">
+      				<!-- Modal Header -->
+      				<div id="modalColor">
+        				알림 창
+        					<button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+      				</div>
+			      	<!-- Modal body -->
+			      	<div class="modal-body" id="mcon">
+			      		...
+			      	</div>
+			      	<!-- Modal footer -->
+			      	<div class="modal-footer">
+			        	<button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
+			      	</div>
+    			</div>
+  			</div>
+		</div>
+	
+
+	
+
     <th:block th:replace="fragments/footer :: footer"></th:block>
     
-     <script>
-      $('#summernote').summernote({
-        tabsize: 2,
-        height: 400,
-        toolbar: [
-          ['style', ['style']],
-          ['font', ['bold', 'underline', 'clear']],
-          ['para', ['ul', 'ol', 'paragraph']],
-          ['table', ['table']],
-          ['view', ['fullscreen', 'codeview', 'help']]
-        ]
-      });
+    <script>
+    	$('#summernote').summernote({
+        	tabsize: 2,
+        	height: 400,
+        	toolbar: [
+          		['style', ['style']],
+          		['font', ['bold', 'underline', 'clear']],
+          		['para', ['ul', 'ol', 'paragraph']],
+          		['table', ['table']],
+          		['view', ['fullscreen', 'codeview', 'help']]
+        	]
+      	});
       
-      $('#summernote').summernote('disable');
+      	$('#summernote').summernote('disable');
     </script>
-    
+
 </body>
 </html>
