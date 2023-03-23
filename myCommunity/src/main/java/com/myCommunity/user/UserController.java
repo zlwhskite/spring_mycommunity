@@ -164,7 +164,6 @@ public class UserController {
 			return "redirect:/boards";
 		}else {
 			UserVo user = userService.findBynickName(loginVo.getNickName());
-			List<SearchVo> userBoradList = searchService.searchNickName(user.getNickName());
 			List<BookmarkVo> bmList = bookmarkService.bookmarkList(user.getId());
 			
 			if(user.getAuth() == 1) {
@@ -179,10 +178,6 @@ public class UserController {
 				
 				for(BookmarkVo v : bmList) {
 					bookmarkList.add(boardService.findById(v.getBoardId()));
-				}
-				
-				for(BoardVo v : bookmarkList) {
-					System.out.println(v.getTitle());
 				}
 				
 				model.addAttribute("boardList", bookmarkList);

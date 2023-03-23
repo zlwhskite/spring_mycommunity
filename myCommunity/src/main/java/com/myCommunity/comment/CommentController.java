@@ -112,6 +112,7 @@ public class CommentController {
 		boardService.commentsCount(commentVo.getBoardId(), cnt);
 		
 		rttr.addFlashAttribute("msgm", "댓글이 삭제되었습니다.");
+		rttr.addFlashAttribute("commId", commentId);
 		
 		return "redirect:/boards/" + division + "/" + commentVo.getBoardId();
 	}
@@ -154,6 +155,7 @@ public class CommentController {
 		
 		rttr.addFlashAttribute("msgm", "댓글이 등록되었습니다.");
 		rttr.addFlashAttribute("commId", commentId);
+		
 		return "redirect:/boards/"+ division + "/" + boardId;
 	}
 	
@@ -176,6 +178,7 @@ public class CommentController {
 		
 		rttr.addFlashAttribute("msgm", "댓글이 수정되었습니다.");
 		rttr.addFlashAttribute("commId", com.getGroupId());
+		
 		return "redirect:/boards/" + division + "/" + com.getBoardId();
 	}
 	
@@ -193,6 +196,7 @@ public class CommentController {
 		boardService.commentsCount(com.getBoardId(), cnt);
 		
 		rttr.addFlashAttribute("msgm", "댓글이 삭제되었습니다.");
+		rttr.addFlashAttribute("commId", com.getGroupId());
 		
 		return "redirect:/boards/" + division + "/" + com.getBoardId();
 	}

@@ -15,7 +15,14 @@
 	
 	<div class="container mt-5">
         <div class="container p-5 w-50">
-            <h2 class="text-center" data-bs-toggle="collapse" data-bs-target="#demo" style="cursor: pointer;"><b>[[ ${userIn.nickName} ]]</b>&nbsp;님의 정보</h2>
+        	<div class="text-center">        	
+	            <h2 class="text-center" data-bs-toggle="collapse" data-bs-target="#demo" style="cursor: pointer; display:inline;">
+	            	<b>[[ ${userIn.nickName} ]]</b>&nbsp;님의 정보
+	            </h2>
+	            <th:block th:if="${!#lists.isEmpty(boardList)}">
+	            	<span class="badge bg-warning" style="display:inline;">[[ ${#lists.size(boardList)} ]]</span>
+	            </th:block>
+        	</div>
             <div id="demo" class="collapse">
             	<th:block th:if="${#lists.isEmpty(boardList)}">
             		<div class="text-center">
@@ -41,7 +48,7 @@
 	                    	<tr th:each="board : ${boardList}">
 	                        	<td th:text="${board.division}"></td>
 	                            <td>
-	                            	<a style="text-decoration: none;" th:href="@{/boards/{division}/{id}(division = 'hot', id = ${board.id})}">
+	                            	<a style="text-decoration: none;" th:href="@{/boards/{division}/{id}(division = 'bookmark', id = ${board.id})}">
 	                               		[[${board.title}]]          		
 	                               	</a>
 	                               	<th:block th:if="${board.commentsCnt != 0}">
@@ -63,11 +70,11 @@
 	            	</table>      
             	</th:block>     
             </div>
-            
+            <!--
             <div class="text-end">
-            	<a th:href="@{/boards}" class="btn btn-primary">Home</a>
+            	<a th:href="@{/boards}" class="btn btn-secondary">Home</a>
             </div>
-            
+            -->
             <form th:action="@{/users/{id}(id = ${userIn.id})}" th:object="${userIn}" method="post">
                 <div class="mb-3 mt-3">
                     <label for="nickName" class="form-label">NickName :</label>
@@ -90,7 +97,7 @@
                       </select>
                 </div>
                 <div class="mt-5 mb-3 text-center">
-                    <button type="submit" class="btn btn-warning" name="action" value="modify">수정하기</button>
+                    <button type="submit" class="btn btn-primary" name="action" value="modify">수정하기</button>
                     <button class="btn btn-danger" type="submit" name="action" value="delete">탈퇴하기</button>
                 </div>                      
             </form>

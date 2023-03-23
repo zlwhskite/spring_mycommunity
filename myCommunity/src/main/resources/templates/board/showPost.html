@@ -64,11 +64,11 @@
             				success: function(result){
                 				if(result == 1) {
 									$('#bm').html('🌝');
-									$("#modalColor").attr("class", "modal-header text-bg-primary");  
+									$("#mColor").attr("class", "modal-header text-bg-primary");  
 									$('#mcon').html("즐겨찾기 목록에 추가되었습니다.");
 								}else {
 									$('#bm').html('🌚');	
-									$("#modalColor").attr("class", "modal-header text-bg-warning");  
+									$("#mColor").attr("class", "modal-header text-bg-warning");  
 									$('#mcon').html("즐겨찾기 목록에서 삭제되었습니다.");
 								}
            					},
@@ -341,7 +341,7 @@
   			<div class="modal-dialog">
     			<div class="modal-content panel-danger">
       				<!-- Modal Header -->
-      				<div id="modalColor">
+      				<div id="mColor">
         				알림 창
         					<button type="button" class="btn-close" data-bs-dismiss="modal"></button>
       				</div>

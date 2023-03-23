@@ -272,7 +272,7 @@ public class BoardController {
 	}
 	
 	@GetMapping("/{division}/{id}")
-	public String showPost(@PathVariable("id") int boardId, @RequestParam(value="page", required=false, defaultValue = "1") int page, 
+	public String showPost(@PathVariable("division") String bookmark, @PathVariable("id") int boardId, @RequestParam(value="page", required=false, defaultValue = "1") int page, 
 			HttpServletRequest request, Model model) {
 		HttpSession session = request.getSession(false);
 		BoardVo boardVo = boardService.findById(boardId);
@@ -289,13 +289,18 @@ public class BoardController {
 			if(loginUser != null) {
 				if(!loginUser.getNickName().equals(boardVo.getUserNickName())) {
 					boardService.hitsUp(boardId);
+				}
+				
+				if(bookmark.equals("bookmark")) {
 					bm = bookmarkService.bookmarkcheck(loginUser.getId(), boardId);
-					if(bm != null) {
-						model.addAttribute("bookmark", bm);
-					}
+					model.addAttribute("bookmark", bm);
+				}else {
+					bm = bookmarkService.bookmarkcheck(loginUser.getId(), boardId);
+					model.addAttribute("bookmark", bm);
 				}
 			}
 		}
+		
 		
 		List<CommentVo> commentList = commentService.commentList(boardId);
 		List<CommentVo> replyList = commentService.replyList(boardId);

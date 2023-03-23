@@ -36,7 +36,7 @@
                             </tr>
                         </thead>
                         <tbody>
-                        	<tr class="table-info" th:each="info, index : ${infoList}" th:if="${index.index} < 2">
+                        	<tr class="table-success" th:each="info, index : ${infoList}" th:if="${index.index} < 2">
                 				<td>공지사항</td>
                 				<td>
                     				<a style="text-decoration: none; color:black;" th:href="@{/boards/{division}/{id}(division = 'info', id = ${info.id})}">
