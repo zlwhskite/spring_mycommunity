@@ -13,5 +13,5 @@ public interface SearchMapper {
 
 	List<SearchVo> searchs(@Param("startIndex")int startIndex, @Param("pageSize") int pageSize, @Param("division") String division, @Param("search") String search);
 	List<SearchVo> searchCount(@Param("division") String division, @Param("search") String search);
-	List<SearchVo> searchNickName(String nickName);
+	List<SearchVo> searchNickName(@Param("startIndex")int startIndex, @Param("pageSize") int pageSize, @Param("nickName")String nickName);
 }

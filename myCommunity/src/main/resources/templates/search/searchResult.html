@@ -71,33 +71,67 @@
                     </div>
                     
                     <th:block th:if="${pagination} != null">
-                    <ul class="pagination justify-content-center">
-  				
-	  					<th:block th:if="${pagination.prev}">  			
-			    			<li class="page-item">
-			     				<a class="page-link" th:href="@{/boards/search(division = ${tit}, search = ${search}, page = ${pagination.startPage} - 1)}" aria-label="Previous">
-			        				<span aria-hidden="true"><<</span>
-			      				</a>
-			    			</li>
-	  					</th:block>
-	  				
-	    				<th:block  th:with="start = ${pagination.startPage}, end = ${pagination.endPage}">
-		    				<li class="page-item mx-1" 
-		    					th:each="pageNum : ${#numbers.sequence(start, end)}" th:classappend="${pagination.criteria.page == pageNum} ? 'active' : ''">
-			    				<a class="page-link"
-			    					th:href="@{/boards/search(division = ${tit}, search = ${search}, page = ${pageNum})}" th:text=${pageNum}></a>
-		    				</li>
-	    				</th:block>
-	    				
-	    				<th:block th:if="${pagination.next}">    				
-		    				<li class="page-item">
-			      				<a class="page-link" th:href="@{/boards/search(division = ${tit}, search = ${search}, page = ${pagination.endPage} + 1)}" aria-label="Next">
-			        				<span aria-hidden="true">>></span>
-			      				</a>
-			    			</li>  				
-	    				</th:block>
-    				
-  					</ul>
+                    
+                    	<th:block th:if="${search}">
+		                    <ul class="pagination justify-content-center">
+		  				
+			  					<th:block th:if="${pagination.prev}">  			
+					    			<li class="page-item">
+					     				<a class="page-link" th:href="@{/boards/search(division = ${tit}, search = ${search}, page = ${pagination.startPage} - 1)}" aria-label="Previous">
+					        				<span aria-hidden="true"><<</span>
+					      				</a>
+					    			</li>
+			  					</th:block>
+			  				
+			    				<th:block  th:with="start = ${pagination.startPage}, end = ${pagination.endPage}">
+				    				<li class="page-item mx-1" 
+				    					th:each="pageNum : ${#numbers.sequence(start, end)}" th:classappend="${pagination.criteria.page == pageNum} ? 'active' : ''">
+					    				<a class="page-link"
+					    					th:href="@{/boards/search(division = ${tit}, search = ${search}, page = ${pageNum})}" th:text=${pageNum}></a>
+				    				</li>
+			    				</th:block>
+			    				
+			    				<th:block th:if="${pagination.next}">    				
+				    				<li class="page-item">
+					      				<a class="page-link" th:href="@{/boards/search(division = ${tit}, search = ${search}, page = ${pagination.endPage} + 1)}" aria-label="Next">
+					        				<span aria-hidden="true">>></span>
+					      				</a>
+					    			</li>  				
+			    				</th:block>
+		    				
+		  					</ul>
+                    	</th:block>
+                    	
+                    	<th:block th:if="not ${search}">
+                    		<ul class="pagination justify-content-center">
+		  				
+			  					<th:block th:if="${pagination.prev}">  			
+					    			<li class="page-item">
+					     				<a class="page-link" th:href="@{/boards/name/{nickname}(nickname = ${tit}, page = ${pagination.startPage} - 1)}" aria-label="Previous">
+					        				<span aria-hidden="true"><<</span>
+					      				</a>
+					    			</li>
+			  					</th:block>
+			  				
+			    				<th:block  th:with="start = ${pagination.startPage}, end = ${pagination.endPage}">
+				    				<li class="page-item mx-1" 
+				    					th:each="pageNum : ${#numbers.sequence(start, end)}" th:classappend="${pagination.criteria.page == pageNum} ? 'active' : ''">
+					    				<a class="page-link"
+					    					th:href="@{/boards/name/{nickname}(nickname = ${tit}, page = ${pageNum})}" th:text=${pageNum}></a>
+				    				</li>
+			    				</th:block>
+			    				
+			    				<th:block th:if="${pagination.next}">    				
+				    				<li class="page-item">
+					      				<a class="page-link" th:href="@{/boards/name/{nickname}(nickname = ${tit}, page = ${pagination.endPage} + 1)}" aria-label="Next">
+					        				<span aria-hidden="true">>></span>
+					      				</a>
+					    			</li>  				
+			    				</th:block>
+		    				
+		  					</ul>      
+                    	</th:block>
+                    	
                     </th:block>
                     
                     

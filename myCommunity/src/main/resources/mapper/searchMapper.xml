@@ -42,6 +42,7 @@
 		where user_nickname = #{nickName}
 		and delete_time is null
 		order by id DESC
+		limit #{startIndex}, #{pageSize}
 	</select>
 
 

@@ -8,5 +8,5 @@ public interface SearchService {
 //	List<SearchVo> allSearch(String search);
 	List<SearchVo> searchs(int startIndex, int pageSize, String division, String search);
 	List<SearchVo> searchCount(String division, String search);
-	List<SearchVo> searchNickName(String nickName);
+	List<SearchVo> searchNickName(int startIndex, int pageSize, String nickName);
 }

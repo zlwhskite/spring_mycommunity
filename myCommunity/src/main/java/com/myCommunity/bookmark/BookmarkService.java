@@ -24,6 +24,7 @@ public class BookmarkService {
 	
 	public BookmarkVo bookmarkcheck(int userId, int boardId) {
 		BookmarkVo bm = bookmarkMapper.bookmarkcheck(userId, boardId);
+		
 		return bm;
 	}
 	

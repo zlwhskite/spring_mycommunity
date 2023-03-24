@@ -24,8 +24,8 @@ public class SearchServiceImpl implements SearchService {
 		return searchMapper.searchCount(division, search);
 	}
 	@Override
-	public List<SearchVo> searchNickName(String nickName) {
-		return searchMapper.searchNickName(nickName);
+	public List<SearchVo> searchNickName(int startIndex, int pageSize, String nickName) {
+		return searchMapper.searchNickName(startIndex, pageSize, nickName);
 	}
 
 }

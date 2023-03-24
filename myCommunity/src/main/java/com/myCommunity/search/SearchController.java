@@ -122,11 +122,42 @@ public class SearchController {
 	}
 	
 	@GetMapping("/name/{nickName}")
-	public String userBoard(@PathVariable("nickName") String nickName, Model model) {
+	public String userBoard(@PathVariable("nickName") String nickName, 
+			@RequestParam(value="page", required=false, defaultValue = "1") int page, Model model) {
 		List<BoardVo> nickNameList = boardService.findByName(nickName);
 		
-		model.addAttribute("resultList", nickNameList);
+		int totalCount = nickNameList.size();
+		
+		Pagination pn = new Pagination();
+		Criteria pg = new Criteria();
+		
+		if(page <= 0) {
+			page = 1;
+		}
+		
+		pg.setPage(page);
+		
+		pn.setCriteria(pg);
+		
+		pn.setTotalCount(totalCount);
+
+		if(pn.getEndPage() < page) {
+			page = pn.getTotalPageCount();
+			pg.setPage(page);
+			
+			pn.setCriteria(pg);
+			
+			pn.setTotalCount(totalCount);
+		}
+		
+		int start = pn.getCriteria().getPageStart();
+		int size = pn.getCriteria().getRecordSize();
+		
+		List<SearchVo> searchList = searchMapper.searchNickName(start, size, nickName);
+		
+		model.addAttribute("resultList", searchList);
 		model.addAttribute("countList", nickNameList);
+		model.addAttribute("pagination", pn);
 		model.addAttribute("tit", nickName);
 		
 		return "search/searchResult";
