@@ -8,6 +8,7 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="https://unpkg.com/feather-icons"></script>
     <link rel="stylesheet" type="text/css" th:href="@{/css/index.css}">
     <title>myCommunity</title>
 </head>
@@ -58,44 +59,43 @@
            		<div class="row">
            		
                 	<div class="col-sm-3 mb-3" th:each="board : ${boardList}">    
-    					<div class="card h-100" style="width:300px">
-										
+    					<div class="card h-100" style="width:300px">						
   	         				<th:block th:each="image, index : ${thumb}" th:if="${board.id} == ${image.id}">	
   	         					<a style="text-decoration: none;" th:href="@{/boards/{division}/{id}(division = ${enDivision}, id = ${board.id}, srt = ${srt}, page = ${pagination.criteria.page})}">						
             						<img th:src="${image.contents}" class="img-thumbnail" style="width: 100%; height:250px;" th:alt="${board.id} + 'Thumbnail'">
   	         					</a>
-            				</th:block>
-						
+            				</th:block>		
         					<div class="card-body">
             					<div class="text-center mb-3">
-            						<a style="text-decoration: none; color:black;" th:href="@{/boards/{division}/{id}(division = ${enDivision}, id = ${board.id}, srt = ${srt}, page = ${pagination.criteria.page})}">
-                						<h4 class="card-title" style="display:inline;">
-                        					[[${board.title}]]	      
-                						</h4>
-                						<th:block th:if="${board.commentsCnt != 0}">
-                        					( [[ ${board.commentsCnt} ]] )
-                    					</th:block>  
-                    				</a>
-                					<th:block th:if="${board.hits} &gt;= 100">
-                    					<span class="badge rounded-pill bg-danger"><small>&nbsp;Hot</small></span>
-                					</th:block>
+	            					<a style="text-decoration: none; color:black;" th:href="@{/boards/{division}/{id}(division = ${enDivision}, id = ${board.id}, srt = ${srt}, page = ${pagination.criteria.page})}">
+	                					<h4 class="card-title" style="display: inline-block; overflow: hidden;  text-overflow: ellipsis; white-space: nowrap; width: 200px;">
+	                        				[[${board.title}]]	       					
+	                					</h4>     					
+	                    			</a>         					
             					</div>
-            					작성자 : 
-            					<a style="text-decoration: none; color: black;" data-bs-toggle="tooltip" title="작성 글 보러가기" th:href="@{/boards/name/{nickName}(nickName = ${board.userNickName})}">
-                					<b>[[${board.userNickName}]]</b>
-            					</a>
             					<th:block th:if="${board.modifyTime} == null">
-                					<p class="card-text">
-                    					작성일 : [[ ${board.createTime} ]]<br>
-                    					조회수 : [[ ${board.hits} ]]
+                					<p class="card-text text-center">
+                    					[[ ${board.createTime} ]]
+                					</p>       
+            					</th:block>
+            					<th:block th:if="${board.modifyTime} != null">	
+                					<p class="card-text text-center">
+                    					[[ ${board.modifyTime} ]]&nbsp;(수정)
                 					</p>
             					</th:block>
-            					<th:block th:if="${board.modifyTime} != null">
-                					<p class="card-text">
-                    					작성일 : [[ ${board.modifyTime} ]]&nbsp;(수정)<br>
-                    					조회수 : [[ ${board.hits} ]]
-                					</p>
-            					</th:block>
+            					<div class="text-center">
+	            					<a style="text-decoration: none; color: black;" data-bs-toggle="tooltip" title="작성 글 보러가기" th:href="@{/boards/name/{nickName}(nickName = ${board.userNickName})}">
+	                					<b>[[${board.userNickName}]]</b>
+	            					</a>
+	            					&nbsp;&nbsp;
+	            					<i data-feather="eye"></i>&nbsp;[[ ${board.hits} ]]
+	                				&nbsp;&nbsp;    						
+		                        	<i data-feather="message-circle"></i>&nbsp;[[ ${board.commentsCnt} ]]
+		                   			<th:block th:if="${board.hits} &gt;= 100">
+		                    			&nbsp;&nbsp;
+	                    				<span class="badge rounded-pill bg-danger"><small>Hot</small></span>
+	                				</th:block> 
+            					</div>
         					</div>
         					
     					</div>
@@ -175,7 +175,8 @@
     	$(document).ready(function() {
       		$('#loading').hide();
 		});
-    
+		//https://feathericons.com/
+    	feather.replace()
     </script>
     
 </body>

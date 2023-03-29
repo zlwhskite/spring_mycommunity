@@ -8,6 +8,8 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletRequestWrapper;
@@ -338,6 +340,22 @@ public class BoardController {
 		int size = pn.getCriteria().getRecordSize();
 		
 		List<BoardVo> boardList = criteriaService.findAll(start, size, boardVo.getDivision());
+		
+		
+		Pattern MY_PATTERN = Pattern.compile("#(\\S+)");
+		String s = "sdflmsdpfspdfmdfosdfposmfp #java#bean#mou";
+        Matcher mat = MY_PATTERN.matcher(s);
+        List<String> tagList = new ArrayList<>();
+
+        while(mat.find()) {
+            tagList.add((mat.group(1)));
+        }
+
+        System.out.println("Create HashTags Success! -----> " + tagList);		
+        
+        for(String i : tagList) {
+        	System.out.println(i);
+        }
 		
 		model.addAttribute("boardList", boardList);
 		model.addAttribute("pagination", pn);

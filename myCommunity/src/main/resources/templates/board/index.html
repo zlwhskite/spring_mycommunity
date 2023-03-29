@@ -58,8 +58,7 @@
                                 <td th:text="${board.division}"></td>
                                 <td>
                                 	<a style="text-decoration: none;" th:href="@{/boards/{division}/{id}(division = 'hot', id = ${board.id})}">
-                                		[[${board.title}]] 
-                                		
+                                		[[${board.title}]]            		
                                 	</a>
                                 	<th:block th:if="${board.commentsCnt != 0}">
                                 		( [[ ${board.commentsCnt} ]] )&nbsp;
