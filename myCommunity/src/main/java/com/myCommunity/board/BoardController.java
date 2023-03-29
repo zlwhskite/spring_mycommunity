@@ -341,7 +341,7 @@ public class BoardController {
 		
 		List<BoardVo> boardList = criteriaService.findAll(start, size, boardVo.getDivision());
 		
-		
+		/*
 		Pattern MY_PATTERN = Pattern.compile("#(\\S+)");
 		String s = "sdflmsdpfspdfmdfosdfposmfp #java#bean#mou";
         Matcher mat = MY_PATTERN.matcher(s);
@@ -356,6 +356,7 @@ public class BoardController {
         for(String i : tagList) {
         	System.out.println(i);
         }
+        */
 		
 		model.addAttribute("boardList", boardList);
 		model.addAttribute("pagination", pn);
