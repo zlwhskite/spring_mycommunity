@@ -21,6 +21,7 @@
 					$('html, body').animate({
 						scrollTop: $(comm).offset().top - $(comm).height() / 2
 					}, 'slow');
+					return false;
 				});
     		}
     	/*]]>*/
@@ -356,9 +357,10 @@
     			</div>
   			</div>
 		</div>
-	
-
-	
+		
+		<div>
+			<a style="position: fixed; bottom: 40px; right: 2%; display: none; z-index: 999; text-decoration: none;" class="btn btn-success rounded-circle" id="topBtn" href="#">TOP</a>
+		</div>
 
     <th:block th:replace="fragments/footer :: footer"></th:block>
     
@@ -376,6 +378,22 @@
       	});
       
       	$('#summernote').summernote('disable');
+      	
+      	
+      	$(function() {
+	        $(window).scroll(function() {
+	            if ($(this).scrollTop() > 500) {
+	                $('#topBtn').fadeIn();
+	            } else {
+	                $('#topBtn').fadeOut();
+	            }
+	        });
+	        $("#topBtn").click(function() {
+	            $('html, body').animate({scrollTop : 0
+	            }, 'slow');
+	            return false;
+	        });
+    	});
     </script>
 
 </body>
