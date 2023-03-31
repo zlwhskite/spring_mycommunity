@@ -179,4 +179,24 @@ public class BoardServiceImpl implements BoardService {
 		return a;
 	}
 
+	//컨텐츠내용중 이미지만추출
+	/*
+	 	Pattern pattern  =  Pattern.compile("<img[^>]*src=[\"']?([^>\"']+)[\"']?[^>]*>");
+		 
+		// 추출할 내용.
+		String content = boardVo.getContents();
+		 
+		// 내용 중에서 이미지 태그를 찾아라!
+		Matcher match = pattern.matcher(content);
+		 
+		String imgTag = null;
+		 
+		if(match.find()){ // 이미지 태그를 찾았다면,,
+		    imgTag = match.group(0); // 글 내용 중에 첫번째 이미지 태그를 뽑아옴.
+		}
+		 
+		// 결과값은 name1.jpg
+		System.out.println(boardVo.getContents());
+		System.out.println("imgTag : " + imgTag);
+	 */
 }

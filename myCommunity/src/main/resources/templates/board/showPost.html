@@ -9,6 +9,7 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
     <link href="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote-lite.min.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote-lite.min.js"></script>
+    <script src="https://unpkg.com/feather-icons"></script>
     <link rel="stylesheet" type="text/css" th:href="@{/css/index.css}">
     <title>myCommunity</title>
     <script type="text/javascript" th:inline="javascript">
@@ -33,10 +34,16 @@
     <div class="container mt-5">
   		<div class="p-5 rounded">
     		<div class="text-center">
-      			<h2 th:text="${board.title}"></h2>
+      			<h2 style="display: inline;">[[ ${board.title} ]]</h2>
+      			<th:block th:if="${board.hits} &gt;= 100">	        	
+	                <span class="badge rounded-pill bg-danger" style="display:inline;"><small>Hot</small></span>
+	            </th:block> 
     		</div>
     		<div class="text-end">
-					조회수 : [[ ${board.hits} ]]
+				<i data-feather="eye"></i>&nbsp;[[ ${board.hits} ]]
+	            &nbsp;&nbsp;    						
+		        <i data-feather="message-circle"></i>&nbsp;[[ ${board.commentsCnt} ]]
+		        &nbsp;&nbsp;
     		</div>
    
     		<th:block th:if="${session.user != null}">
@@ -337,30 +344,31 @@
   		</div>
   		<hr>
 	</div>
+	
+	<div>
+		<a style="position: fixed; bottom: 40px; right: 2%; display: none; z-index: 999; text-decoration: none;" 
+			class="btn btn-success rounded-circle" id="topBtn" href="#">TOP</a>
+	</div>
 
-		<div class="modal fade" id="myM">
-  			<div class="modal-dialog">
-    			<div class="modal-content panel-danger">
-      				<!-- Modal Header -->
-      				<div id="mColor">
-        				알림 창
-        				<button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-      				</div>
-			      	<!-- Modal body -->
-			      	<div class="modal-body" id="mcon">
-			      		...
-			      	</div>
-			      	<!-- Modal footer -->
-			      	<div class="modal-footer">
-			        	<button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
-			      	</div>
-    			</div>
-  			</div>
-		</div>
-		
-		<div>
-			<a style="position: fixed; bottom: 40px; right: 2%; display: none; z-index: 999; text-decoration: none;" class="btn btn-success rounded-circle" id="topBtn" href="#">TOP</a>
-		</div>
+	<div class="modal fade" id="myM">
+  		<div class="modal-dialog">
+    		<div class="modal-content panel-danger">
+      			<!-- Modal Header -->
+      			<div id="mColor">
+        			알림 창
+        			<button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+      			</div>
+			    <!-- Modal body -->
+			    <div class="modal-body" id="mcon">
+			    	...
+			    </div>
+			    <!-- Modal footer -->
+			    <div class="modal-footer">
+			    	<button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
+			    </div>
+    		</div>
+  		</div>
+	</div>
 
     <th:block th:replace="fragments/footer :: footer"></th:block>
     
@@ -394,6 +402,8 @@
 	            return false;
 	        });
     	});
+    	
+    	feather.replace()
     </script>
 
 </body>

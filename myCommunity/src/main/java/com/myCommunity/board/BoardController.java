@@ -341,23 +341,6 @@ public class BoardController {
 		
 		List<BoardVo> boardList = criteriaService.findAll(start, size, boardVo.getDivision());
 		
-		
-		Pattern MY_PATTERN = Pattern.compile("#(\\S+)");
-		String s = "2#java#bean#mou";
-        Matcher mat = MY_PATTERN.matcher(s);
-        List<String> tagList = new ArrayList<>();
-
-        while(mat.find()) {
-            tagList.add((mat.group(1)));
-        }
-
-        System.out.println("Create HashTags Success! -----> " + tagList);		
-        
-        for(String i : tagList) {
-        	System.out.println(i);
-        }
-        
-		
 		model.addAttribute("boardList", boardList);
 		model.addAttribute("pagination", pn);
 		model.addAttribute("board", boardVo);

@@ -17,12 +17,7 @@ public class AdminVo {
 	private String deleteTime;
 	
 	
-	
-	
 	public AdminVo() {}
-	
-	
-	
 	public AdminVo(int id, String email, String nickName, String password, String gender, int auth, String title,
 			String userNickName, String contents, String division, int hits, String createTime, String modifyTime,
 			String deleteTime) {
