@@ -52,6 +52,6 @@
 ![image](https://user-images.githubusercontent.com/80504740/229420481-76e6b448-0d2c-4c72-9b86-65f6a12e5e86.png)
 
 
-### UserInfo
+### User Info
 ![image](https://user-images.githubusercontent.com/80504740/229420538-a69fdba7-602b-4824-bf39-5c4f8bc08c5b.png)
 
