@@ -7,8 +7,9 @@
 
 
 ## 기술 스택
-- 자바11
-- 스프링부트2.7.7
+- Java 11
+- Springboot 2.7.7
+- Thymeleaf
 - Gradle
 - 부트스트랩
 - 제이쿼리
