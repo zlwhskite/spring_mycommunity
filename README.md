@@ -6,7 +6,7 @@
 ![image](https://user-images.githubusercontent.com/80504740/229421096-0e1d66e5-9021-48ed-8f32-e04939738cf2.png)
 
 
-## 사용한 기술
+## 기술 스택
 - 자바11
 - 스프링부트2.7.7
 - Gradle
@@ -16,7 +16,7 @@
 - chart.js
 
 
-## 기능
+## 구현 기능
 - 게시글CRUD(summernote, 파일업로드)
 - 댓글, 대댓글
 - 페이징
