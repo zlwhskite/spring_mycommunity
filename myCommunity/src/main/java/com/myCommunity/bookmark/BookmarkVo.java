@@ -13,6 +13,7 @@ public class BookmarkVo {
 		this.userId = userId;
 		this.boardId = boardId;
 	}
+	
 	public int getId() {
 		return id;
 	}
