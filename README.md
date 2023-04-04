@@ -7,7 +7,6 @@
 
 
 ## ERD
-![image](https://user-images.githubusercontent.com/80504740/229656679-bbb6b010-2a0b-4d88-bde7-9a95387a96e7.png)
 
 
 ## 기술 스택
