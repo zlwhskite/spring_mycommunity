@@ -24,7 +24,7 @@
 - 검색
 - 정렬
 - 출석체크
-- admin(공지사항, adminpage)
+- admin(공지사항, adminPage)
 - 즐겨찾기
 - 회원가입(sha256)
 - 조회 수
