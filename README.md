@@ -59,7 +59,7 @@
 
 
 ### User Info
-![image](https://user-images.githubusercontent.com/80504740/229420538-a69fdba7-602b-4824-bf39-5c4f8bc08c5b.png)
+![image](https://user-images.githubusercontent.com/80504740/229693389-8324661a-e4ec-43b4-9415-0426f16b7c32.png)
 
 
 ## 세부기능
