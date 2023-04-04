@@ -16,11 +16,11 @@
 - Java 11
 - Springboot 2.7.7
 - Thymeleaf
-- Gradle
 - 부트스트랩
 - 제이쿼리
 - MyBatis(H2)
 - chart.js
+Gradle
 
 
 ## 구현 기능
