@@ -20,7 +20,7 @@
 - 제이쿼리
 - MyBatis(H2)
 - chart.js
-Gradle
+- Gradle
 
 
 ## 구현 기능
