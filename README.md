@@ -6,6 +6,10 @@
 ![image](https://user-images.githubusercontent.com/80504740/229421096-0e1d66e5-9021-48ed-8f32-e04939738cf2.png)
 
 
+## ERD
+![image](https://user-images.githubusercontent.com/80504740/229656679-bbb6b010-2a0b-4d88-bde7-9a95387a96e7.png)
+
+
 ## 기술 스택
 - Java 11
 - Springboot 2.7.7
