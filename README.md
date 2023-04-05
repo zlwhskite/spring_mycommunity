@@ -10,8 +10,7 @@
 
 
 ## ERD
-![image](https://user-images.githubusercontent.com/80504740/229969789-e0a3565e-dcee-40b0-8094-7c19558c6b7d.png)
-
+![image](https://user-images.githubusercontent.com/80504740/230013653-aff9d4a9-9ab6-429a-b6d5-0482e0c222e0.png)
 
 
 ## 기술 스택
