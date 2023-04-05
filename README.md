@@ -26,7 +26,7 @@
 
 
 ## 구현 기능
-- 게시글CRUD(summernote, 파일업로드)
+- 게시글CRUD(summernote)
 - 댓글, 대댓글
 - 페이징
 - 검색
