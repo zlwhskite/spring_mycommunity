@@ -19,6 +19,7 @@ public interface CommentMapper {
 	void replyCreate(CommentVo commentVo);
 	void commentModify(@Param("id") int id, @Param("commentVo") CommentVo commentVo);
 	void commentDelete(@Param("id") int id, @Param("commentVo") CommentVo commentVo);
+	void commentBoardDelete(@Param("commentVo") CommentVo commentVo);
 	void commentUserDelete(@Param("commentVo") CommentVo commentVo);
 	CommentVo scrPosition(String nickname);
 	

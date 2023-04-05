@@ -31,4 +31,8 @@ public class BookmarkService {
 	public void delete(int userId, int boardId) {
 		bookmarkMapper.delete(userId, boardId);
 	}
+	
+	public void allDelete(int userId) {
+		bookmarkMapper.allDelete(userId);
+	}
 }

@@ -15,6 +15,7 @@ public interface CommentService {
 	void commentCreate(CommentVo commentVo);
 	void commentModify(int id, CommentVo CommentVo);
 	void commentDelete(int id, CommentVo CommentVo);
+	void commentBoardDelete(CommentVo commentVo);
 	void commentUserDelete(CommentVo commentVo);
 	CommentVo scrPosition(String nickname);
 

@@ -78,6 +78,13 @@
 		where id = #{commentVo.id}
 	</update>
 	
+	<!-- 게시글 삭제 댓글 삭제 -->
+	<update id="commentBoardDelete" parameterType="CommentVo">
+		update comments
+			set delete_time = #{commentVo.deleteTime}
+		where board_id = #{commentVo.boardId} and delete_time is null
+	</update>
+	
 	<!-- 탈퇴 회원 댓글 삭제 -->
 	<update id="commentUserDelete" parameterType="CommentVo">
 		update comments

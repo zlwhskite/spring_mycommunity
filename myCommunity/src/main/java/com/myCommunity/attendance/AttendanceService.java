@@ -21,6 +21,10 @@ public class AttendanceService {
 		return attMapper.findById(id, attdate);
 	}
 	
+	public AttendanceVo findUserInfo(int id) {
+		return attMapper.findUserInfo(id);
+	}
+	
 	@Transactional
 	public void update(int id, AttendanceVo att) {
 		attMapper.update(id, att);

@@ -415,19 +415,31 @@ public class BoardController {
 	}
 	
 	@DeleteMapping("/{id}")
-	public String deletePost(@ModelAttribute("board") BoardVo boardVo, @PathVariable("id") int boardId, RedirectAttributes rttr) {
+	public String deletePost(@ModelAttribute("board") BoardVo boardVo, @PathVariable("id") int boardId, HttpServletRequest request, RedirectAttributes rttr) {
+		HttpSession session = request.getSession(false);
+		LoginVo loginUser = new LoginVo();
+		
+		loginUser = (LoginVo)session.getAttribute("user");
+			
 		boardVo.setDeleteTime(LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
 		String division = boardService.dvchKE(boardVo.getDivision());
+		CommentVo commentVo = new CommentVo();
 		
 		boardService.delete(boardId, boardVo);
 		
 		if(boardVo.getDivision().equals("공지사항")) {
 			rttr.addFlashAttribute("msgm", "삭제가 성공했습니다.");
 			return "redirect:/boards";
+		}else {
+			commentVo.setBoardId(boardId);
+			commentVo.setDeleteTime(LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
+			
+			commentService.commentBoardDelete(commentVo);
+			bookmarkService.delete(loginUser.getId(), boardId);
+			
+			rttr.addFlashAttribute("msgm", "삭제가 성공했습니다.");
+			return "redirect:/boards/" + division;
 		}
-		
-		rttr.addFlashAttribute("msgm", "삭제가 성공했습니다.");
-		return "redirect:/boards/" + division;
 	}
 	
 	@GetMapping("/srt")

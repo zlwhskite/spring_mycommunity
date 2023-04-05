@@ -16,6 +16,15 @@
 		attendance_date = #{attendanceDate}
 	</select>
 	
+	<select id="findUserInfo" resultType="AttendanceVo">
+		select user_id, attendance_date, count
+		from attendance 
+		where user_id = #{userId}
+		order by id DESC 
+		limit 1
+	</select>
+	
+	
 	<update id="update">
 		update attendance
 		set count = #{attVo.count}

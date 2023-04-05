@@ -12,4 +12,5 @@ public interface BookmarkMapper {
 	List<BookmarkVo> bookmarkList(int userId);
 	BookmarkVo bookmarkcheck(@Param("userId") int userId, @Param("boardId") int boardId);
 	void delete(@Param("userId") int userId, @Param("boardId") int boardId);
+	void allDelete(int userId);
 }

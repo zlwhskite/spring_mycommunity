@@ -28,4 +28,8 @@
     	and board_id = #{boardId} 
   	</delete>
 
+	<delete id="allDelete">
+    	delete from bookmarks
+    	where user_id = #{userId}
+  	</delete>
 </mapper>

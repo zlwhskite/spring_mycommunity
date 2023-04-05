@@ -57,6 +57,12 @@ public class CommentServiceImpl implements CommentService {
 	
 	@Override
 	@Transactional
+	public void commentBoardDelete(CommentVo commentVo) {
+		commentMapper.commentBoardDelete(commentVo);
+	}
+	
+	@Override
+	@Transactional
 	public void commentUserDelete(CommentVo commentVo) {
 		commentMapper.commentUserDelete(commentVo);
 	}

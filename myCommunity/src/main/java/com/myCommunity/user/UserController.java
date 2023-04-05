@@ -164,6 +164,8 @@ public class UserController {
 			return "redirect:/boards";
 		}else {
 			UserVo user = userService.findBynickName(loginVo.getNickName());
+			AttendanceVo att = attService.findUserInfo(user.getId());
+
 			List<BookmarkVo> bmList = bookmarkService.bookmarkList(user.getId());
 			
 			if(user.getAuth() == 1) {
@@ -185,7 +187,10 @@ public class UserController {
 				model.addAttribute("userBook", "즐겨찾기한 게시글이 없습니다.");
 			}
 			
+			int attCnt = att.getCount();
+			
 			model.addAttribute("userIn", user);
+			model.addAttribute("attCnt", attCnt);
 			
 			return "user/userInfo";
 		}
@@ -263,6 +268,7 @@ public class UserController {
 			boardService.userDelete(user.getNickName(), bv);
 			commentService.commentUserDelete(cv);
 			attService.delete(loginVo.getId());
+			bookmarkService.allDelete(loginVo.getId());
 			
 			session.invalidate();
 			rttr.addFlashAttribute("lmsgm", "회원탈퇴를 성공했습니다." + " 감사합니다.");

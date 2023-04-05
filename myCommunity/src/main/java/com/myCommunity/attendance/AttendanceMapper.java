@@ -11,6 +11,7 @@ import com.myCommunity.user.UserVo;
 public interface AttendanceMapper {
 	int attenSave(AttendanceVo att);
 	AttendanceVo findById(@Param("userId")int id, @Param("attendanceDate") String attdate);
+	AttendanceVo findUserInfo(int id);
 	void update(@Param("userId") int id, @Param("attVo") AttendanceVo att);
 	void delete(@Param("userId") int id);
 	int todayUser(@Param("attendanceDate") String attdate);
