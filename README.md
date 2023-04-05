@@ -39,15 +39,15 @@
 ### Home
 ![image](https://user-images.githubusercontent.com/80504740/229420084-ddd8ed53-f6d3-4978-bada-eb822bc03949.png)
 
+
 ### Boards
 ![image](https://user-images.githubusercontent.com/80504740/229420135-cbb033bb-46ee-4641-b9aa-84ede1d3e670.png)
-![image](https://user-images.githubusercontent.com/80504740/229962470-6e243315-7f25-4f14-98f7-a46880cdca00.png)
 ![image](https://user-images.githubusercontent.com/80504740/229978002-c82d9d9c-4be2-4e1f-a046-416d151822f5.png)
-
 
 
 ### Sign up
 ![image](https://user-images.githubusercontent.com/80504740/229420174-4bf3f904-9494-4ba8-8b38-05f13262ec83.png)
+
 
 ### Search
 ![image](https://user-images.githubusercontent.com/80504740/229420234-6b7cb8c7-7209-4a05-9468-db43d0869d20.png)
