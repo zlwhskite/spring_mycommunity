@@ -40,7 +40,7 @@
 
 ### Boards
 ![image](https://user-images.githubusercontent.com/80504740/229420135-cbb033bb-46ee-4641-b9aa-84ede1d3e670.png)
-![image](https://user-images.githubusercontent.com/80504740/229420323-e4b54493-b5d1-49cc-bd42-71487c284567.png)
+![image](https://user-images.githubusercontent.com/80504740/229962470-6e243315-7f25-4f14-98f7-a46880cdca00.png)
 
 
 ### Sign up
