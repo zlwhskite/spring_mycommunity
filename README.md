@@ -42,7 +42,7 @@
 
 ### Boards
 ![image](https://user-images.githubusercontent.com/80504740/229420135-cbb033bb-46ee-4641-b9aa-84ede1d3e670.png)
-![image](https://user-images.githubusercontent.com/80504740/229978002-c82d9d9c-4be2-4e1f-a046-416d151822f5.png)
+![image](https://user-images.githubusercontent.com/80504740/230247254-91b1c9b1-d31a-4324-9422-373f0ac52cdf.png)
 
 
 ### Sign up
