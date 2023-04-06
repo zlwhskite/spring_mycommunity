@@ -90,6 +90,11 @@ public class AdminController {
 		return "admin/index";
 	}
 	
+	
+	
+	
+	
+	/*
 	@GetMapping("/edit")
 	public String edit(HttpServletRequest request, RedirectAttributes rttr, Model model) {
 		HttpSession session = request.getSession(false);
@@ -156,4 +161,5 @@ public class AdminController {
 		
 		
 	}
+	*/
 }
