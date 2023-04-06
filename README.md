@@ -3,7 +3,7 @@
 
 
 ## 디렉토리구조
-![image](https://user-images.githubusercontent.com/80504740/229421096-0e1d66e5-9021-48ed-8f32-e04939738cf2.png)
+![image](https://user-images.githubusercontent.com/80504740/230248059-d99c68df-08a0-419b-bf31-15dc59bd6978.png)
 
 
 ## Process Flowchart
