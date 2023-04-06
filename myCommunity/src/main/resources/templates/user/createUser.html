@@ -80,18 +80,19 @@
           		<label for="nickName" class="form-label">NickName :</label>
           		<input type="text" class="form-control" id="nickName" placeholder="Enter nickName" name="nickName">
           		<div class="mt-1 text-end"> 
+          			<th:block th:if="${err != null}">
+            			<span style="color: red;"> <SMALL> [[${err['uerr']}]]  </SMALL></span>
+            		</th:block>
             		<span id="check"></span>             
             		<input type="button" class="btn btn-outline-secondary btn-sm" onclick="nameCheck();" value="중복체크"></input>
-          		</div>	
-          		
-          		<th:block th:if="${err != null}">
-            		<div style="color: red;"> <SMALL> [[${err['nerr']}]]  </SMALL></div>
-            	</th:block>
-            	
+          		</div>		
         	</div>
         	<div class="mb-3">
           		<label for="password" class="form-label">Password :</label>
           		<input type="password" class="form-control" onkeyup="passwordCheck()" id="password" placeholder="Enter password" name="password">
+        		<th:block th:if="${err != null}">
+            		<div style="color: red;"> <SMALL> [[${err['perr']}]]  </SMALL></div>
+            	</th:block>
         	</div>
         	<div class="mb-3">
           		<label for="password2" class="form-label">Confirm Password :</label>
@@ -100,7 +101,7 @@
           		<th:block th:if="${err != null}">
             		<div id="eperr" style="color: red;"> <SMALL> [[${err['eperr']} ]] </SMALL></div>
             	</th:block>
-            	
+        
         	</div>
         	<span id="pwdMessage1" style="color: red" disabled></span>
             <span id="pwdMessage2" style="color: green" disabled></span>
@@ -115,7 +116,7 @@
         	</div>
         	<div class="mb-3 mt-3">
             	<label for="gender">Gender :</label>
-            	<select id="gender" class="form-select" name="gender">
+            	<select id="gender" class="form-select" name="gender" data-bs-toggle="tooltip" data-bs-placement="right" title="성별은 필수가 아닙니다.">
                		<option value="x">성별을 선택해주세요.</option>
                	 	<option>비밀</option>
                 	<option>남</option>

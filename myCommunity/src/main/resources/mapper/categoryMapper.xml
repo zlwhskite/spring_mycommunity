@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.myCommunity.category.CategoryMapper">
+
+	<select id="CategoryList" resultType="CategoryVo">
+		select id, category_name
+		from category
+	</select>
+	
+	<select id="findById" resultType="CategoryVo">
+		select id, category_name
+		from category
+		where id = #{categoryId}
+	</select>
+
+	<update id="categoryEdit" parameterType="CategoryVo">
+		update category
+			set category_name = #{name2}
+		where category_name = #{name1}
+	</update>
+	
+	<update id="categoryOrderEdit" parameterType="CategoryVo">
+		update category
+			set category_name = #{categoryName}
+		where id = #{categoryId}
+	</update>
+</mapper>

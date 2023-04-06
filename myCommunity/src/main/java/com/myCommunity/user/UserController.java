@@ -102,10 +102,13 @@ public class UserController {
 	@PostMapping
 	public String userCreate(@ModelAttribute("user") UserVo userVo, @RequestParam("password2") String password2, RedirectAttributes rttr, Model model, HttpServletRequest request) {	
 		Map<String, String> err = new HashMap<>();
-		System.out.println(password2);
-		System.out.println(userVo.getPassword());
-		if(userVo.getPassword().isEmpty() || password2.isEmpty()) {
-			err.put("perr", "비밀번호를 입력해주세요.");
+		UserVo userCheck = userService.findBynickName(userVo.getNickName());
+		System.out.println(userVo.getGender());
+		if(userCheck != null || userVo.getNickName().equals("")) {
+			err.put("uerr", "중복체크버튼을 눌러 다시 확인해주세요.");
+		}
+		if(userVo.getPassword().isEmpty() || password2.isEmpty() || userVo.getPassword().length() <= 8) {
+			err.put("perr", "비밀번호는 8자리 이상으로 입력해주세요.");
 		}
 		if(!password2.equals(userVo.getPassword())) {
 			err.put("eperr", "비밀번호가 일치하지않습니다.");
@@ -113,18 +116,19 @@ public class UserController {
 		if(userVo.getEmail().isEmpty()) {
 			err.put("eerr", "이메일을 입력해주세요.");
 		}
-		if(userVo.getGender().equals("x")) {
-			err.put("gerr", "성별을 선택해주세요.");
-		}
 		
 		if(!MapUtils.isEmpty(err)) {
 			model.addAttribute("err", err);
 			return "user/createUser";
 		}
 		
+		
 		String sha = userService.sha256(userVo.getPassword());
 		
 		userVo.setPassword(sha);
+		if(userVo.getGender().equals("x")) {
+			userVo.setGender("비밀");
+		}
 		userVo.setCreateTime(LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
 		userVo.setModifyTime(LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
 		
