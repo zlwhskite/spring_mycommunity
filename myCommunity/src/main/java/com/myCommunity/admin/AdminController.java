@@ -19,9 +19,6 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.myCommunity.board.BoardServiceImpl;
 import com.myCommunity.board.BoardVo;
-import com.myCommunity.category.CategoryMapper;
-import com.myCommunity.category.CategoryService;
-import com.myCommunity.category.CategoryVo;
 import com.myCommunity.login.LoginVo;
 
 @Controller
@@ -31,8 +28,6 @@ public class AdminController {
 	AdminService adminService;
 	@Autowired
 	BoardServiceImpl boardService;
-	@Autowired
-	CategoryService categoryService;
 	
 	
 	@GetMapping()
@@ -86,7 +81,7 @@ public class AdminController {
 		model.addAttribute("stockList", stockList);
 		model.addAttribute("workoutList", workoutList);
 		model.addAttribute("freeList", freeList);
-		
+
 		return "admin/index";
 	}
 	

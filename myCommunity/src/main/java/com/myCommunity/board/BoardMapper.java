@@ -35,4 +35,5 @@ public interface BoardMapper {
 	List<BoardVo> findAllFree();
 	List<BoardVo> boardHits(String division);
 	List<BoardVo> boardRecen(String division);
+	List<String> findAllDivision();
 }

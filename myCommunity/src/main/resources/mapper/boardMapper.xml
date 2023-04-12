@@ -118,8 +118,12 @@
 		order by id DESC
 	</select>
 	
-
-	
-
+	<select id="findAllDivision" resultType="string">
+		select division
+		from boards
+		where not 
+		division = '공지사항'
+		group by division
+	</select>
 
 </mapper>

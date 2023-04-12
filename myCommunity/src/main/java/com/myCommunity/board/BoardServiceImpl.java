@@ -157,6 +157,10 @@ public class BoardServiceImpl implements BoardService {
 		return division;
 	}
 	
+	public List<String> findAllDivision() {
+		return boardMapper.findAllDivision();
+	}
+	
 	//썸네일
 	public List<BoardVo> thumb(List<BoardVo> list) {
 		List<BoardVo> a = new ArrayList<>();

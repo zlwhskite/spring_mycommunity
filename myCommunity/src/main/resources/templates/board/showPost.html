@@ -173,7 +173,7 @@
                   						<button class="btn btn-link btn-sm" type="button" data-bs-toggle="collapse" th:attr="data-bs-target=|#a${comm.id}">답글쓰기</button>
                 					</p>				
                 					<div>
-                  						<p>&nbsp;&nbsp;&nbsp;[[ ${comm.contents} ]]</p>							
+                  						<div class="card-text" th:utext="${@commonmarkUtil.markdown(comm.contents)}"></div>							
                 					</div>
               					</th:block>
               					<th:block th:if="${comm.deleteTime != null}">														
@@ -227,7 +227,8 @@
                         							</th:block>
                       							</p>				
                       							<div>
-                        							<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[[ ${rep.contents} ]]</p>							
+                      								<div class="card-text" th:utext="${@commonmarkUtil.markdown(rep.contents)}"></div>	
+                        							<!--<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[[ ${rep.contents} ]]</p>-->						
                       							</div>
                     						</th:block>
                     						<th:block th:if="${rep.deleteTime != null}">														
