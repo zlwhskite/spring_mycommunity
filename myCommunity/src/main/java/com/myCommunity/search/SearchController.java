@@ -2,6 +2,8 @@ package com.myCommunity.search;
 
 import java.util.List;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -123,7 +125,7 @@ public class SearchController {
 	
 	@GetMapping("/name/{nickName}")
 	public String userBoard(@PathVariable("nickName") String nickName, 
-			@RequestParam(value="page", required=false, defaultValue = "1") int page, Model model) {
+			@RequestParam(value="page", required=false, defaultValue = "1") int page, RedirectAttributes rttr, HttpServletRequest request, Model model) {
 		List<BoardVo> nickNameList = boardService.findByName(nickName);
 		
 		int totalCount = nickNameList.size();
@@ -155,7 +157,15 @@ public class SearchController {
 		
 		List<SearchVo> searchList = searchMapper.searchNickName(start, size, nickName);
 		
-		model.addAttribute("resultList", searchList);
+		if(searchList.isEmpty()) {
+			 String addr = request.getHeader("Referer");
+			
+			rttr.addFlashAttribute("errm", "검색결과가 없습니다.");
+			return "redirect:"+ addr;
+		}else {
+			model.addAttribute("resultList", searchList);
+		}
+		
 		model.addAttribute("countList", nickNameList);
 		model.addAttribute("pagination", pn);
 		model.addAttribute("tit", nickName);

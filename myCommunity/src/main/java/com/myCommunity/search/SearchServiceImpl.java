@@ -1,5 +1,6 @@
 package com.myCommunity.search;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,7 +26,11 @@ public class SearchServiceImpl implements SearchService {
 	}
 	@Override
 	public List<SearchVo> searchNickName(int startIndex, int pageSize, String nickName) {
-		return searchMapper.searchNickName(startIndex, pageSize, nickName);
+		try {
+			return searchMapper.searchNickName(startIndex, pageSize, nickName);
+		}catch(Exception e) {
+			return new ArrayList<SearchVo>();
+		}
 	}
 
 }

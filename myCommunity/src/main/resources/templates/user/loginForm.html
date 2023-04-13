@@ -11,7 +11,6 @@
 </head>
 <body>
     <th:block th:replace="fragments/header :: header"></th:block>
-
     
     <div class="container mt-5" style="display: flex; justify-content: center; align-items: center;">
         <div class="w-50 mt-5 mb-5 p-5 rounded" style="border:1px solid black;">
@@ -27,8 +26,8 @@
             </div>
             <div class="mb-3">
             	<th:block th:if="${msg != null}">
-            	<div style="color: red;"><SMALL> [[ ${msg} ]] </SMALL></div>
-            	<br>
+            		<div class="alert alert-danger">[[ ${msg} ]]</div>
+            		<br>
             	</th:block>
                 <I><a style="color: black;" th:href="@{/users/create}">회원가입</a>&nbsp;or&nbsp;</I>
                 

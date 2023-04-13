@@ -153,112 +153,123 @@
           				<br>
         			</th:block>
       			</div>
-          
+      			
       			<!-- 댓글 -->
       			<ul class="list-group list-group-flush" th:each="comm : ${commentList}" th:id="${comm.id}">
-        			<li class="list-group-item">
-          				<div>
-            				<form th:action="@{/comments/{id}(id = ${comm.id})}" class="w-100" method="post">
-              					<input type="hidden" th:field="${board.division}"></input>
-              					<input type="hidden" name="boardId" th:value="${board.id}"></input>
-              					<th:block th:if="${comm.deleteTime == null}">														
-                					<p>
-                  						<b>◽&nbsp;[[ ${comm.userNickName} ]]</b> / 
-                  						<th:block th:if="${comm.modifyTime == null}">
-                    						[[ ${comm.createTime} ]]	
-                  						</th:block>
-                  						<th:block th:if="${comm.modifyTime != null}">
-                  							[[ ${comm.modifyTime} ]](수정)
-                  						</th:block>
-                  						<button class="btn btn-link btn-sm" type="button" data-bs-toggle="collapse" th:attr="data-bs-target=|#a${comm.id}">답글쓰기</button>
-                					</p>				
-                					<div>
-                  						<div class="card-text" th:utext="${@commonmarkUtil.markdown(comm.contents)}"></div>							
-                					</div>
-              					</th:block>
-              					<th:block th:if="${comm.deleteTime != null}">														
-                					<p>
-                  						<s>삭제 된 댓글입니다.</s>
-                					</p>				
-              					</th:block>
-              					<div class="collapse mb-2" th:id="a + ${comm.id}">
-                					<div class="input-group mb-3">
-                  						<textarea rows="5" cols="50" name="replyContents" placeholder="댓글을 입력해주세요."></textarea>
-                  						<button type="submit" class="btn btn-outline-success btn-sm" name="action" value="replyCreate">답글쓰기</button>
-                					</div>
-              					</div>
-              					<div class="collapse mb-2" th:id="c + ${comm.id}">
-                					<div class="input-group mb-3">
-                  						<textarea rows="5" cols="50" name="contents" placeholder="수정 할 댓글을 입력해주세요."></textarea>
-                  						<button type="submit" class="btn btn-outline-success btn-sm" name="action" value="modify">수정완료</button>
-                					</div>
-              					</div>
-              					<th:block th:if="${session.user != null}">
-                					<th:block th:if="${#strings.equals(session.user.nickName, comm.userNickName)} and ${comm.deleteTime == null}">
-                  						<p>						
-                    						<button class="btn btn-outline-primary" type="button" data-bs-toggle="collapse" th:attr="data-bs-target=|#c${comm.id}">수정</button> 
-                    						/ 
-                    						<button class="btn btn-outline-warning" type="submit" name="action" value="delete">삭제</button>
-                  						</p>
-                					</th:block>
-              					</th:block>
-            				</form>
-          				</div>
-        			</li>
-
-        			<!-- 대댓글 -->
-        			<th:block th:each="rep : ${replyList}">
-         	 			<th:block th:if="${rep.groupId == comm.id}">
-            				<input type="hidden" name="replyId" th:value="${rep.id}"></input>
-            				<ul class="list-group list-group-flush">
-              					<li class="list-group-item">
-                					<div>
-                  						<form th:action="@{/comments/{id}(id = ${rep.id})}" method="post">
-                    						<input type="hidden" th:field="${board.division}"></input>
-                    						<input type="hidden" name="boardId" th:value="${board.id}"></input>
-                    						<th:block th:if="${rep.deleteTime == null}">		
-                      							<p>
-                        							<b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;⤷&nbsp;&nbsp;[[ ${rep.userNickName} ]]</b> / 
-                        							<th:block th:if="${rep.modifyTime == null}">
-                          								[[ ${rep.createTime} ]]	
-                        							</th:block>
-                        							<th:block th:if="${rep.modifyTime != null}">
-                          								[[ ${rep.modifyTime} ]](수정)
-                        							</th:block>
-                      							</p>				
-                      							<div>
-                      								<div class="card-text" th:utext="${@commonmarkUtil.markdown(rep.contents)}"></div>	
-                        							<!--<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[[ ${rep.contents} ]]</p>-->						
-                      							</div>
-                    						</th:block>
-                    						<th:block th:if="${rep.deleteTime != null}">														
-                     	 						<p>	
-                        							<s>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;⤷&nbsp;&nbsp;삭제 된 댓글입니다.</s>
-                      							</p>				
-                    						</th:block>
-                    						<div class="collapse mb-2" th:id="rc + ${rep.id}">
-                      							<div class="input-group mb-3">
-                        							<textarea rows="5" cols="50" name="modifyContents" placeholder="수정 할 댓글을 입력해주세요."></textarea>
-                        							<button type="submit" class="btn btn-outline-success btn-sm" name="action" value="replyModify">수정완료</button>
-                      							</div>
-                    						</div>
-                    						<th:block th:if="${session.user != null}">
-                      							<th:block th:if="${#strings.equals(session.user.nickName, rep.userNickName)} and ${rep.deleteTime == null}">
-                        							<p>						
-                          								<button class="btn btn-outline-primary" type="button" data-bs-toggle="collapse" th:attr="data-bs-target=|#rc${rep.id}">수정</button> 
-                            							/ 
-                          								<button class="btn btn-outline-warning" type="submit" name="action" value="replyDelete">삭제</button>
-                        							</p>
-                      							</th:block>
-                    						</th:block>
-                  						</form>
-                					</div>
-              					</li>
-            				</ul>
-          				</th:block>
-        			</th:block> 
+            		<li class="list-group-item">
+                  		<div>
+                        	<form th:action="@{/comments/{id}(id = ${comm.id})}" class="w-100" method="post">
+                            	<input type="hidden" th:field="${board.division}"></input>
+                              	<input type="hidden" name="boardId" th:value="${board.id}"></input>
+                              	<th:block th:if="${comm.deleteTime == null}">														
+                                	<p>
+                                    	<a style="text-decoration: none; color: black;" data-bs-toggle="tooltip" title="작성 글 보러가기" 
+      										th:href="@{/boards/name/{nickName}(nickName = ${comm.userNickName})}">
+      										📌 &nbsp;<b>[[ ${comm.userNickName} ]]</b> / 
+										</a>
+                                        <th:block th:if="${comm.modifyTime == null}">
+                                        	[[ ${comm.createTime} ]]	
+                                        </th:block>
+                                        <th:block th:if="${comm.modifyTime != null}">
+                                        	[[ ${comm.modifyTime} ]](수정)
+                                        </th:block>
+                                        <button class="btn btn-link btn-sm" type="button" data-bs-toggle="collapse" th:attr="data-bs-target=|#a${comm.id}">답글쓰기</button>
+                                    </p>				
+                                    <div>
+                                    	<p>[( ${@commonmarkUtil.markdown(comm.contents)} )]</p>							
+                                    </div>
+                              	</th:block>
+                              	<th:block th:if="${comm.deleteTime != null}">														
+                                	<p>
+                                    	<s>📌 &nbsp;삭제 된 댓글입니다.</s>
+                                	</p>				
+                              	</th:block>
+                              	<div class="collapse mb-2" th:id="a + ${comm.id}">
+                                	<div class="input-group mb-3">
+                                    	<textarea rows="5" cols="50" name="replyContents" placeholder="댓글을 입력해주세요."></textarea>
+                                        <button type="submit" class="btn btn-outline-success btn-sm" name="action" value="replyCreate">답글쓰기</button>
+                                	</div>
+                              	</div>
+                              	<div class="collapse mb-2" th:id="c + ${comm.id}">
+                                	<div class="input-group mb-3">
+                                    	<textarea rows="5" cols="50" name="contents" placeholder="수정 할 댓글을 입력해주세요."></textarea>
+                                        <button type="submit" class="btn btn-outline-success btn-sm" name="action" value="modify">수정완료</button>
+                                	</div>
+                              	</div>
+                              	<th:block th:if="${session.user != null}">
+                                	<th:block th:if="${#strings.equals(session.user.nickName, comm.userNickName)} and ${comm.deleteTime == null}">
+                                    	<p>						
+                                        	<button class="btn btn-outline-primary" type="button" data-bs-toggle="collapse" th:attr="data-bs-target=|#c${comm.id}">수정</button> 
+                                            	/ 
+                                            <button class="btn btn-outline-warning" type="submit" name="action" value="delete">삭제</button>
+                                        </p>
+                                	</th:block>
+                              	</th:block>
+                        	</form>
+                  		</div>
+                              
+    
+                  		<!-- 대댓글 -->
+                  		<th:block th:each="rep : ${replyList}">
+                        	<th:block th:if="${rep.groupId == comm.id}">
+                            	<input type="hidden" name="replyId" th:value="${rep.id}"></input>
+                              		<ul class="list-group list-group-flush">
+                                    	<li class="list-group-item">
+                                        	<ul class="list-group list-group-flush">
+                                            	<li class="list-group-item">
+                                                	<div>
+                                                    	<form th:action="@{/comments/{id}(id = ${rep.id})}" method="post">
+                                                        	<input type="hidden" th:field="${board.division}"></input>
+                                                            <input type="hidden" name="boardId" th:value="${board.id}"></input>
+                                                           	<th:block th:if="${rep.deleteTime == null}">		
+                                                           		<p>
+                                                                	<a style="text-decoration: none; color: black;" data-bs-toggle="tooltip" title="작성 글 보러가기" 
+      																	th:href="@{/boards/name/{nickName}(nickName = ${rep.userNickName})}">
+     																	⤷ &nbsp;&nbsp;<b>[[ ${rep.userNickName} ]]</b> / 
+																	</a>
+                                                                    <th:block th:if="${rep.modifyTime == null}">
+                                                                    	[[ ${rep.createTime} ]]	
+                                                                    </th:block>
+                                                                    <th:block th:if="${rep.modifyTime != null}">
+                                                                    	[[ ${rep.modifyTime} ]](수정)
+                                                                    </th:block>
+                                                               	</p>				
+                                                                <div>						
+                                                                	<p>[( | ${@commonmarkUtil.markdown(rep.contents)} | )]</p>
+                                                                    <!--<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[[ ${rep.contents} ]]</p>-->							
+                                                                </div>
+                                                          	</th:block>
+                                                            <th:block th:if="${rep.deleteTime != null}">														
+                                                            	<p>
+                                                                	<s>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;⤷&nbsp;&nbsp;삭제 된 댓글입니다.</s>
+                                                                </p>				
+                                                           	</th:block>
+                                                            <div class="collapse mb-2" th:id="rc + ${rep.id}">
+                                                            	<div class="input-group mb-3">
+                                                                	<textarea rows="5" cols="50" name="modifyContents" placeholder="수정 할 댓글을 입력해주세요."></textarea>
+                                                                    <button type="submit" class="btn btn-outline-success btn-sm" name="action" value="replyModify">수정완료</button>
+                                                                </div>
+                                                            </div>
+                                                            <th:block th:if="${session.user != null}">
+                                                            	<th:block th:if="${#strings.equals(session.user.nickName, rep.userNickName)} and ${rep.deleteTime == null}">
+                                                                	<p>						
+                                                                    	<button class="btn btn-outline-primary" type="button" data-bs-toggle="collapse" th:attr="data-bs-target=|#rc${rep.id}">수정</button> 
+                                                                        	/ 
+                                                                        <button class="btn btn-outline-warning" type="submit" name="action" value="replyDelete">삭제</button>
+                                                                   	</p>
+                                                                </th:block>
+                                                            </th:block>
+                                                      </form>
+                                                 	</div>
+                                                </li>
+                                          	</ul>
+                                    	</li>
+                              		</ul>
+                        	</th:block>
+                  		</th:block> 
+            		</li>
       			</ul>
-  
+
       			<br><br>
   
       			<form th:action="@{/comments/create}" method="post">
