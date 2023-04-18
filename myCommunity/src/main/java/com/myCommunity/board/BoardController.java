@@ -37,6 +37,8 @@ import com.myCommunity.admin.AdminService;
 import com.myCommunity.admin.AdminVo;
 import com.myCommunity.bookmark.BookmarkService;
 import com.myCommunity.bookmark.BookmarkVo;
+import com.myCommunity.category.CategoryService;
+import com.myCommunity.category.CategoryVo;
 import com.myCommunity.comment.CommentServiceImpl;
 import com.myCommunity.comment.CommentVo;
 import com.myCommunity.criteria.Criteria;
@@ -60,6 +62,8 @@ public class BoardController {
 	AdminService adminService;
 	@Autowired
 	BookmarkService bookmarkService;
+	@Autowired
+	CategoryService categoryService;
 	
 	@Value("${file.dir}")
 	private String fileDir;

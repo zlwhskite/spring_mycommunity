@@ -158,6 +158,7 @@ public class SearchController {
 		List<SearchVo> searchList = searchMapper.searchNickName(start, size, nickName);
 		
 		if(searchList.isEmpty()) {
+			//이전 페이지 주소
 			 String addr = request.getHeader("Referer");
 			
 			rttr.addFlashAttribute("errm", "검색결과가 없습니다.");
