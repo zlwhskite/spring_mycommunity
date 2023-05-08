@@ -80,38 +80,6 @@ public class BoardController {
 		List<BoardVo> freeList = boardService.findAllFree();
 		List<AdminVo> infoList = adminService.infoBoardList();
 		
-		HttpSession session = request.getSession(false);
-		
-		if (session == null) {
-
-			model.addAttribute("boardList", boardList);
-			model.addAttribute("travelList", travelList);
-			model.addAttribute("hobbyList", hobbyList);
-			model.addAttribute("computerList", computerList);
-			model.addAttribute("stockList", stockList);
-			model.addAttribute("workoutList", workoutList);
-			model.addAttribute("freeList", freeList);
-			model.addAttribute("infoList", infoList);
-			
-			return "board/index";
-		}
-		
-		LoginVo loginUser = (LoginVo)session.getAttribute("user");
-
-		if (loginUser == null) {
-			
-			model.addAttribute("boardList", boardList);
-			model.addAttribute("travelList", travelList);
-			model.addAttribute("hobbyList", hobbyList);
-			model.addAttribute("computerList", computerList);
-			model.addAttribute("stockList", stockList);
-			model.addAttribute("workoutList", workoutList);
-			model.addAttribute("freeList", freeList);
-			model.addAttribute("infoList", infoList);
-			
-			return "board/index";
-		}
-
 		model.addAttribute("boardList", boardList);
 		model.addAttribute("travelList", travelList);
 		model.addAttribute("hobbyList", hobbyList);
@@ -120,8 +88,6 @@ public class BoardController {
 		model.addAttribute("workoutList", workoutList);
 		model.addAttribute("freeList", freeList);
 		model.addAttribute("infoList", infoList);
-		
-		model.addAttribute("user", loginUser);
 	
 		return "board/index";
 	}
@@ -219,42 +185,16 @@ public class BoardController {
 
 	@GetMapping("/create")
 	public String createPost(HttpServletRequest request, RedirectAttributes rttr) {
-		HttpSession session = request.getSession(false);
-		
-		if(session == null) {
-			rttr.addFlashAttribute("errm", "로그인 후 글 작성이 가능합니다.");
-			return "redirect:/login";
-		}
-		if(session != null) {
-			LoginVo loginVo = (LoginVo)session.getAttribute("user");
-			if(loginVo == null) {
-				rttr.addFlashAttribute("errm", "로그인 후 글 작성이 가능합니다.");
-				return "redirect:/login";
-			}
-		}
-		
 		return "board/createPost";
 	}
-
 
 	@PostMapping
 	public String savePost(@ModelAttribute("board") BoardVo boardVo, HttpServletRequest request, RedirectAttributes rttr) {
 		HttpSession session = request.getSession(false);
 		
 		LoginVo loginUser = new LoginVo();
-		
-		if(session == null) {
-			rttr.addFlashAttribute("errm", "로그인 후 글 작성이 가능합니다.");
-			return "redirect:/login";
-		}
-		if(session != null) {
-			loginUser = (LoginVo)session.getAttribute("user");
-			
-			if(loginUser == null) {
-				rttr.addFlashAttribute("errm", "로그인 후 글 작성이 가능합니다.");
-				return "redirect:/login";
-			}
-		}
+		loginUser = (LoginVo)session.getAttribute("user");
+
 		
 		if(boardVo.getTitle().isEmpty() || boardVo.getContents().isEmpty()) {
 			rttr.addFlashAttribute("errm", "제목 또는 내용을 입력해주세요.");
@@ -278,8 +218,9 @@ public class BoardController {
 	}
 	
 	@GetMapping("/{division}/{id}")
-	public String showPost(@PathVariable("division") String bookmark, @PathVariable("id") int boardId, @RequestParam(value="page", required=false, defaultValue = "1") int page, 
+	public String showPost(@PathVariable("division") String division, @PathVariable("id") int boardId, @RequestParam(value="page", required=false, defaultValue = "1") int page, 
 			HttpServletRequest request, Model model) {
+		
 		HttpSession session = request.getSession(false);
 		BoardVo boardVo = boardService.findById(boardId);
 		BookmarkVo bm = new BookmarkVo();
@@ -296,14 +237,8 @@ public class BoardController {
 				if(!loginUser.getNickName().equals(boardVo.getUserNickName())) {
 					boardService.hitsUp(boardId);
 				}
-				
-				if(bookmark.equals("bookmark")) {
-					bm = bookmarkService.bookmarkcheck(loginUser.getId(), boardId);
-					model.addAttribute("bookmark", bm);
-				}else {
-					bm = bookmarkService.bookmarkcheck(loginUser.getId(), boardId);
-					model.addAttribute("bookmark", bm);
-				}
+				bm = bookmarkService.bookmarkcheck(loginUser.getId(), boardId);
+				model.addAttribute("bookmark", bm);	
 			}
 		}
 		
@@ -351,6 +286,7 @@ public class BoardController {
 		model.addAttribute("commentList", commentList);
 		model.addAttribute("replyList", replyList);
 		model.addAttribute("commentSize", commentSize);
+		model.addAttribute("check", division);
 		
 		return "board/showPost";
 	}
@@ -432,7 +368,7 @@ public class BoardController {
 		boardService.delete(boardId, boardVo);
 		
 		if(boardVo.getDivision().equals("공지사항")) {
-			rttr.addFlashAttribute("msgm", "삭제가 성공했습니다.");
+			rttr.addFlashAttribute("msgm", "공지사항이 삭제되었습니다.");
 			return "redirect:/boards";
 		}else {
 			commentVo.setBoardId(boardId);

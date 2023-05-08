@@ -271,7 +271,7 @@
       			</ul>
 
       			<br><br>
-  
+  				
       			<form th:action="@{/comments/create}" method="post">
         			<input type="hidden" th:field="${board.id}"></input>
         			<input type="hidden" th:field="${board.userNickName}"></input>
@@ -283,9 +283,11 @@
           				<button type="submit" class="btn btn-primary">댓글쓰기</button>
         			</div>    
       			</form>
-				<br>
+				
+				<th:block th:if="${not check.toString().equals('hot')}">
+      			
       			<hr>
-    
+    			
       			<div class="container">
         			<div class="p-1 bg-default text-white rounded">
           				<div><br>

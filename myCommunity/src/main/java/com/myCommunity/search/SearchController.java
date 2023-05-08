@@ -34,6 +34,7 @@ public class SearchController {
 	@GetMapping("/search")
 	public String search(@RequestParam("division") String division, @RequestParam("search") String search, 
 			@RequestParam(value="page", required=false, defaultValue = "1") int page, RedirectAttributes rttr, Model model) {	
+		
 		if(division.equals("All")) {
 			List<SearchVo> countList = searchMapper.searchCount(division, search);
 			
@@ -119,7 +120,7 @@ public class SearchController {
 		model.addAttribute("countList", countList);
 		model.addAttribute("search", search);
 		model.addAttribute("tit", division);
-	
+
 		return "search/searchResult";
 	}
 	

@@ -80,11 +80,12 @@
           		<label for="nickName" class="form-label">NickName :</label>
           		<input type="text" class="form-control" id="nickName" placeholder="Enter nickName" name="nickName">
           		<div class="mt-1 text-end"> 
-          			<th:block th:if="${err != null}">
-            			<span style="color: red;"> <SMALL> [[${err['uerr']}]]  </SMALL></span>
-            		</th:block>
             		<span id="check"></span>             
             		<input type="button" class="btn btn-outline-secondary btn-sm" onclick="nameCheck();" value="중복체크"></input>
+            		<th:block th:if="${err != null}">
+            			<div style="color: red;"> <SMALL> [[${err['uerr']}]]  </SMALL></div>
+            			<div style="color: red;"> <SMALL> [[ ${err['lerr']} ]] </SMALL> </div>
+            		</th:block>
           		</div>		
         	</div>
         	<div class="mb-3">

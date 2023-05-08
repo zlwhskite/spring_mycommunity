@@ -102,12 +102,20 @@ public class UserController {
 	@PostMapping
 	public String userCreate(@ModelAttribute("user") UserVo userVo, @RequestParam("password2") String password2, RedirectAttributes rttr, Model model, HttpServletRequest request) {	
 		Map<String, String> err = new HashMap<>();
+		
+		//공백제거
+		String emptyCheck = userVo.getNickName();
+		userVo.setNickName(emptyCheck.replaceAll(" ", ""));
+		
 		UserVo userCheck = userService.findBynickName(userVo.getNickName());
-		System.out.println(userVo.getGender());
-		if(userCheck != null || userVo.getNickName().equals("")) {
+		
+		if(userCheck != null) {
 			err.put("uerr", "중복체크버튼을 눌러 다시 확인해주세요.");
 		}
-		if(userVo.getPassword().isEmpty() || password2.isEmpty() || userVo.getPassword().length() <= 8) {
+		if(userVo.getNickName().length() >= 10) {
+			err.put("lerr", "닉네임은 10자리 이하로 입력해주세요.");
+		}
+		if(userVo.getPassword().isEmpty() || password2.isEmpty() || userVo.getPassword().length() <= 7) {
 			err.put("perr", "비밀번호는 8자리 이상으로 입력해주세요.");
 		}
 		if(!password2.equals(userVo.getPassword())) {
