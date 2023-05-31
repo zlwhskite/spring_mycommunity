@@ -58,7 +58,8 @@
 
 
 ### Admin Page
-![image](https://user-images.githubusercontent.com/80504740/229420481-76e6b448-0d2c-4c72-9b86-65f6a12e5e86.png)
+![image](https://github.com/zlwhskite/spring_mycommunity/assets/80504740/16ab341a-bdbf-4ae0-861b-f19e9b7e8c6e)
+
 
 
 ### User Info
