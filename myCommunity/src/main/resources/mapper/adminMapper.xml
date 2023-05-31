@@ -2,6 +2,16 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.myCommunity.admin.AdminMapper">
+	<select id="totalBoardList" resultType="int">
+		select count(*)
+		from boards
+		where delete_time is null
+	</select>
+	<select id="totalUserList" resultType="int">
+		select count(*)
+		from users
+		where delete_time is null
+	</select>
 	<select id="userList" resultType="AdminVo">
 		select id, email, nickname, password, gender, auth, create_time, modify_time, delete_time
 		from users

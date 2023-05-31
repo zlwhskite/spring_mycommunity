@@ -29,24 +29,24 @@
         <div id="section1" class="container-fluid d-flex" style="padding:20px 20px;">
         	<div class="d-flex flex-column">
 	            <div class="mb-5">
-	                <h1>TodayUsers</h1>
+	                <h1>Total Users</h1>
 	                <br>
+	                <!--
 	                <th:block th:if="${todayUser} != null">
 	                	<h3>&nbsp;&nbsp;&nbsp;&nbsp;->&nbsp;0명</h3>
 	                </th:block>
-	                <th:block th:if="${todayUser} == null">
-	                	<h3>&nbsp;&nbsp;&nbsp;&nbsp;->&nbsp;[[ ${todayUserList.size} ]]명</h3>
-	                </th:block>
+	                -->
+	                <h3>&nbsp;&nbsp;&nbsp;&nbsp;->&nbsp;[[ ${totalUsers} ]]명</h3>
 	            </div>
 	            <div class="mt-5">
-	                <h1>TodayBoards</h1>
+	                <h1>Total Boards</h1>
 	                <br>
+	                <!--
 	                <th:block th:if="${todayBoard} != null">
 	                	<h3>&nbsp;&nbsp;&nbsp;&nbsp;->&nbsp;0개</h3>
 	                </th:block>
-	                <th:block th:if="${todayBoard} == null">
-	                	<h3>&nbsp;&nbsp;&nbsp;&nbsp;->&nbsp;[[ ${todayBoardList.size} ]]개</h3>
-	                </th:block>
+	                -->
+	                <h3>&nbsp;&nbsp;&nbsp;&nbsp;->&nbsp;[[ ${totalBoards} ]]개</h3>
 	            </div>
             </div>
             <div class="flex-grow-1">

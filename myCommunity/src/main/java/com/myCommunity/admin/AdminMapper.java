@@ -10,6 +10,8 @@ import org.apache.ibatis.annotations.Mapper;
 public interface AdminMapper {
 	List<AdminVo> userList();
 	List<AdminVo> boardList();
+	int totalBoardList();
+	int totalUserList();
 	List<AdminVo> todayUserList(String date);
 	List<AdminVo> todayBoardList(String date);
 	List<AdminVo> infoBoardList();

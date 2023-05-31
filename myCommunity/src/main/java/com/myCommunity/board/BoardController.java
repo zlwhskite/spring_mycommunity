@@ -29,6 +29,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.SessionAttribute;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
@@ -184,7 +185,13 @@ public class BoardController {
 	
 
 	@GetMapping("/create")
-	public String createPost(HttpServletRequest request, RedirectAttributes rttr) {
+	public String createPost(@SessionAttribute(name = "user", required = false)
+	LoginVo user, RedirectAttributes rttr) {
+		if(user == null) {
+			rttr.addFlashAttribute("errm", "회원가입 또는 로그인 후 글을 작성할 수 있습니다.");
+			return "redirect:/boards";
+		}
+		
 		return "board/createPost";
 	}
 

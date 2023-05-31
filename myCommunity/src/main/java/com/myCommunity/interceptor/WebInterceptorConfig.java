@@ -18,9 +18,9 @@ public class WebInterceptorConfig implements WebMvcConfigurer {
 				//인터셉터를 적용할 URL패턴을 지정
 				.addPathPatterns("/**") 
 				//인터셉터에서 제외할 패턴을 지정
-				.excludePathPatterns("/", "/boards","/boards/**/{path:[0-9]+}", "/boards/srt", "/boards/hot/**", 
+				.excludePathPatterns("/", "/boards", "/boards/create", "/boards/**/{path:[0-9]+}", "/boards/srt", "/boards/hot/**", 
 						"/boards/travel/**", "/boards/hobby/**", "/boards/computer/**", "/boards/stock/**", "/boards/workout/**", "/boards/free/**",
 						"/boards/search/**", "/boards/name/**", "/users", "/users/create", "/users/checks", "/users/findUser", "/users/findPwd",
-						"/comments/**", "/login", "/logout", "/h2-console", "/h2-console/**", "/css/*");
+						"/comments/**", "/login", "/logout", "/h2-console", "/file/**", "/h2-console/**", "/css/*");
 	}
 }

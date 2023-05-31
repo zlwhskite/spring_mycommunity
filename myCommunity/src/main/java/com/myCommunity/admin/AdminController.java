@@ -53,6 +53,8 @@ public class AdminController {
 		String nowDate = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
 		List<AdminVo> todayUser = adminService.todayUserList(nowDate);
 		List<AdminVo> todayBoard = adminService.todayBoardList(nowDate);
+		int totalUsers = adminService.totalUserList();
+		int totalBoards = adminService.totalBoardList();
 		List<AdminVo> userList = adminService.userList();
 		List<AdminVo> boardList = adminService.boardList();
 		
@@ -72,6 +74,8 @@ public class AdminController {
 		
 		model.addAttribute("todayUserList", todayUser);
 		model.addAttribute("todayBoardList", todayBoard);
+		model.addAttribute("totalUsers", totalUsers);
+		model.addAttribute("totalBoards", totalBoards);
 		model.addAttribute("userList", userList);
 		model.addAttribute("boardList", boardList);
 		

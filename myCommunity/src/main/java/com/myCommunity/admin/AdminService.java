@@ -16,6 +16,16 @@ public class AdminService {
 	public List<AdminVo> boardList() {
 		return adminMapper.boardList();
 	}
+	public int totalBoardList() {
+		int result = adminMapper.totalBoardList();
+		
+		return result;
+	}
+	public int totalUserList() {
+		int result = adminMapper.totalUserList();
+		
+		return result;
+	}
 	public List<AdminVo> todayUserList(String date) {
 		return adminMapper.todayUserList(date);
 	}
