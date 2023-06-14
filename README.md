@@ -17,8 +17,8 @@
 - Java 11
 - Springboot 2.7.7
 - Thymeleaf
-- 부트스트랩5
-- 제이쿼리
+- bootstrap5
+- jquery
 - MyBatis(H2)
 - chart.js
 - Gradle
